@@ -30,8 +30,10 @@ ls -d worktrees 2>/dev/null      # Alternative
 ### 2. Check CLAUDE.md
 
 ```bash
-grep -i "worktree.*director" CLAUDE.md 2>/dev/null
+grep -in "worktree" CLAUDE.md 2>/dev/null
 ```
+
+Read the matching lines (and any surrounding heading such as `## Worktrees`) to decide. Phrasings vary — `worktree directory`, `worktrees live in .worktrees/`, `use .worktrees for feature branches`, a `## Worktrees` heading, etc. A single-pattern match is too narrow; read the section with judgment.
 
 **If preference specified:** Use it without asking.
 
@@ -43,7 +45,7 @@ If no directory exists and no CLAUDE.md preference:
 No worktree directory found. Where should I create worktrees?
 
 1. .worktrees/ (project-local, hidden)
-2. ~/.config/ultrapowers/worktrees/<project-name>/ (global location)
+2. $HOME/.config/ultrapowers/worktrees/<project-name>/ (global location)
 
 Which would you prefer?
 ```
@@ -83,13 +85,15 @@ project=$(basename "$(git rev-parse --show-toplevel)")
 ### 2. Create Worktree
 
 ```bash
-# Determine full path
+# Determine full path.
+# Use $HOME explicitly — inside double-quoted strings shell will NOT expand `~`,
+# which silently creates a literal `~` directory in the current working dir.
 case $LOCATION in
   .worktrees|worktrees)
     path="$LOCATION/$BRANCH_NAME"
     ;;
-  ~/.config/ultrapowers/worktrees/*)
-    path="~/.config/ultrapowers/worktrees/$project/$BRANCH_NAME"
+  "$HOME/.config/ultrapowers/worktrees"/*|~/.config/ultrapowers/worktrees/*)
+    path="$HOME/.config/ultrapowers/worktrees/$project/$BRANCH_NAME"
     ;;
 esac
 

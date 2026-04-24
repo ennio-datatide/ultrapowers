@@ -153,9 +153,13 @@ The user's first reply is authoritative. Do not second-guess it. If a user says 
 
 **Exploring approaches:**
 
-- Propose 2-3 different approaches with trade-offs
-- Present options conversationally with your recommendation and reasoning
-- Lead with your recommended option and explain why
+- **Scale the count to the real alternatives.** Don't manufacture choice architecture.
+  - **One approach** when there's only one reasonable way (e.g., a `/health` endpoint, a single-file config change). Present as "I'll do it this way unless you object" and move on.
+  - **Two or three approaches** when there are genuine trade-offs (complexity vs. power, different libraries, sync vs. async, etc.).
+  - **Always three approaches** for architecture-level decisions (data model, service boundary, deployment model, auth strategy).
+- Never invent strawmen to hit a count. If you can only think of one credible option, present one.
+- Present options conversationally with your recommendation and reasoning.
+- Lead with your recommended option and explain why.
 
 **Presenting the design:**
 
@@ -197,11 +201,25 @@ After writing the spec document, look at it with fresh eyes:
 Fix any issues inline. No need to re-review — just fix and move on.
 
 **User Review Gate:**
-After the spec review loop passes, ask the user to review the written spec before proceeding:
+After the spec review loop passes, decide whether the user needs to re-read the written spec. The verbal approval the user just gave in the design section is authoritative — the gate exists to catch drift introduced by writing, not to re-ratify decisions.
+
+**Skip the re-read gate when both are true:**
+- The spec body is **under ~500 words** (or the feature is a trivial/small triage outcome — but those don't write a spec at all, so in practice this condition selects short "full" specs).
+- The user's verbal approval in the design section was **explicit and single-pass** (no revision loops, no "hmm, not sure about X").
+
+In that case, announce one line and proceed directly to research:
+
+> "Spec written to `<path>`. Proceeding to deep-research."
+
+**Run the gate when either is true:**
+- The spec is substantial (~500+ words, multiple sections, non-trivial architecture).
+- The design section involved revisions, uncertainty, or multiple candidate approaches the user deliberated over.
+
+Gate prompt:
 
 > "Spec written to `<path>` (local only, not committed). Please review it and let me know if you want to make any changes before we start the research phase."
 
-Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
+Wait for the user's response. If they request changes, make them and re-run the spec self-review. Only proceed once the user approves.
 
 **Research Pipeline:**
 

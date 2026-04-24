@@ -39,6 +39,8 @@ If CLAUDE.md, GEMINI.md, or AGENTS.md says "don't use TDD" and a skill says "alw
 
 Skills use Claude Code tool names. Non-CC platforms: see `references/copilot-tools.md` (Copilot CLI), `references/codex-tools.md` (Codex) for tool equivalents. Gemini CLI users get the tool mapping loaded automatically via GEMINI.md.
 
+**Gemini subagent fallback:** Gemini CLI does not expose a per-call parallel-dispatch primitive. The two subagent-dependent skills — `ultrapowers:dispatching-parallel-agents` and `ultrapowers:subagent-driven-development` — auto-fall-back to serial execution or to `ultrapowers:executing-plans` on Gemini. Users on Gemini still get the full pipeline; they just lose the parallel/subagent optimization, not any correctness guarantee.
+
 ## Workflow Preferences
 
 Workflow preferences (auto-commit, auto-push, commit design docs) are collected during the **brainstorming** skill, after clarifying questions. All downstream skills respect these settings.

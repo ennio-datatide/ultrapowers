@@ -1,5 +1,7 @@
 # Codex Tool Mapping
 
+> **Reading aid only — not a runtime translation layer.** This file helps you interpret Claude Code tool names when you encounter them inside skills. The Codex plugin does **not** translate tool calls at runtime; you invoke your platform's native tools directly. MCP tools are consumed natively via `.mcp.json` in your Codex config — there is no compatibility shim. When the Codex plugin manifest eventually supports a first-class `agents` field, the "Named agent dispatch" section below becomes redundant and should be removed.
+
 Skills use Claude Code tool names. When you encounter these in a skill, use your platform equivalent:
 
 | Skill references | Codex equivalent |
