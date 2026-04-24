@@ -94,11 +94,11 @@ Every implementation step gets audited against the research findings and your pl
 2. **deep-research** — Researches the current state of the art for every technology and pattern in the spec. Resolves the latest versions of tools referenced by the profile library, so recommendations are always current.
 3. **skills-audit** — Classifies every required competency as Covered, Stale, Missing, or External. Sibling-pack skills are recognized transparently.
 4. **skills-creation** — Creates or updates the skills needed to fill gaps. Knowledge is captured for future sessions.
-5. **using-git-worktrees** — Creates an isolated workspace on a new branch and verifies a clean test baseline. Your main branch stays untouched.
+5. **using-git-worktrees** *(optional)* — Creates an isolated workspace on a new branch and verifies a clean test baseline. Your main branch stays untouched. User-invoked when isolation is wanted; not auto-triggered by the pipeline.
 6. **writing-plans** — Breaks work into bite-sized tasks (2–5 minutes each) with skill annotations on each step. Clear enough for any agent to follow.
 7. **subagent-driven-development** or **executing-plans** — Dispatches a fresh subagent per task with two-stage review (spec compliance first, then code quality). Auto-picked by default.
 8. **test-driven-development** — Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Code written before tests gets deleted.
-9. **requesting-code-review** — Reviews against plan with audit checks. Critical issues block progress. No rubber-stamping.
+9. **code-reviewer agent** (with **requesting-code-review** and **receiving-code-review** skills as user-invoked helpers) — `subagent-driven-development` dispatches the `code-reviewer` agent for per-task review + final review; the two review skills document how to request and receive review when a user runs one manually.
 10. **finishing-a-development-branch** — Verifies tests pass, executes the chosen integration path (merge / PR / keep / discard), cleans up the worktree.
 
 **The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.

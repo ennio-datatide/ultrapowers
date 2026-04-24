@@ -9,7 +9,7 @@ description: Use when brainstorming completes and a spec is approved — researc
 
 Before building anything, research the current state of the art. This skill activates automatically after brainstorming produces an approved spec. It ensures agents work with verified, current knowledge rather than potentially outdated training data.
 
-**This step runs 100% of the time.** No exceptions, no shortcuts, no "I already know this."
+**This step runs by default after every brainstorming handoff.** The exception is when the user explicitly says "skip research" (for a trivial, well-understood topic where the research adds zero signal). Otherwise run it — assumptions about training-memory currency rot faster than you expect.
 
 ## When to Use
 
@@ -19,8 +19,9 @@ Before building anything, research the current state of the art. This skill acti
 
 ## When NOT to Use
 
-- Never skip this step. It always runs after brainstorming.
-- The only exception: if the user explicitly says "skip research."
+- The user explicitly says "skip research."
+- The change is trivially small (a one-liner, a rename, a typo fix, a cosmetic edit) where full research adds no signal — the decision to skip sits with brainstorming's triage of the incoming request.
+- Otherwise, run it — even if you think you already know the answer. Training-memory currency is the most common silent failure mode.
 
 ## Process
 

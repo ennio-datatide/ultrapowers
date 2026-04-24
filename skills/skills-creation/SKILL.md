@@ -114,4 +114,8 @@ Prepare skill references for each implementation step:
 
 ## Output
 
-Created/updated skill files + annotated step references for the implementation plan. Invoke **writing-plans** skill next.
+Created/updated skill files + annotated step references for the implementation plan.
+
+**Optional before writing-plans:** if the work warrants isolation (multi-task feature, risky change, parallel workstream), invoke **`ultrapowers:using-git-worktrees`** to create an isolated workspace before planning. This is user-triggered and not mandatory — trivial or docs-only work doesn't need it.
+
+**Next:** invoke **`ultrapowers:writing-plans`** skill.

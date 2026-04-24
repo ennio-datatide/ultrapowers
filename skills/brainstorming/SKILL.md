@@ -262,7 +262,7 @@ If `~/.claude/` doesn't exist, create it. The file is user-level on purpose — 
 - Rephrase the workflow-prefs prompt:
   - Instead of: *"auto-commit, auto-push, commit design docs"*
   - Say: *"Workflow defaults: save your progress automatically, share to GitHub automatically, keep design docs private. Reply `ok` or tell me what to change."*
-- When writing the design doc (step 10), **prepend a plain-language summary paragraph** at the top of the spec explaining what's being built in business terms. The technical body follows — that part stays technical because the audience is the implementer.
+- When writing the design doc (step 8), **prepend a plain-language summary paragraph** at the top of the spec explaining what's being built in business terms. The technical body follows — that part stays technical because the audience is the implementer.
 
 ### What stays the same in both modes
 
@@ -311,17 +311,17 @@ Before generating approaches, check:
 
 ## Sibling-Pack Scan
 
-**Step 8 — Scan for sibling-pack skills (runs after design is approved and profile inspiration has been offered, before writing the spec):**
+**Step 7 — Scan for sibling-pack skills (runs after design is approved and profile inspiration has been offered, before writing the spec):**
 
 1. Read `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`.
-2. Extract signals from the approved design: architecture section, tech stack mentions, domain descriptions, plus any tools adopted from the step 7 profile inspiration.
+2. Extract signals from the approved design: architecture section, tech stack mentions, domain descriptions, plus any tools adopted from the step 5 profile inspiration.
 3. For each signal, look up matching skills in both the `ultrapowers-dev` and `ultrapowers-business` tables.
 4. For each matched skill, scan the session's available-skills list (injected as `<system-reminder>`) for the corresponding prefix:
    - `ultrapowers-dev:<name>` present → **installed match** for `ultrapowers-dev`.
    - `ultrapowers-business:<name>` present → **installed match** for `ultrapowers-business`.
    - Pack prefix entirely absent from available-skills → **missing pack** (candidate for install prompt).
 5. Handle results:
-   - **Installed matches** (any count) → append a `## Referenced Skills` section to the spec (written in step 9) listing them with one-line rationale per skill. Done silently — no user prompt.
+   - **Installed matches** (any count) → append a `## Referenced Skills` section to the spec (written in step 8) listing them with one-line rationale per skill. Done silently — no user prompt.
    - **Missing pack, relevant AND `suggestSiblingPacks.<pack>: true`** → emit a blocking prompt, one per missing pack, sequentially. Do not combine packs into a single prompt.
 
 **Blocking prompt template (one per missing pack):**
