@@ -31,7 +31,7 @@ digraph deep_research {
     "Extract technologies\nand patterns from spec" [shape=box];
     "Formulate research questions\n(specific, answerable)" [shape=box];
     "Research using tools\n(context7, WebSearch, WebFetch)" [shape=box];
-    "Cross-reference\nmultiple sources" [shape=diamond];
+    "Cross-reference\nmultiple sources" [shape=box];
     "Gaps remain?" [shape=diamond];
     "Synthesize findings\ninto research brief" [shape=box];
     "Hand off to skills-audit" [shape=doublecircle];

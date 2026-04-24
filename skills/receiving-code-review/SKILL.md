@@ -49,7 +49,7 @@ WHY: Items may be related. Partial understanding = wrong implementation.
 
 **Example:**
 ```
-your human partner: "Fix 1-6"
+Partner: "Fix 1-6"
 You understand 1,2,3,6. Unclear on 4,5.
 
 ❌ WRONG: Implement 1,2,3,6 now, ask about 4,5 later
@@ -58,7 +58,7 @@ You understand 1,2,3,6. Unclear on 4,5.
 
 ## Source-Specific Handling
 
-### From your human partner
+### From Your Human Partner
 - **Trusted** - implement after understanding
 - **Still ask** if scope unclear
 - **No performative agreement**
@@ -83,7 +83,7 @@ IF conflicts with your human partner's prior decisions:
   Stop and discuss with your human partner first
 ```
 
-**your human partner's rule:** "External feedback - be skeptical, but check carefully"
+**Partner's rule:** "External feedback - be skeptical, but check carefully"
 
 ## YAGNI Check for "Professional" Features
 
@@ -95,7 +95,7 @@ IF reviewer suggests "implementing properly":
   IF used: Then implement properly
 ```
 
-**your human partner's rule:** "You and reviewer both report to me. If we don't need this feature, don't add it."
+**Partner's rule:** "You and reviewer both report to me. If we don't need this feature, don't add it."
 
 ## Implementation Order
 
@@ -195,7 +195,7 @@ Reviewer: "Implement proper metrics tracking with database, date filters, CSV ex
 
 **Unclear Item (Good):**
 ```
-your human partner: "Fix items 1-6"
+Partner: "Fix items 1-6"
 You understand 1,2,3,6. Unclear on 4,5.
 ✅ "Understand 1,2,3,6. Need clarification on 4 and 5 before implementing."
 ```

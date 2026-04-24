@@ -158,6 +158,8 @@ Ultrapowers calibrates tone, brainstorms the design with you, researches current
 - **writing-skills** — Create new skills following best practices
 - **using-ultrapowers** — Introduction to the skills system
 
+See also: **skills-audit** and **skills-creation** under Research Pipeline above.
+
 ## Companion Plugins
 
 Ultrapowers focuses on the core workflow. Domain-specific skills live in companion plugins:

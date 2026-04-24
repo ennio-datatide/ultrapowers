@@ -1,6 +1,6 @@
 ---
 name: dispatching-parallel-agents
-description: Use when facing 2+ independent tasks that can be worked on without shared state or sequential dependencies
+description: Use when investigating 2+ unrelated failures, bugs, or subsystems in parallel (read-only evidence gathering) — NOT for plan-driven implementation; use subagent-driven-development for that
 ---
 
 # Dispatching Parallel Agents
