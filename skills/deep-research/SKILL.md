@@ -72,6 +72,8 @@ Priority order:
 2. **WebSearch** — landscape, comparisons, community consensus
 3. **WebFetch** — specific articles, documentation pages
 
+If context7 is not configured in this session, skip it and start from WebSearch/WebFetch. context7 is an optional MCP dependency, not a hard requirement — missing it downgrades to web-only research, not a skill failure.
+
 **Dispatch parallel research agents** for independent topics.
 
 ### 4. Cross-Reference and Validate

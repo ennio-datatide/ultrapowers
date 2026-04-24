@@ -13,6 +13,17 @@ When you have multiple unrelated failures (different test files, different subsy
 
 **Core principle:** Dispatch one agent per independent problem domain. Let them work concurrently.
 
+**Scope:** this skill covers **investigation and debugging fan-out** (evidence gathering across independent failures, parallel research, read-only exploration). For **implementation** work, use `ultrapowers:subagent-driven-development` instead — that skill deliberately runs implementers serially to avoid merge conflicts on shared files. Never dispatch multiple implementation subagents in parallel from here.
+
+**Platform note:** the code shapes below use Claude Code's `Task(...)` primitive. On other harnesses, substitute the equivalent:
+
+- **Codex / Copilot CLI** — `agent(...)` spawn calls with an explicit subagent name.
+- **OpenCode** — `@agent` mentions in chat.
+- **Cursor** — background-agent dispatch via the Cursor Agents panel or `@` mention.
+- **Gemini CLI** — Gemini does not currently expose a per-call parallel-dispatch primitive; serialize the dispatches or skip this skill on that harness.
+
+The pattern (one focused prompt per independent domain) is platform-agnostic; only the spawn call differs.
+
 ## When to Use
 
 ```dot
@@ -65,13 +76,15 @@ Each agent gets:
 
 ### 3. Dispatch in Parallel
 
-```typescript
-// In Claude Code / AI environment
-Task("Fix agent-tool-abort.test.ts failures")
-Task("Fix batch-completion-behavior.test.ts failures")
-Task("Fix tool-approval-race-conditions.test.ts failures")
-// All three run concurrently
+```text
+# Pseudocode — substitute your platform's parallel-dispatch primitive
+dispatch("Investigate failure domain A")
+dispatch("Investigate failure domain B")
+dispatch("Investigate failure domain C")
+# All three run concurrently; you coordinate, they don't share state
 ```
+
+On Claude Code, `dispatch(...)` is `Task(subagent_type=..., prompt=...)` — see the Platform note at the top for other harnesses.
 
 ### 4. Review and Integrate
 
@@ -130,32 +143,15 @@ Return: Summary of what you found and what you fixed.
 **Exploratory debugging:** You don't know what's broken yet
 **Shared state:** Agents would interfere (editing same files, using same resources)
 
-## Real Example from Session
+## Example Shape
 
-**Scenario:** 6 test failures across 3 files after major refactoring
+Given 3 failing test files with independent root causes (timing, event-structure, async-completion), the controller identifies three domains, dispatches one agent per domain, and integrates the returned fixes:
 
-**Failures:**
-- agent-tool-abort.test.ts: 3 failures (timing issues)
-- batch-completion-behavior.test.ts: 2 failures (tools not executing)
-- tool-approval-race-conditions.test.ts: 1 failure (execution count = 0)
+- **Agent 1** — scope: one test file; expected: diagnose + fix without touching other files.
+- **Agent 2** — scope: a different test file; expected: same.
+- **Agent 3** — scope: a different test file; expected: same.
 
-**Decision:** Independent domains - abort logic separate from batch completion separate from race conditions
-
-**Dispatch:**
-```
-Agent 1 → Fix agent-tool-abort.test.ts
-Agent 2 → Fix batch-completion-behavior.test.ts
-Agent 3 → Fix tool-approval-race-conditions.test.ts
-```
-
-**Results:**
-- Agent 1: Replaced timeouts with event-based waiting
-- Agent 2: Fixed event structure bug (threadId in wrong place)
-- Agent 3: Added wait for async tool execution to complete
-
-**Integration:** All fixes independent, no conflicts, full suite green
-
-**Time saved:** 3 problems solved in parallel vs sequentially
+On return, the controller reviews each summary, checks for cross-file conflicts, runs the full test suite, and integrates. Because domains were independent, fixes don't collide; because each agent had a narrow scope, their summaries are easy to audit.
 
 ## Key Benefits
 
@@ -172,11 +168,6 @@ After agents return:
 3. **Run full suite** - Verify all fixes work together
 4. **Spot check** - Agents can make systematic errors
 
-## Real-World Impact
+## Expected Outcome
 
-From debugging session (2025-10-03):
-- 6 failures across 3 files
-- 3 agents dispatched in parallel
-- All investigations completed concurrently
-- All fixes integrated successfully
-- Zero conflicts between agent changes
+When dispatched correctly (independent domains, focused prompts, explicit output contract), parallel agents return fixes that integrate cleanly with zero conflicts and complete in roughly the time of the slowest single agent — a substantial speedup over sequential investigation.

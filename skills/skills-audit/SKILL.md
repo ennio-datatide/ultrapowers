@@ -106,7 +106,14 @@ Not every project needs every category. Use the spec to determine which are rele
 
 ### Checking installed skills
 
-Many category skills may already be installed as plugins. Check the available-skills list in the current session (injected as `<system-reminder>`). Mark installed ones as **External** — they don't need to be created, just referenced in the plan.
+Many category skills may already be installed as plugins. Check the available-skills list in the current session. Mark installed ones as **External** — they don't need to be created, just referenced in the plan.
+
+**How the available-skills list surfaces per platform:**
+- **Claude Code** — injected automatically into the session as a `<system-reminder>`.
+- **Codex / Copilot CLI / OpenCode / Cursor** — no session-level injection. Enumerate installed skills by listing the skill directories directly: `~/.claude/skills/`, `<repo>/.claude/skills/`, `<repo>/.codex/skills/`, `<repo>/.cursor/skills/`, `<repo>/.opencode/skills/`, and any plugin-cache directories the harness uses.
+- **Gemini CLI** — read metadata loaded at session start via `activate_skill` registry; fall back to listing `<repo>/.gemini/skills/` and `<repo>/.agents/skills/` if needed.
+
+If no enumeration mechanism is available, ask the user to paste the skill list and proceed.
 
 **Sibling-pack prefixes are always External.** Any skill whose name starts with `ultrapowers-dev:` or `ultrapowers-business:` is part of a sibling plugin and is classified **External** without further investigation. If a matched profile from brainstorming provided a pre-populated `skills` list, seed the External set from that list before scanning domain competencies — this avoids re-deriving skills the profile already resolved.
 

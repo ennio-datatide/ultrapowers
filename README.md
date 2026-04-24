@@ -80,6 +80,20 @@ git clone https://github.com/ennio-datatide/ultrapowers.git
 
 Start a new session and ask for something that should trigger a skill — for example, *"help me plan this feature"* or *"let's debug this issue"*. The agent should invoke the relevant skill automatically.
 
+### Other Harnesses
+
+Ultrapowers is **first-class on Claude Code**; other harnesses run the skills in best-effort mode. Support tiers:
+
+| Harness       | Tier          | Install guide                                  |
+| ------------- | ------------- | ---------------------------------------------- |
+| Claude Code   | First-class   | Sections above                                 |
+| OpenCode      | First-class   | [.opencode/INSTALL.md](.opencode/INSTALL.md)   |
+| Codex         | Best-effort — skills-only, clone + symlink   | [.codex/INSTALL.md](.codex/INSTALL.md)     |
+| Cursor        | Best-effort — skills + agents via plugin manifest | [.cursor-plugin/plugin.json](.cursor-plugin/plugin.json) |
+| Gemini CLI    | Best-effort — skills via extension manifest; `Task()` parallel dispatch not supported | [gemini-extension.json](gemini-extension.json) |
+
+Best-effort means: the skills load and the workflow principles apply, but a handful of primitives (notably `<system-reminder>` injection and Claude Code's `Task(...)` tool) don't have a direct equivalent. The platform-notes in individual skills flag where this matters.
+
 ## How it works
 
 It starts the same way Superpowers does — your agent doesn't just jump into code. It steps back and asks what you're really trying to do.

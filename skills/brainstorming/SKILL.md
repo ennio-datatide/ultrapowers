@@ -23,6 +23,10 @@ The design can be as short as one line. What CANNOT be skipped is alignment with
 
 "Simple" projects are where unexamined assumptions cause wasted work — but the confirmation doesn't have to be a document. A single line the user reads and nods to is enough for a one-liner. The HARD-GATE enforces alignment, not ceremony.
 
+## Platform Notes
+
+Several sections below reference reference files via the `${CLAUDE_SKILL_DIR}` path variable. This variable is Claude-Code-specific and resolves to the directory this SKILL.md lives in. On non-Claude-Code platforms (Codex, OpenCode, Cursor, Gemini CLI), treat `${CLAUDE_SKILL_DIR}` as a placeholder for the same directory and read the files directly (for example: `skills/brainstorming/sibling-pack-map.md` relative to the plugin root, or the equivalent installed path on that platform).
+
 ## Checklist
 
 You MUST create a task for each of these items and complete them in order. Steps 2–3 always run. Steps 4–12 run only for `full` triage; `small` and `trivial` take reduced paths described under Step 2.
@@ -91,7 +95,7 @@ digraph brainstorming {
 - **Small or trivial** → implement directly (no research, no plan doc, no spec doc) — TDD discipline still applies on the implementer side. For small, a single commit captures the change; for trivial, same.
 - **Bug phrasing** → hand off to `ultrapowers:systematic-debugging` immediately; do not run triage.
 
-Do NOT invoke `writing-plans`, `frontend-design`, `mcp-builder`, or any other implementation skill directly from the full path — those are downstream of the research pipeline.
+Do NOT invoke `writing-plans` or any other implementation skill directly from the full path — those are downstream of the research pipeline.
 
 ## Triage Routing
 
@@ -178,7 +182,6 @@ The user's first reply is authoritative. Do not second-guess it. If a user says 
 
 - Write the validated design (spec) to `docs/ultrapowers/specs/YYYY-MM-DD-<topic>-design.md`
   - (User preferences for spec location override this default)
-- Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document only if the user opted to commit design docs (see Workflow Preferences). Default: do not commit.
 
 **Spec Self-Review:**
