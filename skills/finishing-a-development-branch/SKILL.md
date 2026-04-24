@@ -23,7 +23,7 @@ Before presenting options, read `.claude/ultrapowers-preferences.json` in the pr
 
 ### Step 1: Verify Tests
 
-**Before presenting options, verify tests pass:**
+**Before presenting options, verify tests pass.** This step is the concrete enforcement of the `ultrapowers:verification-before-completion` doctrine — no "should work", no "tests were green earlier", no trust in prior output. Run the command fresh, in this session, and read the output before continuing.
 
 ```bash
 # Run project's test suite
@@ -215,6 +215,9 @@ git worktree remove <worktree-path>
 **Called by:**
 - **subagent-driven-development** (Step 7) - After all tasks complete
 - **executing-plans** (Step 5) - After all batches complete
+
+**Required sub-skill:**
+- **ultrapowers:verification-before-completion** - Step 1's test run is this skill's concrete enforcement point. If the test command has not been run fresh in this session, stop and run it before presenting options.
 
 **Pairs with:**
 - **using-git-worktrees** - Cleans up worktree created by that skill

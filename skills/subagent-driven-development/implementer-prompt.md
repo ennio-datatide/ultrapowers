@@ -26,13 +26,22 @@ Task tool (general-purpose):
 
     **Ask them now.** Raise any concerns before starting work.
 
+    ## Required First Step: Invoke TDD Skill
+
+    **Before writing any code**, invoke the `ultrapowers:test-driven-development` skill.
+    This is mandatory, not advisory — every implementer subagent starts with a TDD
+    invocation. The skill defines the red-green-refactor cycle you will follow for
+    every production code change in this task. If you skip this step, your work
+    will fail code review.
+
     ## Your Job
 
-    Once you're clear on requirements:
-    1. Implement exactly what the task specifies
-    2. Write tests (following TDD if task says to)
-    3. Verify implementation works
-    4. Commit your work
+    Once you're clear on requirements and have invoked the TDD skill:
+    1. Implement exactly what the task specifies, following the TDD cycle (failing
+       test first, minimal implementation, refactor)
+    2. Write tests **before** the code that satisfies them — never after
+    3. Verify implementation works (run the actual test command; no "should pass")
+    4. Commit your work (if `autoCommit: true` was passed in) or stage it (if `autoCommit: false`)
     5. Self-review (see below)
     6. Report back
 

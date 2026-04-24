@@ -130,6 +130,17 @@ From 24 failure memories:
 - Implications of success
 - ANY communication suggesting completion/correctness
 
+## When Not To Apply
+
+This skill governs claims about **work state** (tests pass, build succeeds, feature complete, bug fixed). It does not apply to:
+
+- Discussion, brainstorming, or planning statements where no verification command exists ("this plan looks reasonable", "option A fits better")
+- Opinion or recommendation language ("I'd prefer X", "we should consider Y")
+- Hypothetical or conditional statements ("if we add retry logic, the timeout issue goes away")
+- Descriptions of intent before work begins ("I'll start with the handler, then wire up the tests")
+
+If there is no command that could prove or disprove the claim, there is nothing to verify — speak freely.
+
 ## The Bottom Line
 
 **No shortcuts for verification.**

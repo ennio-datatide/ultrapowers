@@ -368,4 +368,6 @@ Production code → test exists and failed first
 Otherwise → not TDD
 ```
 
+Tests written later, even comprehensively, are not TDD. Letter and spirit both require test-first.
+
 No exceptions without your human partner's permission.

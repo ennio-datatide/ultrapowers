@@ -176,9 +176,3 @@ After saving the plan, **auto-pick** the execution approach — do not ask the u
 > "Plan complete and saved to `docs/ultrapowers/plans/<filename>.md`. Proceeding with Subagent-Driven execution."
 
 **Only present a menu if you are NOT picking Subagent-Driven** — explain why (e.g., "This plan has 2 tightly-coupled tasks; inline is faster") and ask for confirmation. Never ask the user to pick between approaches when Subagent-Driven is clearly the right call.
-
-### Controller judgment inside Subagent-Driven execution
-
-Subagent-Driven Development prescribes a fresh implementer subagent + spec review + code-quality review per task. That ceremony exists for a reason — it catches correctness and quality issues early. But for **trivial mechanical tasks** (single bash command, pasting fixed content into a new file, read-only grep checks), the controller can verify directly and skip the reviewer dispatches.
-
-Rule of thumb: if the task has no judgment, no domain reasoning, and no "did the implementer build the right thing" ambiguity, verify inline. Dispatch subagents when there's real work being delegated. Never skip reviews for tasks that edit existing logic-bearing code.

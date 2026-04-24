@@ -98,9 +98,29 @@ Not every task needs implementer + spec reviewer + quality reviewer + final revi
 
 Trivial-tier tasks in a plan are uncommon. If the plan decomposition produced many tier-A tasks, consider whether the plan is over-decomposed rather than under-reviewing. Tier-B is the default; tier-A is the explicit exception.
 
+### Controller judgment on ceremony
+
+The two-stage review (spec + code-quality) per task exists for a reason — it catches correctness and quality issues early. But for **trivial mechanical tasks** (single bash command, pasting fixed content into a new file, read-only grep checks), the controller can verify directly and skip the reviewer dispatches.
+
+Rule of thumb: if the task has no judgment, no domain reasoning, and no "did the implementer build the right thing" ambiguity, verify inline. Dispatch subagents when there's real work being delegated. **Never skip reviews for tasks that edit existing logic-bearing code** — even a one-line change to a critical handler gets both reviews.
+
 ## Workflow Preferences
 
 Before dispatching implementer subagents, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its values for `autoCommit` and `autoPush`. Pass these to implementer subagents so they know whether to commit after each task and whether to push. If the file is missing, default to `autoCommit: true`, `autoPush: true` (matches the `brainstorming` skill and README 1.x defaults).
+
+### Preferences Propagation
+
+The controller plumbs prefs through each dispatched subagent. Inject the resolved values explicitly — don't rely on subagents re-reading the prefs file.
+
+| Prompt file | Variables injected | Behavior by value |
+|---|---|---|
+| `./implementer-prompt.md` | `autoCommit`, `autoPush` | `autoCommit: true` → implementer commits at end of task. `autoCommit: false` → implementer **stages** changes (`git add`) but does not commit; the controller decides commit boundaries later. `autoPush` is implementer-ignored (only finishing-a-development-branch pushes). |
+| `./spec-reviewer-prompt.md` | (none) | Read-only review; no commit/push side effects. |
+| `./code-quality-reviewer-prompt.md` | (none) | Read-only review; no commit/push side effects. |
+
+**Contract for `autoCommit: false`:** the implementer's `Report Format` still reports DONE with the staged diff. Reviewers run against the staged state, not against a commit. The controller — or `finishing-a-development-branch` at the end — is responsible for deciding commit granularity. Do not force implementers to commit when the user opted out.
+
+**Verifying the contract:** if you change the three prompt files, re-read this subsection to confirm the behavior still matches. When in doubt, prefer documenting the divergence here over silently changing prompt semantics.
 
 ## Pre-Implementation Skills Check
 
@@ -294,6 +314,7 @@ Done!
 - **ultrapowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
 - **ultrapowers:writing-plans** - Creates the plan this skill executes
 - **ultrapowers:requesting-code-review** - Code review template for reviewer subagents
+- **ultrapowers:verification-before-completion** - REQUIRED: Invoke before marking any task complete and before handing off to finishing-a-development-branch. No completion claim without fresh verification evidence.
 - **ultrapowers:finishing-a-development-branch** - Complete development after all tasks
 
 **Subagents should use:**

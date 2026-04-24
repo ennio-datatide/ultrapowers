@@ -45,6 +45,7 @@ For each task:
 ### Step 3: Complete Development
 
 After all tasks complete and verified:
+- **REQUIRED SUB-SKILL:** Use ultrapowers:verification-before-completion to confirm each task's acceptance criteria actually pass. Evidence before claims — no "should work" hand-waving.
 - Announce: "I'm using the finishing-a-development-branch skill to complete this work."
 - **REQUIRED SUB-SKILL:** Use ultrapowers:finishing-a-development-branch
 - Follow that skill to verify tests, present options, execute choice
@@ -80,4 +81,5 @@ After all tasks complete and verified:
 **Required workflow skills:**
 - **ultrapowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
 - **ultrapowers:writing-plans** - Creates the plan this skill executes
+- **ultrapowers:verification-before-completion** - REQUIRED: Invoke before handing off to finishing-a-development-branch. No completion claim without fresh verification evidence.
 - **ultrapowers:finishing-a-development-branch** - Complete development after all tasks
