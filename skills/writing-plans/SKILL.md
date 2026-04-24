@@ -20,7 +20,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 ## Workflow Preferences
 
-Before writing the plan, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its values for `autoCommit` and `autoPush` to determine whether commit steps should be included in the plan. If the file is missing, default to all OFF (no auto-commit, no auto-push).
+Before writing the plan, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its values for `autoCommit` and `autoPush` to determine whether commit steps should be included in the plan. If the file is missing, default to `autoCommit: true`, `autoPush: true`, `commitDesignDocs: false` (matches the `brainstorming` skill and README 1.x defaults).
 
 ## Scope Check
 

@@ -15,7 +15,7 @@ Guide completion of development work by presenting clear options and handling ch
 
 ## Workflow Preferences
 
-Before presenting options, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its `autoPush` value to determine whether to push automatically. If the file is missing, default to OFF (no auto-push).
+Before presenting options, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its `autoPush` value to determine whether to push automatically. If the file is missing, default to `autoPush: true` (matches the `brainstorming` skill and README 1.x defaults).
 
 ## The Process
 

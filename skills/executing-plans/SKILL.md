@@ -15,7 +15,7 @@ Load plan, review critically, execute all tasks, report when complete.
 
 ## Workflow Preferences
 
-Before executing, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its values for `autoCommit` and `autoPush` to determine whether to commit after each task and whether to push. If the file is missing, default to all OFF (no auto-commit, no auto-push).
+Before executing, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its values for `autoCommit` and `autoPush` to determine whether to commit after each task and whether to push. If the file is missing, default to `autoCommit: true`, `autoPush: true` (matches the `brainstorming` skill and README 1.x defaults).
 
 ## The Process
 
