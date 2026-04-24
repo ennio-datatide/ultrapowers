@@ -88,7 +88,7 @@ Ultrapowers is **first-class on Claude Code**; other harnesses run the skills in
 | ------------- | ------------- | ---------------------------------------------- |
 | Claude Code   | First-class   | Sections above                                 |
 | OpenCode      | First-class   | [.opencode/INSTALL.md](.opencode/INSTALL.md)   |
-| Codex         | Best-effort — skills-only, clone + symlink   | [.codex/INSTALL.md](.codex/INSTALL.md)     |
+| Codex         | Best-effort — skills + agents via plugin manifest (clone + symlink install) | [.codex/INSTALL.md](.codex/INSTALL.md) / [.codex-plugin/plugin.json](.codex-plugin/plugin.json) |
 | Cursor        | Best-effort — skills + agents via plugin manifest | [.cursor-plugin/plugin.json](.cursor-plugin/plugin.json) |
 | Gemini CLI    | Best-effort — skills via extension manifest; `Task()` parallel dispatch not supported | [gemini-extension.json](gemini-extension.json) |
 
