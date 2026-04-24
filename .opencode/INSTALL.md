@@ -52,7 +52,7 @@ To pin a specific version:
 
 ```json
 {
-  "plugin": ["ultrapowers@git+https://github.com/ennio-datatide/ultrapowers.git#v5.0.3"]
+  "plugin": ["ultrapowers@git+https://github.com/ennio-datatide/ultrapowers.git#v1.2.0"]
 }
 ```
 
