@@ -1,3 +1,6 @@
-# These are supported funding model platforms
-
-github: [obra]
+# GitHub Sponsors / funding configuration.
+# Leave entries commented out until a sponsors account is set up.
+# See: https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+#
+# github: [ennio-datatide]
+# custom: ["https://datatide.io/sponsor"]

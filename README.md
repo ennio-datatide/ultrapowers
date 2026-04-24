@@ -18,7 +18,6 @@
   <a href="https://github.com/ennio-datatide/ultrapowers/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/ennio-datatide/ultrapowers?color=6d28d9&style=flat-square"></a>
   <a href="https://github.com/ennio-datatide/ultrapowers/pulls"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-6d28d9?style=flat-square"></a>
   <a href="https://docs.claude.com/en/docs/claude-code"><img alt="Claude Code" src="https://img.shields.io/badge/Claude%20Code-plugin-6d28d9?style=flat-square"></a>
-  <a href="https://github.com/sponsors/obra"><img alt="Sponsor Superpowers" src="https://img.shields.io/badge/%E2%9D%A4-sponsor%20superpowers-ea4aaa?style=flat-square"></a>
 </p>
 
 <p align="center">
@@ -188,7 +187,7 @@ Skills live directly in this repository. To contribute:
 
 ## Attribution
 
-Ultrapowers is a fork of [Superpowers](https://github.com/obra/superpowers) by [Jesse Vincent (obra)](https://blog.fsck.com) and the team at [Prime Radiant](https://primeradiant.com). The original Superpowers workflow is brilliant — Ultrapowers builds on top of it. If Superpowers has helped you, consider [sponsoring Jesse's work](https://github.com/sponsors/obra).
+Ultrapowers started as a fork of [Superpowers](https://github.com/obra/superpowers) by [Jesse Vincent (obra)](https://blog.fsck.com) and the team at [Prime Radiant](https://primeradiant.com), and has since diverged with its own research pipeline, workflow defaults, sibling-pack integration, architecture profile matching, and tone calibration. Credit for the original skill-system foundation goes to their work.
 
 ## License
 
@@ -196,8 +195,8 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ## Community
 
-Ultrapowers is built by [Ennio Maldonado](https://www.enniomaldonado.com) at [DataTide](https://datatide.io), extending the work of [Jesse Vincent](https://blog.fsck.com) and [Prime Radiant](https://primeradiant.com).
+Ultrapowers is built by [Ennio Maldonado](https://www.enniomaldonado.com) at [DataTide](https://datatide.io).
 
 - **Docs**: https://datatide.io/ultrapowers
 - **Issues**: https://github.com/ennio-datatide/ultrapowers/issues
-- **Superpowers Discord**: [Join the community](https://discord.gg/Jd8Vphy9jq)
+- **Course**: https://ultrapowers.dev
