@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/ennio-datatide/ultrapowers/releases"><img alt="Version" src="https://img.shields.io/badge/plugin-v5.2.0-6d28d9?style=flat-square"></a>
+  <a href="https://github.com/ennio-datatide/ultrapowers/releases"><img alt="Version" src="https://img.shields.io/badge/plugin-v1.2.0-6d28d9?style=flat-square"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/ennio-datatide/ultrapowers?color=6d28d9&style=flat-square"></a>
   <a href="https://github.com/ennio-datatide/ultrapowers/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/ennio-datatide/ultrapowers?color=6d28d9&style=flat-square"></a>
   <a href="https://github.com/ennio-datatide/ultrapowers/pulls"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-6d28d9?style=flat-square"></a>
@@ -43,7 +43,7 @@ Ultrapowers extends [Superpowers](https://github.com/obra/superpowers) by Jesse 
 | DataTide Consulting | Custom AI solutions for your business | [datatide.io](https://datatide.io)         |
 | This Repository     | The open source skill system          | You're here                                |
 
-## What's New in 5.2
+## What's New in 1.2
 
 - **Workflow preferences, persisted per repo.** `.claude/ultrapowers-preferences.json` stores `autoCommit`, `autoPush`, `commitDesignDocs`, and sibling-pack suggestion flags. Brainstorming asks once — one confirm-or-tweak prompt — then every downstream skill respects the setting. Defaults: auto-commit on, auto-push on, design docs local.
 - **Transparent sibling-pack awareness.** When [`ultrapowers-dev`](https://github.com/ennio-datatide/ultrapowers-dev) or [`ultrapowers-business`](https://github.com/ennio-datatide/ultrapowers-business) are installed, the workflow silently references their skills in specs, audits, and plan annotations. Missing pack → one blocking "install / skip / stop suggesting" prompt.

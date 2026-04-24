@@ -5,13 +5,13 @@
   },
   "owner": {
     "name": "Ennio Maldonado",
-    "url": "https://www.datatide.com"
+    "url": "https://datatide.io"
   },
   "plugins": [
     {
       "name": "ultrapowers",
       "description": "Core workflow: research-driven development with brainstorming, deep research, skills auditing, TDD, and subagent-driven development",
-      "version": "5.2.0",
+      "version": "1.2.0",
       "source": "./"
     },
     {
