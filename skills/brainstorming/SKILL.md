@@ -21,18 +21,19 @@ Every project goes through this process. A todo list, a single-function utility,
 
 You MUST create a task for each of these items and complete them in order:
 
-1. **Explore project context** — check files, docs, recent commits
-2. **Match architecture profile** — read `~/.claude/ultrapowers-architecture-defaults.json` (then repo-level override if present); match signals from user's idea; if a profile fits, suggest its stack before asking clarifying questions (see Architecture Profile Matching section)
-3. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
-4. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-5. **Load or ask workflow preferences** — check for saved preferences in .claude/ultrapowers-preferences.json; if missing, ask and save (see Workflow Preferences section below)
-6. **Propose 2-3 approaches** — with trade-offs and your recommendation
-7. **Present design** — in sections scaled to their complexity, get user approval after each section
-8. **Scan for sibling-pack skills** — after design is approved, match the design against `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`; bucket matches into installed vs missing; for missing packs, emit a blocking prompt per pack (see Sibling-Pack Scan section)
-9. **Write design doc** — save to `docs/ultrapowers/specs/YYYY-MM-DD-<topic>-design.md` (commit only if user opted in). If a profile matched in step 2 or skills matched in step 8, include them in a `## Referenced Skills` section inside the spec.
-10. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-11. **User reviews written spec** — ask user to review the spec file before proceeding
-12. **Transition to research** — invoke deep-research skill to capture current state of the art
+1. **Explore project context** — check files, docs, recent commits (silent machine step)
+2. **Calibrate user tone** — read `~/.claude/ultrapowers-user-profile.json` (and repo-level `technicalComfortOverride` if present); if missing, ask the single calibration question (see Tone Calibration section). Result shapes every prompt in subsequent steps.
+3. **Match architecture profile** — read `~/.claude/ultrapowers-architecture-defaults.json` (then repo-level override if present); match signals from user's idea; if a profile fits, suggest its stack before asking clarifying questions (see Architecture Profile Matching section)
+4. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
+5. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
+6. **Load or ask workflow preferences** — check for saved preferences in .claude/ultrapowers-preferences.json; if missing, ask and save (see Workflow Preferences section below). Phrasing adapts to tone calibration.
+7. **Propose 2-3 approaches** — with trade-offs and your recommendation
+8. **Present design** — in sections scaled to their complexity, get user approval after each section
+9. **Scan for sibling-pack skills** — after design is approved, match the design against `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`; bucket matches into installed vs missing; for missing packs, emit a blocking prompt per pack (see Sibling-Pack Scan section)
+10. **Write design doc** — save to `docs/ultrapowers/specs/YYYY-MM-DD-<topic>-design.md` (commit only if user opted in). If tone is `non-technical`, open the spec with a plain-language summary paragraph before the technical body. If a profile matched in step 3 or skills matched in step 9, include them in a `## Referenced Skills` section inside the spec.
+11. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+12. **User reviews written spec** — ask user to review the spec file before proceeding (explain in the tone calibrated for this user)
+13. **Transition to research** — invoke deep-research skill to capture current state of the art
 
 ## Process Flow
 
@@ -205,6 +206,80 @@ The `suggestSiblingPacks` object is additive and controls whether Step 6a (below
 If `.claude/` directory doesn't exist, create it. Suggest adding `.claude/ultrapowers-preferences.json` to `.gitignore` if not already ignored.
 
 All downstream skills (`writing-plans`, `subagent-driven-development`, `executing-plans`, `finishing-a-development-branch`, `project-setup`) read this file and respect the values. Unknown keys (like `suggestSiblingPacks` in older consumers) are ignored gracefully. If the file is missing, fall back to defaults documented above (all three workflow flags ON for auto-commit/auto-push, OFF for commitDesignDocs; both `suggestSiblingPacks` flags ON).
+
+## Tone Calibration
+
+**Step 2 — Calibrate user tone:**
+
+The same design conversation should sound very different with a backend engineer than with a founder who doesn't write code. We're still the technical experts — we still recommend the best stack — but the user is describing what they want in their own words, so the language we use back to them has to match their comfort level.
+
+### Lookup order
+
+1. Repo override: `<repo>/.claude/ultrapowers-preferences.json` → `technicalComfortOverride` field (if present, wins).
+2. User-level: `~/.claude/ultrapowers-user-profile.json` → `technicalComfort` field.
+3. Neither set → ask the first-run question (below), save answer, proceed.
+
+### First-run question
+
+Ask exactly once, as the **first user-facing question** of the session (before workflow prefs, before clarifying questions):
+
+> "Quick calibration so I match your style — are you **technical** (developer, engineer, tech PM) or **non-technical** (creator, founder, business owner, designer)? Reply `technical` or `non-technical`, or describe yourself in your own words and I'll infer."
+
+**Parsing:**
+
+| Reply contains | Save as |
+|---|---|
+| `technical` / `dev` / `engineer` / `pm` / `technical lead` / `cto` | `"technical"` |
+| `non-technical` / `non tech` / `creator` / `founder` / `owner` / `designer` / `marketer` / `not a dev` | `"non-technical"` |
+| Free-form description — infer from context (mentions of code, frameworks, APIs → technical; mentions of business, product, users-without-tech-details → non-technical) | best guess, then confirm in one line: *"Going with `<bucket>` — say 'recalibrate' any time to change."* |
+| Ambiguous / blank | default to `"technical"` and announce: *"Defaulting to technical tone — say 'explain simpler' any time to switch."* |
+
+### Saving
+
+Write to `~/.claude/ultrapowers-user-profile.json`:
+
+```json
+{
+  "technicalComfort": "technical"
+}
+```
+
+If `~/.claude/` doesn't exist, create it. The file is user-level on purpose — the user's comfort level doesn't change between projects. Use a repo-level `technicalComfortOverride` only when a specific project needs a different calibration (e.g., you're helping a non-technical collaborator).
+
+### What `technical` mode does
+
+- Use stack / framework / library names directly: "Astro + Tailwind v4 + Drizzle + Neon."
+- Discuss tradeoffs with precise vocabulary: SSR vs SSG, cold-start latency, query N+1, cache invalidation.
+- Ask questions at the layer the user operates: "Do you want optimistic updates or pessimistic?"
+- Design docs, plans, and research briefs — already technical, no change.
+
+### What `non-technical` mode does
+
+- Still name the stack, but add a short parenthetical the first time: "Astro (a modern framework for fast content sites)."
+- Frame tradeoffs as **business outcomes**: speed, cost, future maintenance, flexibility — not technical internals.
+- Translate clarifying questions into plain language:
+  - Instead of: *"Should this page be SSR or SSG?"*
+  - Say: *"Should every visitor see the same page, or personalized content? Static pages load faster and cost less; dynamic pages let you personalize but are slightly slower."*
+- Rephrase the workflow-prefs prompt:
+  - Instead of: *"auto-commit, auto-push, commit design docs"*
+  - Say: *"Workflow defaults: save your progress automatically, share to GitHub automatically, keep design docs private. Reply `ok` or tell me what to change."*
+- When writing the design doc (step 10), **prepend a plain-language summary paragraph** at the top of the spec explaining what's being built in business terms. The technical body follows — that part stays technical because the audience is the implementer.
+
+### What stays the same in both modes
+
+- The stack recommendation itself. We pick the best tools regardless of the user's comfort — that's our job as the technical expert supporting the build.
+- The implementation plan and research brief are always technical (implementer-facing).
+- The architecture-profile match. We still suggest the right profile; only the *presentation* of that profile changes in tone.
+
+### Override at any time
+
+User can say:
+
+- `explain simpler` / `talk less technical` / `I'm not a dev` → switch to `non-technical`, overwrite the file.
+- `talk more technical` / `use technical terms` / `I'm a dev` → switch to `technical`, overwrite the file.
+- `recalibrate` → re-ask the first-run question.
+
+When switching, announce the change in one line: *"Got it — switching to plain-language mode. Say 'talk more technical' any time to switch back."*
 
 ## Architecture Profile Matching
 
