@@ -21,16 +21,19 @@ Every project goes through this process. A todo list, a single-function utility,
 
 You MUST create a task for each of these items and complete them in order:
 
-1. **Explore project context** — check files, docs, recent commits
-2. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
-3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-4. **Load or ask workflow preferences** — check for saved preferences in .claude/ultrapowers-preferences.json; if missing, ask and save (see Workflow Preferences section below)
-5. **Propose 2-3 approaches** — with trade-offs and your recommendation
-6. **Present design** — in sections scaled to their complexity, get user approval after each section
-7. **Write design doc** — save to `docs/ultrapowers/specs/YYYY-MM-DD-<topic>-design.md` (commit only if user opted in)
-8. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-9. **User reviews written spec** — ask user to review the spec file before proceeding
-10. **Transition to research** — invoke deep-research skill to capture current state of the art
+1. **Explore project context** — check files, docs, recent commits (silent machine step)
+2. **Calibrate user tone** — read `~/.claude/ultrapowers-user-profile.json` (and repo-level `technicalComfortOverride` if present); if missing, ask the single calibration question (see Tone Calibration section). Result shapes every prompt in subsequent steps.
+3. **Match architecture profile** — read `~/.claude/ultrapowers-architecture-defaults.json` (then repo-level override if present); match signals from user's idea; if a profile fits, suggest its stack before asking clarifying questions (see Architecture Profile Matching section)
+4. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
+5. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
+6. **Load or ask workflow preferences** — check for saved preferences in .claude/ultrapowers-preferences.json; if missing, ask and save (see Workflow Preferences section below). Phrasing adapts to tone calibration.
+7. **Propose 2-3 approaches** — with trade-offs and your recommendation
+8. **Present design** — in sections scaled to their complexity, get user approval after each section
+9. **Scan for sibling-pack skills** — after design is approved, match the design against `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`; bucket matches into installed vs missing; for missing packs, emit a blocking prompt per pack (see Sibling-Pack Scan section)
+10. **Write design doc** — save to `docs/ultrapowers/specs/YYYY-MM-DD-<topic>-design.md` (commit only if user opted in). If tone is `non-technical`, open the spec with a plain-language summary paragraph before the technical body. If a profile matched in step 3 or skills matched in step 9, include them in a `## Referenced Skills` section inside the spec.
+11. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+12. **User reviews written spec** — ask user to review the spec file before proceeding (explain in the tone calibrated for this user)
+13. **Transition to research** — invoke deep-research skill to capture current state of the art
 
 ## Process Flow
 
@@ -150,35 +153,181 @@ Wait for the user's response. If they request changes, make them and re-run the 
 
 **Step 4 — Load or ask workflow preferences:**
 
-Read `.claude/ultrapowers-preferences.json` in the project root using the Read tool. If it exists and contains valid JSON with `autoCommit`, `autoPush`, and `commitDesignDocs` keys, load the values silently and announce:
+Read `.claude/ultrapowers-preferences.json` in the project root using the Read tool. If it exists and contains valid JSON, load the values silently and announce:
 
-> "Using saved preferences (auto-commit: on/off, auto-push: on/off, commit docs: on/off). Say 'change preferences' to update."
+> "Using saved workflow prefs (auto-commit: on/off, auto-push: on/off, commit docs: on/off). Say 'change prefs' to update."
 
-If the file does not exist or is invalid, ask the user all three questions in **a single message**:
+If the file does not exist or is invalid, ask the user **one** question with the defaults visible:
 
-> "Before we move on to approaches, a few workflow preferences:
-> 1. **Auto-commit** — Should I commit autonomously as I complete tasks, or would you prefer to handle commits yourself?
-> 2. **Auto-push** — Should I push to remote autonomously, or would you prefer to push manually?
-> 3. **Commit design docs** — Should I commit design specs and research briefs to git, or keep them local only?"
+> "Workflow defaults for this repo: **auto-commit on**, **auto-push on**, **commit design docs off**. Reply `ok` to accept, or tell me what to change (e.g., `no auto-push`, `commit docs too`, `all off`)."
 
-**Defaults if the user doesn't answer or says "whatever":**
-- Auto-commit: **OFF** (user commits manually)
-- Auto-push: **OFF** (user pushes manually)
-- Commit design docs: **OFF** (local only)
+**Defaults:**
+- `autoCommit`: **ON** (commit autonomously as tasks complete)
+- `autoPush`: **ON** (push to remote after commits)
+- `commitDesignDocs`: **OFF** (design specs/research briefs stay local)
+- `suggestSiblingPacks.dev`: **ON** (suggest installing `ultrapowers-dev` when relevant and missing)
+- `suggestSiblingPacks.business`: **ON** (suggest installing `ultrapowers-business` when relevant and missing)
 
-After collecting answers, write them to `.claude/ultrapowers-preferences.json`:
+**Deterministic reply parsing** (apply in order; multiple modifiers combine):
+
+| User reply | Resulting change |
+|---|---|
+| `ok` / `yes` / `accept` / empty | all defaults as-is |
+| `no auto-commit` / `manual commits` | `autoCommit: false` |
+| `no auto-push` / `manual push` | `autoPush: false` |
+| `commit docs` / `include design docs` | `commitDesignDocs: true` |
+| `all off` | `autoCommit: false`, `autoPush: false`, `commitDesignDocs: false` |
+| `all on` | `autoCommit: true`, `autoPush: true`, `commitDesignDocs: true` |
+
+Combined example: `no auto-push, commit docs` → `autoPush: false`, `commitDesignDocs: true`.
+
+If the reply is ambiguous (e.g., `push but not commit`), ask **one** targeted follow-up:
+
+> "To confirm: auto-push on, auto-commit off, commit docs off — correct?"
+
+Do not guess.
+
+**Schema written to `.claude/ultrapowers-preferences.json`:**
 
 ```json
 {
   "autoCommit": true,
-  "autoPush": false,
-  "commitDesignDocs": false
+  "autoPush": true,
+  "commitDesignDocs": false,
+  "suggestSiblingPacks": {
+    "dev": true,
+    "business": true
+  }
 }
 ```
 
+The `suggestSiblingPacks` object is additive and controls whether Step 6a (below) fires blocking "install missing sibling pack" prompts. If the file is missing this key, treat both flags as `true`. If a user replies `stop suggesting ultrapowers-dev` (or the flag is written via the sibling-pack scan step), persist `suggestSiblingPacks.dev: false` without touching other fields.
+
 If `.claude/` directory doesn't exist, create it. Suggest adding `.claude/ultrapowers-preferences.json` to `.gitignore` if not already ignored.
 
-All downstream skills (writing-plans, subagent-driven-development, executing-plans, finishing-a-development-branch) read this file and respect the values. If the file is missing, fall back to defaults (all OFF).
+All downstream skills (`writing-plans`, `subagent-driven-development`, `executing-plans`, `finishing-a-development-branch`, `project-setup`) read this file and respect the values. Unknown keys (like `suggestSiblingPacks` in older consumers) are ignored gracefully. If the file is missing, fall back to defaults documented above (all three workflow flags ON for auto-commit/auto-push, OFF for commitDesignDocs; both `suggestSiblingPacks` flags ON).
+
+## Tone Calibration
+
+**Step 2 — Calibrate user tone:**
+
+The same design conversation should sound very different with a backend engineer than with a founder who doesn't write code. We're still the technical experts — we still recommend the best stack — but the user is describing what they want in their own words, so the language we use back to them has to match their comfort level.
+
+### Lookup order
+
+1. Repo override: `<repo>/.claude/ultrapowers-preferences.json` → `technicalComfortOverride` field (if present, wins).
+2. User-level: `~/.claude/ultrapowers-user-profile.json` → `technicalComfort` field.
+3. Neither set → ask the first-run question (below), save answer, proceed.
+
+### First-run question
+
+Ask exactly once, as the **first user-facing question** of the session (before workflow prefs, before clarifying questions):
+
+> "Quick calibration so I match your style — are you **technical** (developer, engineer, tech PM) or **non-technical** (creator, founder, business owner, designer)? Reply `technical` or `non-technical`, or describe yourself in your own words and I'll infer."
+
+**Parsing:**
+
+| Reply contains | Save as |
+|---|---|
+| `technical` / `dev` / `engineer` / `pm` / `technical lead` / `cto` | `"technical"` |
+| `non-technical` / `non tech` / `creator` / `founder` / `owner` / `designer` / `marketer` / `not a dev` | `"non-technical"` |
+| Free-form description — infer from context (mentions of code, frameworks, APIs → technical; mentions of business, product, users-without-tech-details → non-technical) | best guess, then confirm in one line: *"Going with `<bucket>` — say 'recalibrate' any time to change."* |
+| Ambiguous / blank | default to `"technical"` and announce: *"Defaulting to technical tone — say 'explain simpler' any time to switch."* |
+
+### Saving
+
+Write to `~/.claude/ultrapowers-user-profile.json`:
+
+```json
+{
+  "technicalComfort": "technical"
+}
+```
+
+If `~/.claude/` doesn't exist, create it. The file is user-level on purpose — the user's comfort level doesn't change between projects. Use a repo-level `technicalComfortOverride` only when a specific project needs a different calibration (e.g., you're helping a non-technical collaborator).
+
+### What `technical` mode does
+
+- Use stack / framework / library names directly: "Astro + Tailwind v4 + Drizzle + Neon."
+- Discuss tradeoffs with precise vocabulary: SSR vs SSG, cold-start latency, query N+1, cache invalidation.
+- Ask questions at the layer the user operates: "Do you want optimistic updates or pessimistic?"
+- Design docs, plans, and research briefs — already technical, no change.
+
+### What `non-technical` mode does
+
+- Still name the stack, but add a short parenthetical the first time: "Astro (a modern framework for fast content sites)."
+- Frame tradeoffs as **business outcomes**: speed, cost, future maintenance, flexibility — not technical internals.
+- Translate clarifying questions into plain language:
+  - Instead of: *"Should this page be SSR or SSG?"*
+  - Say: *"Should every visitor see the same page, or personalized content? Static pages load faster and cost less; dynamic pages let you personalize but are slightly slower."*
+- Rephrase the workflow-prefs prompt:
+  - Instead of: *"auto-commit, auto-push, commit design docs"*
+  - Say: *"Workflow defaults: save your progress automatically, share to GitHub automatically, keep design docs private. Reply `ok` or tell me what to change."*
+- When writing the design doc (step 10), **prepend a plain-language summary paragraph** at the top of the spec explaining what's being built in business terms. The technical body follows — that part stays technical because the audience is the implementer.
+
+### What stays the same in both modes
+
+- The stack recommendation itself. We pick the best tools regardless of the user's comfort — that's our job as the technical expert supporting the build.
+- The implementation plan and research brief are always technical (implementer-facing).
+- The architecture-profile match. We still suggest the right profile; only the *presentation* of that profile changes in tone.
+
+### Override at any time
+
+User can say:
+
+- `explain simpler` / `talk less technical` / `I'm not a dev` → switch to `non-technical`, overwrite the file.
+- `talk more technical` / `use technical terms` / `I'm a dev` → switch to `technical`, overwrite the file.
+- `recalibrate` → re-ask the first-run question.
+
+When switching, announce the change in one line: *"Got it — switching to plain-language mode. Say 'talk more technical' any time to switch back."*
+
+## Architecture Profile Matching
+
+**Step 2 — Match architecture profile:**
+
+Before asking clarifying questions, check if the user's described idea matches a pre-defined architecture profile. Profiles encode the user's default stack choices and feed directly into the design's Architecture section + skills-audit's "External" list.
+
+1. Read `~/.claude/ultrapowers-architecture-defaults.json` (user-level, baseline) and `<repo>/.claude/ultrapowers-architecture-defaults.json` (repo-level override — replaces user-level if present).
+2. If neither file exists AND this is the first run of modified brainstorming:
+   > "I don't see your architecture defaults file at `~/.claude/ultrapowers-architecture-defaults.json`. I can seed one with two profiles (marketing/content site + SaaS product app) based on your current reference projects. Want me to create it? (`yes` / `skip`)"
+
+   On `yes`: write the seed file using the two profiles from `${CLAUDE_SKILL_DIR}/architecture-profile-matching.md`. On `skip`: proceed without matching, don't ask again this session.
+3. If a file exists, apply the matching algorithm in `${CLAUDE_SKILL_DIR}/architecture-profile-matching.md` against the user's idea text.
+4. Present the result:
+   - **No match:** skip silently; proceed to clarifying questions.
+   - **Single match:** suggest the profile using the wording in the reference file; user accepts or declines.
+   - **Multiple matches:** present top 2-3 with signal counts; user picks or says `neither`.
+5. If accepted, store the profile ID for the session and bake its `stack` values into the design's Architecture section when you reach step 7.
+
+**Never auto-edit the defaults file.** Any change to profiles (including seed write) requires explicit user consent.
+
+## Sibling-Pack Scan
+
+**Step 8 — Scan for sibling-pack skills (runs after design is approved, before writing the spec):**
+
+1. Read `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`.
+2. Extract signals from the approved design: architecture section, tech stack mentions, domain descriptions, profile `stack` values (if a profile was matched in step 2).
+3. For each signal, look up matching skills in both the `ultrapowers-dev` and `ultrapowers-business` tables.
+4. For each matched skill, scan the session's available-skills list (injected as `<system-reminder>`) for the corresponding prefix:
+   - `ultrapowers-dev:<name>` present → **installed match** for `ultrapowers-dev`.
+   - `ultrapowers-business:<name>` present → **installed match** for `ultrapowers-business`.
+   - Pack prefix entirely absent from available-skills → **missing pack** (candidate for install prompt).
+5. Handle results:
+   - **Installed matches** (any count) → append a `## Referenced Skills` section to the spec (written in step 9) listing them with one-line rationale per skill. Done silently — no user prompt.
+   - **Missing pack, relevant AND `suggestSiblingPacks.<pack>: true`** → emit a blocking prompt, one per missing pack, sequentially. Do not combine packs into a single prompt.
+
+**Blocking prompt template (one per missing pack):**
+
+> "This project looks like it would benefit from the **ultrapowers-{dev|business}** pack. Detected signals: `{signal1}`, `{signal2}`, `{signal3}`. It's optional but would give the implementation plan access to current best-practice skills. Options:
+>
+> 1. **Install** — I'll pause while you run `/plugin install ultrapowers-{dev|business}@ultrapowers` (or use the interactive `/plugin` menu). When done, say `installed` and I'll re-scan.
+> 2. **Skip** — proceed without; I won't reference these skills in the spec.
+> 3. **Skip and stop suggesting** — sets `suggestSiblingPacks.{dev|business}: false` in `.claude/ultrapowers-preferences.json` so I don't suggest this pack again in this repo."
+
+Wait for user response:
+- `installed` → call `/reload-plugins` if needed, re-read the available-skills list (ask the user to paste the updated list if not automatically visible), re-bucket matches, and proceed. If the pack still doesn't appear, ask the user to verify the install and fall back to `skip` after one retry.
+- `skip` → drop matches for this pack for this session; don't write to prefs.
+- `skip and stop suggesting` → read current `.claude/ultrapowers-preferences.json`, set `suggestSiblingPacks.<pack>: false`, write it back (preserving all other keys), drop matches for this session.
 
 ## Visual Companion
 
