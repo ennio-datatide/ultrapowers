@@ -123,22 +123,21 @@ When the upstream `skills-audit` output includes a "Skills to Reference in Plan"
 
 1. Include the full list in the plan's header (under a "Skills referenced during implementation:" subheading).
 2. For each task, identify which of those skills apply (match against files touched, languages used, concerns involved).
-3. Prepend applicable skills to the task body as `@<skill-name>` pointers, one per line. Examples:
+3. Name applicable skills in the task body as a **Skills referenced** prose line, using the skill name only (no `@` prefix — `@` syntax force-loads files immediately and burns context). Examples:
 
    ```
    ### Task 3: Add Clerk auth middleware
 
-   @ultrapowers-dev:nextjs-patterns
-   @clerk-nextjs-patterns
+   **Skills referenced:** `ultrapowers-dev:nextjs-patterns`, `clerk-nextjs-patterns`
 
    **Files:**
    - Modify: ...
    ```
 
 4. Do not sprinkle pointers gratuitously — only on tasks where the skill materially shapes the implementation. A task that just writes a JSON file doesn't need every language skill appended.
-5. If skills-audit did not produce a list (or the project has no sibling-pack skills), skip annotation entirely. No placeholder `@nothing` pointers.
+5. If skills-audit did not produce a list (or the project has no sibling-pack skills), skip annotation entirely.
 
-The implementation skill (`subagent-driven-development` or `executing-plans`) reads these annotations when dispatching per-task subagents, ensuring they invoke the right skills.
+The implementation skill (`subagent-driven-development` or `executing-plans`) reads these annotations when dispatching per-task subagents and includes the named skills in the dispatch prompt so they're invoked on demand — never force-loaded up front.
 
 ## Remember
 - Exact file paths always
