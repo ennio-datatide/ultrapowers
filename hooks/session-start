@@ -14,6 +14,52 @@ if [ -d "$legacy_skills_dir" ]; then
     warning_message="\n\n<important-reminder>IN YOUR FIRST REPLY AFTER SEEING THIS MESSAGE YOU MUST TELL THE USER:⚠️ **WARNING:** Ultrapowers now uses Claude Code's skills system. Custom skills in ~/.config/ultrapowers/skills will not be read. Move custom skills to ~/.claude/skills instead. To make this message go away, remove ~/.config/ultrapowers/skills</important-reminder>"
 fi
 
+# Update check: compare installed version to marketplace main, cached 24h.
+# Opt out with ULTRAPOWERS_UPDATE_CHECK=0. Silent on network failure.
+check_for_update() {
+    [ "${ULTRAPOWERS_UPDATE_CHECK:-1}" = "0" ] && return 0
+
+    local installed
+    installed=$(grep -oE '"version"[[:space:]]*:[[:space:]]*"[^"]+"' "${PLUGIN_ROOT}/.claude-plugin/plugin.json" 2>/dev/null | head -1 | sed -E 's/.*"([^"]+)"$/\1/') || true
+    [ -z "${installed:-}" ] && return 0
+
+    local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/ultrapowers"
+    local cache_file="$cache_dir/update-check.json"
+    local now latest checked_at
+    now=$(date +%s)
+    local ttl=86400
+    latest=""
+
+    if [ -f "$cache_file" ]; then
+        checked_at=$(grep -oE '"checked_at"[[:space:]]*:[[:space:]]*[0-9]+' "$cache_file" 2>/dev/null | grep -oE '[0-9]+' | head -1) || true
+        if [ -n "${checked_at:-}" ] && [ "$((now - checked_at))" -lt "$ttl" ]; then
+            latest=$(grep -oE '"latest_version"[[:space:]]*:[[:space:]]*"[^"]+"' "$cache_file" 2>/dev/null | sed -E 's/.*"([^"]+)"$/\1/') || true
+        fi
+    fi
+
+    if [ -z "${latest:-}" ]; then
+        local remote
+        remote=$(curl --max-time 5 --silent --fail \
+            "https://raw.githubusercontent.com/ennio-datatide/ultrapowers/main/.claude-plugin/plugin.json" 2>/dev/null) || return 0
+        latest=$(printf '%s' "$remote" | grep -oE '"version"[[:space:]]*:[[:space:]]*"[^"]+"' | head -1 | sed -E 's/.*"([^"]+)"$/\1/') || true
+        [ -z "${latest:-}" ] && return 0
+
+        mkdir -p "$cache_dir" 2>/dev/null || true
+        printf '{"checked_at":%s,"latest_version":"%s"}\n' "$now" "$latest" > "$cache_file" 2>/dev/null || true
+    fi
+
+    if [ "$latest" != "$installed" ]; then
+        local newer
+        newer=$(printf '%s\n%s\n' "$installed" "$latest" | sort -V | tail -1)
+        if [ "$newer" = "$latest" ]; then
+            printf '\n\n<ultrapowers-update-available>\nUltrapowers %s is available (installed: %s). Tell the user once, then suggest they run `/plugin update ultrapowers` when ready. Do not run it yourself.\n</ultrapowers-update-available>' \
+                "$latest" "$installed"
+        fi
+    fi
+}
+
+update_notice=$(check_for_update || true)
+
 # Read using-ultrapowers content
 using_ultrapowers_content=$(cat "${PLUGIN_ROOT}/skills/using-ultrapowers/SKILL.md" 2>&1 || echo "Error reading using-ultrapowers skill")
 
@@ -32,7 +78,8 @@ escape_for_json() {
 
 using_ultrapowers_escaped=$(escape_for_json "$using_ultrapowers_content")
 warning_escaped=$(escape_for_json "$warning_message")
-session_context="<EXTREMELY_IMPORTANT>\nYou have ultrapowers.\n\n**Below is the full content of your 'ultrapowers:using-ultrapowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_ultrapowers_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>"
+update_notice_escaped=$(escape_for_json "$update_notice")
+session_context="<EXTREMELY_IMPORTANT>\nYou have ultrapowers.\n\n**Below is the full content of your 'ultrapowers:using-ultrapowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_ultrapowers_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>${update_notice_escaped}"
 
 # Output context injection as JSON.
 # Cursor hooks expect additional_context (snake_case).
