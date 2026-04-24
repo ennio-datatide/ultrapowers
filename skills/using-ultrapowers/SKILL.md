@@ -43,13 +43,13 @@ Skills use Claude Code tool names. Non-CC platforms: see `references/copilot-too
 
 Workflow preferences (auto-commit, auto-push, commit design docs) are collected during the **brainstorming** skill, after clarifying questions. All downstream skills respect these settings.
 
-**Defaults** (if not explicitly set): no auto-commit, no auto-push, design docs local only.
+**Defaults** (if not explicitly set): auto-commit ON, auto-push ON, design docs local only.
 
-| Preference | Default | Behavior when ON |
-|------------|---------|-----------------|
-| Auto-commit | OFF | Commit after each completed task/step |
-| Auto-push | OFF | Push after commits (requires auto-commit ON) |
-| Commit design docs | OFF | Include design specs in git commits |
+| Preference | Default | Behavior |
+|------------|---------|----------|
+| Auto-commit | **ON** | Commit after each completed task/step |
+| Auto-push | **ON** | Push after commits (requires auto-commit ON) |
+| Commit design docs | OFF | Keep specs, research briefs, and plans local; do not include in git commits |
 
 # Using Skills
 
@@ -110,22 +110,33 @@ These thoughts mean STOP—you're rationalizing:
 
 When multiple skills could apply, use this order:
 
-1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
-2. **Research pipeline second** (deep-research → skills-audit → skills-creation) - ensures current knowledge
-3. **Implementation skills third** (writing-plans, TDD, mcp-builder) - these guide execution
+1. **Process skills first** (brainstorming, systematic-debugging) — these determine HOW to approach the task
+2. **Research pipeline second** (deep-research → skills-audit → skills-creation) — ensures current knowledge; runs only on the **full** triage path
+3. **Implementation skills third** (writing-plans, TDD) — these guide execution
 
-"Let's build X" → brainstorming → research pipeline → implementation skills.
-"Fix this bug" → debugging first, then domain-specific skills.
+"Let's build X" → brainstorming → triage → (research pipeline + writing-plans if full) → implementation.
+"Fix this bug" / "why is X broken" → systematic-debugging directly (brainstorming's triage hands off).
+"Rename this function" / "fix this typo" → brainstorming triage answers "trivial" → direct implement.
 
-## The Research Pipeline
+## Triage (First Question in Brainstorming)
 
-After brainstorming completes, the following chain runs automatically:
+`brainstorming` asks a one-sentence triage question before any clarifying work: trivial / small / full.
+
+- **trivial** (one-liner, rename, typo, cosmetic) → skip research, skip plan doc, one-sentence confirm + implement
+- **small** (single-file, known pattern) → skip research, skip plan doc, one-paragraph inline design + implement
+- **full** (feature, multi-file, new design) → current multi-section spec + research pipeline + written plan
+
+If the user's phrasing clearly signals a bug report ("fix this bug", "why is X broken"), brainstorming hands off to `systematic-debugging` before asking triage.
+
+## The Research Pipeline (full-triage path only)
+
+For full-scope work, this chain runs automatically after brainstorming:
 
 ```
 brainstorming → deep-research → skills-audit → skills-creation → writing-plans
 ```
 
-- **deep-research**: Runs 100% of the time. Cannot be audited (new knowledge can't be validated against old knowledge).
+- **deep-research**: Runs by default on full-scope work. Cannot be audited (new knowledge can't be validated against old knowledge). Skipped on trivial and small paths.
 - **skills-audit**: Checks all supporting skills against research findings.
 - **skills-creation**: Creates/updates supporting skills to fill gaps.
 - **Every other step is audited** against the plan and skills for compliance.

@@ -31,6 +31,8 @@ Use for ANY technical issue:
 - Build failures
 - Integration issues
 
+**This skill is the pipeline entry point for debugging requests.** When the user's message is clearly a bug/failure report — phrases like "fix this bug", "why is X broken", "this test fails", "crash when I …", "error says …" — invoke this skill directly. Do NOT run `brainstorming` first; `brainstorming`'s Triage Routing section explicitly hands off to this skill on bug phrasing. Re-route to `brainstorming` only if investigation reveals that real design work is needed (e.g., the "bug" is actually a missing feature).
+
 **Use this ESPECIALLY when:**
 - Under time pressure (emergencies make guessing tempting)
 - "Just one quick fix" seems obvious

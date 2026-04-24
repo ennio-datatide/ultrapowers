@@ -10,34 +10,46 @@ Help turn ideas into fully formed designs and specs through natural collaborativ
 Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design and get user approval.
 
 <HARD-GATE>
-Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
+Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. Design DEPTH scales with triage outcome (see Step 2): trivial = a one-line chat confirmation, small = a one-paragraph inline design, full = a multi-section spec with a written doc. All three still require explicit user approval.
 </HARD-GATE>
 
-## Anti-Pattern: "This Is Too Simple To Need A Design"
+## Principle: scale depth, never skip approval
 
-Every project goes through this process. A todo list, a single-function utility, a config change — all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.
+The design can be as short as one line. What CANNOT be skipped is alignment with the user before implementation. The triage in Step 2 picks the depth:
+
+- **Trivial** (one-liner, typo, rename, cosmetic edit) → one-sentence description + user `ok` → implement. No spec doc, no research brief, no plan doc.
+- **Small** (single-file fix, targeted change, known pattern) → one-paragraph inline design + user `ok` → implement. No spec doc, no research brief, no plan doc.
+- **Full** (feature, multi-file, new design) → existing multi-section spec flow with research + plan.
+
+"Simple" projects are where unexamined assumptions cause wasted work — but the confirmation doesn't have to be a document. A single line the user reads and nods to is enough for a one-liner. The HARD-GATE enforces alignment, not ceremony.
 
 ## Checklist
 
-You MUST create a task for each of these items and complete them in order:
+You MUST create a task for each of these items and complete them in order. Steps 2–3 always run. Steps 4–12 run only for `full` triage; `small` and `trivial` take reduced paths described under Step 2.
 
 1. **Explore project context** — check files, docs, recent commits (silent machine step)
-2. **Calibrate user tone** — read `~/.claude/ultrapowers-user-profile.json` (and repo-level `technicalComfortOverride` if present); if missing, ask the single calibration question (see Tone Calibration section). Result shapes every prompt in subsequent steps.
-3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-4. **Load or ask workflow preferences** — check for saved preferences in .claude/ultrapowers-preferences.json; if missing, ask and save (see Workflow Preferences section below). Phrasing adapts to tone calibration.
-5. **Propose 2-3 approaches** — trade-offs across complexity, tooling, and deployment. **Internally consult** `~/.claude/ultrapowers-architecture-defaults.json` (then repo-level override if present): if a profile fits the clarified needs, **adapt its stack to this specific idea** (don't copy it verbatim) and present it as one of the 2-3 options. The other options come from fresh thinking — a simpler alternative, a more ambitious alternative, or a variant with a different deployment strategy. The user picks one or mixes. (See Architecture Profile Matching section for the algorithm and wording.)
-6. **Present design** — in sections scaled to their complexity, get user approval after each section
-7. **Scan for sibling-pack skills** — match the approved design against `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`; bucket matches into installed vs missing; for missing packs, emit a blocking prompt per pack (see Sibling-Pack Scan section)
-8. **Write design doc** — save to `docs/ultrapowers/specs/YYYY-MM-DD-<topic>-design.md` (commit only if user opted in). If tone is `non-technical`, open the spec with a plain-language summary paragraph before the technical body. If skills matched in step 7, include them in a `## Referenced Skills` section inside the spec.
-9. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-10. **User reviews written spec** — ask user to review the spec file before proceeding (explain in the tone calibrated for this user)
-11. **Transition to research** — invoke deep-research skill to capture current state of the art
+2. **Triage scope** — ask one multiple-choice question: is this trivial / small / full? Route accordingly (see Triage Routing section). **Route-specific first-fire skills:** if the user's phrasing is "fix this bug" / "why is X broken" / "this test fails" — hand off to `ultrapowers:systematic-debugging` instead of continuing brainstorming.
+3. **Calibrate user tone** — read `~/.claude/ultrapowers-user-profile.json` (and repo-level `technicalComfortOverride` if present); if missing, ask the single calibration question (see Tone Calibration section). Result shapes every prompt in subsequent steps.
+4. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
+5. **Load or ask workflow preferences** — check for saved preferences in .claude/ultrapowers-preferences.json; if missing, ask and save (see Workflow Preferences section below). Phrasing adapts to tone calibration.
+6. **Propose 2-3 approaches** — trade-offs across complexity, tooling, and deployment. **Internally consult** `~/.claude/ultrapowers-architecture-defaults.json` (then repo-level override if present): if a profile fits the clarified needs, **adapt its stack to this specific idea** (don't copy it verbatim) and present it as one of the 2-3 options. The other options come from fresh thinking — a simpler alternative, a more ambitious alternative, or a variant with a different deployment strategy. The user picks one or mixes. (See Architecture Profile Matching section for the algorithm and wording.)
+7. **Present design** — in sections scaled to their complexity, get user approval after each section
+8. **Scan for sibling-pack skills** — match the approved design against `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`; bucket matches into installed vs missing; for missing packs, emit a blocking prompt per pack (see Sibling-Pack Scan section)
+9. **Write design doc** — save to `docs/ultrapowers/specs/YYYY-MM-DD-<topic>-design.md` (commit only if user opted in). If tone is `non-technical`, open the spec with a plain-language summary paragraph before the technical body. If skills matched in step 8, include them in a `## Referenced Skills` section inside the spec.
+10. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+11. **User reviews written spec** — ask user to review the spec file before proceeding (explain in the tone calibrated for this user)
+12. **Transition to research** — invoke deep-research skill to capture current state of the art
 
 ## Process Flow
 
 ```dot
 digraph brainstorming {
     "Explore project context" [shape=box];
+    "Triage scope?" [shape=diamond];
+    "Systematic-debugging entry?" [shape=diamond];
+    "Invoke systematic-debugging" [shape=doublecircle];
+    "One-sentence confirm + ok" [shape=box];
+    "One-paragraph inline design + ok" [shape=box];
     "Calibrate user tone" [shape=box];
     "Ask clarifying questions" [shape=box];
     "Load / ask workflow prefs" [shape=box];
@@ -49,8 +61,16 @@ digraph brainstorming {
     "Spec self-review\n(fix inline)" [shape=box];
     "User reviews spec?" [shape=diamond];
     "Invoke deep-research skill" [shape=doublecircle];
+    "Implement directly\n(no research, no plan doc)" [shape=doublecircle];
 
-    "Explore project context" -> "Calibrate user tone";
+    "Explore project context" -> "Systematic-debugging entry?";
+    "Systematic-debugging entry?" -> "Invoke systematic-debugging" [label="yes (bug phrasing)"];
+    "Systematic-debugging entry?" -> "Triage scope?" [label="no"];
+    "Triage scope?" -> "One-sentence confirm + ok" [label="trivial"];
+    "Triage scope?" -> "One-paragraph inline design + ok" [label="small"];
+    "Triage scope?" -> "Calibrate user tone" [label="full"];
+    "One-sentence confirm + ok" -> "Implement directly\n(no research, no plan doc)";
+    "One-paragraph inline design + ok" -> "Implement directly\n(no research, no plan doc)";
     "Calibrate user tone" -> "Ask clarifying questions";
     "Ask clarifying questions" -> "Load / ask workflow prefs";
     "Load / ask workflow prefs" -> "Propose 2-3 approaches\n(profile-inspired + fresh)";
@@ -66,7 +86,52 @@ digraph brainstorming {
 }
 ```
 
-**The terminal state is invoking deep-research.** Do NOT invoke writing-plans, frontend-design, mcp-builder, or any other implementation skill directly. The ONLY skill you invoke after brainstorming is deep-research. The research pipeline (deep-research → skills-audit → skills-creation) will eventually invoke writing-plans.
+**Terminal states** depend on triage outcome:
+- **Full** → invoke `ultrapowers:deep-research` (research pipeline then takes over).
+- **Small or trivial** → implement directly (no research, no plan doc, no spec doc) — TDD discipline still applies on the implementer side. For small, a single commit captures the change; for trivial, same.
+- **Bug phrasing** → hand off to `ultrapowers:systematic-debugging` immediately; do not run triage.
+
+Do NOT invoke `writing-plans`, `frontend-design`, `mcp-builder`, or any other implementation skill directly from the full path — those are downstream of the research pipeline.
+
+## Triage Routing
+
+**Ask this question after context exploration, before any tone calibration or clarifying question:**
+
+> "Quick triage — how big is this?
+> 1. **Trivial** — one-liner, typo, rename, cosmetic edit
+> 2. **Small** — single-file fix or targeted change with a known pattern
+> 3. **Full** — feature, multi-file change, or new design
+>
+> Reply `1`, `2`, or `3`, or describe in your own words."
+
+**Bug-phrasing bypass (runs BEFORE the triage question):** if the user's message is clearly a debugging request — phrases like "fix this bug", "why is X broken", "this test fails", "crash when I …", "error says …" — **do not run triage**. Hand off directly to `ultrapowers:systematic-debugging`. Return control here only if debugging concludes and real design work follows.
+
+### Outcomes
+
+**1. Trivial**
+
+- Skip tone calibration, clarifying questions, workflow-prefs ask, approaches, spec doc, sibling-pack scan, research, plan doc.
+- State the change in one sentence: which file, what line, what the change is. Example: *"I'll add `app.get('/health', (req,res) => res.json({status:'ok'}))` to `index.js` after line 12, plus one supertest test. OK?"*
+- On user `ok` (or equivalent), implement directly. TDD discipline applies on the implementer side (write test, watch it fail, implement, watch it pass) — but no plan document is written.
+- If workflow prefs say `autoCommit: true`, commit with a descriptive message. No spec, no research brief, no plan.
+
+**2. Small**
+
+- Skip workflow-prefs ask (use repo prefs silently, ask later if missing). Skip sibling-pack scan. Skip spec doc writing. Skip research. Skip plan doc.
+- Calibrate tone (Step 3) unless already done this session.
+- Ask AT MOST ONE clarifying question — only if a genuine ambiguity would affect the implementation. Often you can skip this too.
+- Present a one-paragraph inline design in chat: goal, approach, files touched, test plan. 3–6 sentences.
+- On user `ok`, implement directly. TDD discipline applies. Commit with a clear message (autoCommit per prefs).
+- If during implementation you realize the change is larger than "small" (touches ≥3 files, needs new subsystem, etc.), STOP and re-triage as full.
+
+**3. Full**
+
+- Run the full pipeline — Steps 3 through 12 of the Checklist, ending with invocation of `deep-research`.
+- This is the path the rest of this document describes.
+
+### Trust the triage
+
+The user's first reply is authoritative. Do not second-guess it. If a user says `1` (trivial) for a change that turns out to need design, you'll catch it during implementation and re-triage. Do not inflate the triage "just to be safe" — that defeats the point and is the exact friction this routing is built to remove.
 
 ## The Process
 
