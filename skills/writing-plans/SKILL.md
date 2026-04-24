@@ -163,20 +163,23 @@ If you find issues, fix them inline. No need to re-review — just fix and move 
 
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+After saving the plan, **auto-pick** the execution approach — do not ask the user by default.
 
-**"Plan complete and saved to `docs/ultrapowers/plans/<filename>.md`. Two execution options:**
+**Default: Subagent-Driven** (`@ultrapowers:subagent-driven-development`). Fresh subagent per task + two-stage review. Use this for any plan with multiple independent tasks.
 
-**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
+**Fallback: Inline Execution** (`@ultrapowers:executing-plans`). Only use when:
+- The plan has ≤2 tasks AND they're tightly coupled (context handoff overhead isn't worth it), OR
+- Subagents are not available on the current platform, OR
+- The user explicitly asked for inline execution.
 
-**2. Inline Execution** - Execute tasks in this session using executing-plans, batch execution with checkpoints
+**Announce the choice** in one line before starting:
 
-**Which approach?"**
+> "Plan complete and saved to `docs/ultrapowers/plans/<filename>.md`. Proceeding with Subagent-Driven execution."
 
-**If Subagent-Driven chosen:**
-- **REQUIRED SUB-SKILL:** Use ultrapowers:subagent-driven-development
-- Fresh subagent per task + two-stage review
+**Only present a menu if you are NOT picking Subagent-Driven** — explain why (e.g., "This plan has 2 tightly-coupled tasks; inline is faster") and ask for confirmation. Never ask the user to pick between approaches when Subagent-Driven is clearly the right call.
 
-**If Inline Execution chosen:**
-- **REQUIRED SUB-SKILL:** Use ultrapowers:executing-plans
-- Batch execution with checkpoints for review
+### Controller judgment inside Subagent-Driven execution
+
+Subagent-Driven Development prescribes a fresh implementer subagent + spec review + code-quality review per task. That ceremony exists for a reason — it catches correctness and quality issues early. But for **trivial mechanical tasks** (single bash command, pasting fixed content into a new file, read-only grep checks), the controller can verify directly and skip the reviewer dispatches.
+
+Rule of thumb: if the task has no judgment, no domain reasoning, and no "did the implementer build the right thing" ambiguity, verify inline. Dispatch subagents when there's real work being delegated. Never skip reviews for tasks that edit existing logic-bearing code.

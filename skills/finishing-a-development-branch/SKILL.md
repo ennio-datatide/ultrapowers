@@ -50,9 +50,21 @@ git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
 
 Or ask: "This branch split from main - is that correct?"
 
-### Step 3: Present Options
+### Step 3: Auto-Pick Or Present Options
 
-Present exactly these 4 options:
+**Auto-pick based on signals** instead of asking every time:
+
+| Signal | Action |
+|---|---|
+| `autoPush: true` AND branch has ≥1 commit ahead of base | Option 2 (push + PR). Announce the choice, proceed. |
+| `autoPush: false` OR no preference file | Present the 4-option menu below. |
+| User explicitly said "merge locally" / "discard" / "keep as-is" | Honor the request directly (typed confirmation still required for discard). |
+
+**Announce your auto-pick** in one line before proceeding:
+
+> "Implementation complete. Auto-picking Option 2 (push + PR) — `autoPush: true` set in workflow prefs."
+
+**Only present the menu when the auto-pick rules don't apply.** When shown, use exactly these 4 options:
 
 ```
 Implementation complete. What would you like to do?
@@ -66,6 +78,8 @@ Which option?
 ```
 
 **Don't add explanation** - keep options concise.
+
+**Never auto-pick Option 4 (Discard)** — destructive actions always require explicit user intent and typed confirmation (see Option 4 below). Also: when auto-picking Option 2, if the branch target defaults to an upstream fork (common when `origin` is a fork of another repo), pass `--repo <owner/repo>` explicitly to `gh pr create` to avoid PRs landing on the wrong remote.
 
 ### Step 4: Execute Choice
 
