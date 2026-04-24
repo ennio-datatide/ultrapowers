@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: Use when the user requests a new feature, component, design, or behavior change in any project, before any implementation step
+description: Use before any new feature, component, design, or behavior change in any project, EXCEPT bug fixes and test failures — use systematic-debugging for those; MUST run before any implementation step
 ---
 
 # Brainstorming Ideas Into Designs
@@ -30,6 +30,8 @@ Several sections below reference reference files via the `${CLAUDE_SKILL_DIR}` p
 ## Checklist
 
 You MUST create a task for each of these items and complete them in order. Steps 2–3 always run. Steps 4–12 run only for `full` triage; `small` and `trivial` take reduced paths described under Step 2.
+
+**First-run friction vs. steady-state:** on the first-ever run for a given user/repo combo, Steps 3 (tone calibration) and 5 (workflow prefs) each prompt once — cached to `~/.claude/ultrapowers-user-profile.json` and `.claude/ultrapowers-preferences.json` respectively. On subsequent sessions they load silently, so the only visible prompt before clarifying work is Step 2 (triage). This is the intentional setup cost for future sessions; don't ask these questions again if the files already contain valid values.
 
 1. **Explore project context** — check files, docs, recent commits (silent machine step)
 2. **Triage scope** — ask one multiple-choice question: is this trivial / small / full? Route accordingly (see Triage Routing section). **Route-specific first-fire skills:** if the user's phrasing is "fix this bug" / "why is X broken" / "this test fails" — hand off to `ultrapowers:systematic-debugging` instead of continuing brainstorming.

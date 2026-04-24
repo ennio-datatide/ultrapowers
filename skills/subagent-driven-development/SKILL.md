@@ -84,6 +84,20 @@ digraph process {
 }
 ```
 
+## Scope-Adjusted Review
+
+Not every task needs implementer + spec reviewer + quality reviewer + final reviewer. Calibrate review depth to task scope:
+
+| Tier | Fits when | Dispatches per task |
+|---|---|---|
+| **A. Trivial** | single-file, logic-bearing change ≤10 LOC (e.g. one-line validation, tightening a regex) | implementer + **one combined reviewer** (merge spec + quality into a single prompt) |
+| **B. Standard** | typical task from a plan — new function, handler, component, migration | current two-stage: implementer → spec reviewer → quality reviewer |
+| **C. Complex** | multi-file architectural change, cross-cutting concern, new subsystem | standard + **one extra architecture reviewer** to catch layering/coupling issues |
+
+**Final code reviewer for entire implementation:** skip it when the plan has exactly one task — the per-task reviews already covered the full change. Dispatch it only when multiple tasks compose into something the individual reviews could not catch in isolation.
+
+Trivial-tier tasks in a plan are uncommon. If the plan decomposition produced many tier-A tasks, consider whether the plan is over-decomposed rather than under-reviewing. Tier-B is the default; tier-A is the explicit exception.
+
 ## Workflow Preferences
 
 Before dispatching implementer subagents, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its values for `autoCommit` and `autoPush`. Pass these to implementer subagents so they know whether to commit after each task and whether to push. If the file is missing, default to `autoCommit: true`, `autoPush: true` (matches the `brainstorming` skill and README 1.x defaults).

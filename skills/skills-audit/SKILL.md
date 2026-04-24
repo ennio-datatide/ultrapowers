@@ -156,6 +156,18 @@ For each skill found, note what it covers and whether its patterns are current p
 
 ## Produce Audit Report
 
+### Short-Circuit for All-Covered Audits
+
+If the final classification is **zero Missing, zero Stale** (i.e. every competency is Covered or External), skip writing a full audit document. Emit a single sentence in chat and hand off immediately to `writing-plans`:
+
+> "Skills audit: all required competencies covered by installed skills — `[list of External/Covered skills]`. Proceeding to writing-plans."
+
+No audit file is written. The rationale is that an audit with nothing to create is overhead; the plan itself will reference the relevant skills inline.
+
+### Full Report Format (when there is Missing or Stale work)
+
+Write the full report file below **only** when there is at least one Missing or Stale entry that will drive a `skills-creation` step.
+
 ```markdown
 ## Skills Audit Report
 
