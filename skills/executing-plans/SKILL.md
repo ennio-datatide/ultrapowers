@@ -1,17 +1,25 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+description: Use when executing a plan on a harness without subagent support, or when pausing and resuming execution across sessions
 ---
 
 # Executing Plans
 
 ## Overview
 
-Load plan, review critically, execute all tasks, report when complete.
+Load plan, review critically, execute all tasks inline, report when complete.
 
 **Announce at start:** "I'm using the executing-plans skill to implement this plan."
 
-**Note:** Tell your human partner that Ultrapowers works much better with access to subagents. The quality of its work will be significantly higher if run on a platform with subagent support (such as Claude Code or Codex). If subagents are available, use ultrapowers:subagent-driven-development instead of this skill.
+## When to Use (Fallback Path)
+
+`subagent-driven-development` is the canonical execution path. Use `executing-plans` only when one of the following is true:
+
+1. The harness does not expose a subagent primitive (`Task` in Claude Code, `agent()` in Codex, `@agent` in OpenCode) — in that case inline execution is the only option.
+2. Work must pause and resume across sessions — inline execution keeps state in the plan's checkboxes and the TodoWrite list, which survives session boundaries better than a multi-subagent dispatch plan.
+3. The user explicitly chose inline execution during the writing-plans handoff.
+
+If none of these apply, stop and switch to `ultrapowers:subagent-driven-development`. The quality of its two-stage audited review is measurably higher on every platform that supports it.
 
 ## Workflow Preferences
 

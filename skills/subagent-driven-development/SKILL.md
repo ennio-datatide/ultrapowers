@@ -249,7 +249,7 @@ Done!
 - Start implementation on main/master branch without explicit user consent
 - Skip reviews (spec compliance OR code quality)
 - Proceed with unfixed issues
-- Dispatch multiple implementation subagents in parallel (conflicts)
+- Dispatch multiple implementation subagents in parallel (conflicts). `ultrapowers:dispatching-parallel-agents` is scoped to **investigation / debugging fan-out** only — read-only evidence gathering across independent failures. It is never a substitute for serial implementation here.
 - Make subagent read plan file (provide full text instead)
 - Skip scene-setting context (subagent needs to understand where task fits)
 - Ignore subagent questions (answer before letting them proceed)

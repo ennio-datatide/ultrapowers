@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: Use when encountering any bug, test failure, or unexpected behavior, before proposing fixes
+description: Use for bugs, test failures, or unexpected behavior — also when 2+ fix attempts have failed, each fix reveals a new problem, or you're tempted to patch without investigation; handles debug routing instead of brainstorming
 ---
 
 # Systematic Debugging
@@ -190,6 +190,7 @@ You MUST complete each phase before proceeding to the next.
    - Test passes now?
    - No other tests broken?
    - Issue actually resolved?
+   - After verification, hand off to `ultrapowers:verification-before-completion` for the pre-commit checklist, then to `ultrapowers:finishing-a-development-branch` to merge / PR / keep / discard the change.
 
 4. **If Fix Doesn't Work**
    - STOP
