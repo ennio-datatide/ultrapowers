@@ -72,9 +72,27 @@ Present all 2-3 approaches uniformly so none is privileged. Name each approach b
 >
 > Which of these fits, or do you want to mix pieces from different ones?"
 
-**Never** label an approach as "the recommended one" unless the user asks for a recommendation after seeing all options. Letting the user choose is the point.
+### When to recommend vs. present neutrally
 
-**Always acceptable answers:** pick one, mix pieces, ask for another alternative, or reject all three and go in a different direction. The profile library is optional inspiration; don't treat "none of these" as a corner case.
+Default is neutral presentation — let the user choose. But recommending is a valid tool when you have strong, specific signal. Use judgment per-choice, not a blanket rule.
+
+**Recommend** when:
+- The user is `non-technical` (per tone calibration) AND you have enough signal from clarifying questions to genuinely know the best fit. Non-technical users often get stuck in decision paralysis with 3 similar-sounding options — a clear recommendation with reasoning actually helps.
+- One approach is meaningfully safer / simpler / cheaper given explicit constraints the user stated (budget, timeline, team size).
+- The user explicitly asks: *"which do you recommend?"*.
+
+**Present neutrally (no recommendation)** when:
+- The user is `technical` and has opinions — let them lead.
+- The three approaches are genuinely close in trade-offs; recommending would be cosmetic.
+- You don't yet have enough context to know which fits best.
+
+**How to recommend without pushing:**
+
+> "All three would work. **For what you described, I'd go with Approach 2** — you mentioned wanting to add accounts later without rewriting, and Next.js + Vercel makes that easiest. Happy to go with 1 or 3 if you prefer, though."
+
+One line of recommendation + one line of *why this specific user's context matters* + an explicit opening for disagreement. Never "the recommended one" as a generic label; always grounded in what they said.
+
+**Always acceptable answers from the user:** pick one, mix pieces, ask for another alternative, or reject all three and go in a different direction. The profile library is optional inspiration; don't treat "none of these" as a corner case.
 
 ## Seed profiles
 
