@@ -5,6 +5,8 @@ description: Use when completing tasks, implementing major features, or before m
 
 # Requesting Code Review
 
+## Overview
+
 Dispatch the `ultrapowers:code-reviewer` agent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history. This keeps the reviewer focused on the work product, not your thought process, and preserves your own context for continued work.
 
 > **When this skill fires vs. when `subagent-driven-development` does it automatically:** `subagent-driven-development` already dispatches the `code-reviewer` agent per-task and at the end of a plan. Use *this* skill when you want to request a review **outside** the subagent-driven flow — ad-hoc after a commit, before a merge, or to re-review after addressing feedback. For pipeline-automatic review, keep using `subagent-driven-development`.
@@ -33,7 +35,7 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 **2. Dispatch code-reviewer subagent:**
 
-Use Task tool with ultrapowers:code-reviewer type, fill template at `code-reviewer.md`
+Use the `Task` tool with `subagent_type: ultrapowers:code-reviewer`. Populate the prompt from the template file `code-reviewer.md` in this skill's directory, substituting the placeholders below. On non-Claude-Code harnesses, substitute the equivalent dispatch primitive (see `ultrapowers:dispatching-parallel-agents` Platform Notes).
 
 **Placeholders:**
 - `{WHAT_WAS_IMPLEMENTED}` - What you just built

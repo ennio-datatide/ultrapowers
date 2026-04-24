@@ -13,7 +13,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
 
-**Context:** This should be run in a dedicated worktree (created by brainstorming skill).
+**Context:** This should be run inside a dedicated worktree. Use `ultrapowers:using-git-worktrees` to create it if you haven't already.
 
 **Save plans to:** `docs/ultrapowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)

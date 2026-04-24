@@ -15,7 +15,9 @@ Guide completion of development work by presenting clear options and handling ch
 
 ## Workflow Preferences
 
-Before presenting options, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its `autoPush` value to determine whether to push automatically. If the file is missing, default to `autoPush: true` (matches the `brainstorming` skill and README 1.x defaults).
+Before presenting options, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its `autoPush` value to determine whether to push automatically. If the file is missing, default to `autoPush: true` (matches the `brainstorming` skill and README 1.x defaults). If the file exists but cannot be parsed as JSON, warn the user and fall back to the full 4-option menu — do not auto-pick from a malformed prefs file.
+
+`autoCommit` covers uncommitted working-tree changes (should this skill commit them itself before presenting options? No — assume upstream skills committed per-task). `autoPush` governs Option 2 push behavior; it does not influence Option 1's local merge.
 
 ## The Process
 
@@ -121,7 +123,7 @@ EOF
 )"
 ```
 
-Then: Cleanup worktree (Step 5)
+Then: **keep the worktree open** while the PR is in review — cleanup happens after the PR lands.
 
 #### Option 3: Keep As-Is
 
@@ -153,7 +155,7 @@ Then: Cleanup worktree (Step 5)
 
 ### Step 5: Cleanup Worktree
 
-**For Options 1, 2, 4:**
+**For Options 1 and 4:**
 
 Check if in worktree:
 ```bash
@@ -165,7 +167,7 @@ If yes:
 git worktree remove <worktree-path>
 ```
 
-**For Option 3:** Keep worktree.
+**For Options 2 and 3:** Keep the worktree. Option 2's PR may still be in review; Option 3 is an explicit keep-as-is.
 
 ## Quick Reference
 

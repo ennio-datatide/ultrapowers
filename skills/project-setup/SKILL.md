@@ -5,7 +5,11 @@ description: "Use when setting up a new project, initializing CLAUDE.md, or when
 
 # Project Setup
 
-Generate a tailored CLAUDE.md for the current project by scanning the codebase and asking targeted questions.
+## Overview
+
+Generate a tailored CLAUDE.md for the current project by scanning the codebase and asking targeted questions, or update workflow preferences when invoked in Preferences Mode.
+
+**Announce at start:** "I'm using the project-setup skill to configure this project."
 
 ## Process
 
@@ -69,7 +73,20 @@ When invoked as "project-setup preferences", "change my workflow preferences", o
 
    > "Current workflow prefs: auto-commit {on|off}, auto-push {on|off}, commit design docs {on|off}, suggest `ultrapowers-dev` {on|off}, suggest `ultrapowers-business` {on|off}. Reply `ok` to keep, or tell me what to change (e.g., `no auto-push`, `stop suggesting dev`)."
 
-3. Parse reply using the same rules documented in `skills/brainstorming/SKILL.md` Workflow Preferences section, extended with:
+3. Parse reply using the shared rules below (also documented in `skills/brainstorming/SKILL.md` — the two skills MUST stay in sync):
+
+   **Shared workflow-prefs parser:**
+
+   | User reply | Resulting change |
+   |---|---|
+   | `ok` / `yes` / `accept` / empty | keep all current values |
+   | `no auto-commit` / `manual commits` | `autoCommit: false` |
+   | `no auto-push` / `manual push` | `autoPush: false` |
+   | `commit docs` / `include design docs` | `commitDesignDocs: true` |
+   | `all off` | `autoCommit: false`, `autoPush: false`, `commitDesignDocs: false` |
+   | `all on` | `autoCommit: true`, `autoPush: true`, `commitDesignDocs: true` |
+
+   **Preferences-Mode-only extensions:**
 
    | User reply | Resulting change |
    |---|---|
@@ -78,6 +95,8 @@ When invoked as "project-setup preferences", "change my workflow preferences", o
    | `resume suggesting dev` / `suggest dev again` | `suggestSiblingPacks.dev: true` |
    | `resume suggesting business` / `suggest business again` | `suggestSiblingPacks.business: true` |
    | `reset sibling suggestions` | both `suggestSiblingPacks` flags to `true` |
+
+   Modifiers combine (e.g. `no auto-push, stop suggesting dev` → apply both). If the reply is ambiguous, ask one targeted follow-up rather than guessing.
 
 4. Write updated values to `.claude/ultrapowers-preferences.json`. Preserve keys the user didn't change.
 5. Suggest adding to `.gitignore` if not already ignored.
@@ -88,3 +107,9 @@ When invoked as "project-setup preferences", "change my workflow preferences", o
 - **One question at a time** — don't overwhelm
 - **Keep it lean** — CLAUDE.md is always in context, so shorter is better
 - **No framework advice** — ultrapowers-dev skills handle best practices
+
+## Common Mistakes
+
+- **Writing a boilerplate CLAUDE.md** instead of deriving sections from the actual codebase. If the generated file could apply to any project, it's wrong.
+- **Asking more than one question at a time** — breaks the principle above and overwhelms the user. Split compound questions into a sequence.
+- **Skipping the "ask user to review" step** — CLAUDE.md lands in context every turn. If anything is wrong, the user will catch it now or fight it all week.
