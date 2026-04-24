@@ -1,6 +1,8 @@
 # Architecture Profile Matching
 
-This reference is consulted by `skills/brainstorming/SKILL.md` during the "Match architecture profile" step (runs between "Explore project context" and "Ask clarifying questions").
+This reference is consulted by `skills/brainstorming/SKILL.md` during **Step 5 — Propose 2-3 approaches**. Profiles seed one of the approaches; fresh thinking seeds the others.
+
+**Core principle:** Profiles are *inspiration*, not prescription. The user's design wins. Profiles exist to suggest tool choices that have worked well for similar past projects, so there's always a familiar reference point among the 2-3 approaches shown — but there's always at least one genuine alternative, too.
 
 ## Lookup order
 
@@ -30,8 +32,10 @@ This reference is consulted by `skills/brainstorming/SKILL.md` during the "Match
 ## Matching algorithm
 
 ```
-match_profile(idea_text, profiles):
-    normalized = lowercase(idea_text)
+match_profile(clarified_needs, profiles):
+    # Match against what the user said during clarifying questions —
+    # product type, audience, constraints, tech mentions. Not the raw idea.
+    normalized = lowercase(clarified_needs)
     scored = []
     for p in profiles:
         count = number of signals in p.signals that appear in normalized (word boundary)
@@ -39,28 +43,38 @@ match_profile(idea_text, profiles):
             scored.append((p, count))
 
     if len(scored) == 0:
-        return None, "no match — skip"
-    if len(scored) == 1:
-        return scored[0][0], "suggest"
-    return scored, "ambiguous — ask user to pick"
+        return None
+    return max(scored, key=count)  # single best match feeds one approach
 ```
 
-## Suggestion UX
+Only the top match is used as the seed for one of the 2-3 approaches. If multiple profiles tie, pick the first-defined or ask the user briefly: *"A couple of past-project profiles could work here — {A} or {B}. Any preference, or should I pick whichever fits best?"*
 
-**Single match:**
+## Adapting the profile into an approach
 
-> "This looks like a **{profile.description}**. My default stack for these is {comma-separated stack values} (based on {reference_projects}). Want to use this stack, or discuss alternatives?"
+Take the profile's `stack` and adjust:
 
-- `use defaults` / `yes` → bake stack + skills into spec's Architecture section; seed `skills-audit` with the profile's `skills` list.
-- `discuss alternatives` / `no` → proceed to clarifying questions, no stack bake-in.
+1. **Drop what's irrelevant.** If the idea doesn't need payments, drop Stripe even if the profile includes it.
+2. **Add what the idea needs.** If the user mentioned realtime features and the profile doesn't cover that, add the missing piece.
+3. **Adjust deployment to constraints.** Profile says Vercel but the user has an existing Fly.io account? Flex to match.
+4. **Preserve the profile's opinions** where they align with the idea — that's the whole point. The point isn't to hide the profile, it's to start from a known-good baseline.
 
-**Multiple matches:**
+## Presenting approaches (the wording during step 5)
 
-> "This could fit {N} profiles:
-> 1. **{profile[0].description}** — matches: {list of hit signals} ({count} signals)
-> 2. **{profile[1].description}** — matches: {list} ({count} signals)
+Present all 2-3 approaches uniformly so none is privileged. Name each approach by its character, not "the profile one":
+
+> "Here are three directions for this:
 >
-> Which fits, or `neither`?"
+> **Approach 1 — Lean content site.** Astro + Tailwind + Netlify + a Resend form. Similar to how I've built marketing/consultancy sites before. ~1 day to ship, minimal ongoing cost. Trade-off: not great if you expect to add dashboards or authed content later.
+>
+> **Approach 2 — Start minimal, grow modular.** Next.js + Vercel + a simple static content layer. Costs slightly more up front but lets you add auth/payments later without rearchitecting.
+>
+> **Approach 3 — Dedicated CMS path.** Astro + Sanity + Netlify. Best if multiple non-technical people will edit content regularly.
+>
+> Which of these fits, or do you want to mix pieces from different ones?"
+
+**Never** label an approach as "the recommended one" unless the user asks for a recommendation after seeing all options. Letting the user choose is the point.
+
+**Always acceptable answers:** pick one, mix pieces, ask for another alternative, or reject all three and go in a different direction. The profile library is optional inspiration; don't treat "none of these" as a corner case.
 
 ## Seed profiles
 

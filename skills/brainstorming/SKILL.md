@@ -23,43 +23,42 @@ You MUST create a task for each of these items and complete them in order:
 
 1. **Explore project context** — check files, docs, recent commits (silent machine step)
 2. **Calibrate user tone** — read `~/.claude/ultrapowers-user-profile.json` (and repo-level `technicalComfortOverride` if present); if missing, ask the single calibration question (see Tone Calibration section). Result shapes every prompt in subsequent steps.
-3. **Match architecture profile** — read `~/.claude/ultrapowers-architecture-defaults.json` (then repo-level override if present); match signals from user's idea; if a profile fits, suggest its stack before asking clarifying questions (see Architecture Profile Matching section)
-4. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
-5. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-6. **Load or ask workflow preferences** — check for saved preferences in .claude/ultrapowers-preferences.json; if missing, ask and save (see Workflow Preferences section below). Phrasing adapts to tone calibration.
-7. **Propose 2-3 approaches** — with trade-offs and your recommendation
-8. **Present design** — in sections scaled to their complexity, get user approval after each section
-9. **Scan for sibling-pack skills** — after design is approved, match the design against `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`; bucket matches into installed vs missing; for missing packs, emit a blocking prompt per pack (see Sibling-Pack Scan section)
-10. **Write design doc** — save to `docs/ultrapowers/specs/YYYY-MM-DD-<topic>-design.md` (commit only if user opted in). If tone is `non-technical`, open the spec with a plain-language summary paragraph before the technical body. If a profile matched in step 3 or skills matched in step 9, include them in a `## Referenced Skills` section inside the spec.
-11. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
-12. **User reviews written spec** — ask user to review the spec file before proceeding (explain in the tone calibrated for this user)
-13. **Transition to research** — invoke deep-research skill to capture current state of the art
+3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
+4. **Load or ask workflow preferences** — check for saved preferences in .claude/ultrapowers-preferences.json; if missing, ask and save (see Workflow Preferences section below). Phrasing adapts to tone calibration.
+5. **Propose 2-3 approaches** — trade-offs across complexity, tooling, and deployment. **Internally consult** `~/.claude/ultrapowers-architecture-defaults.json` (then repo-level override if present): if a profile fits the clarified needs, **adapt its stack to this specific idea** (don't copy it verbatim) and present it as one of the 2-3 options. The other options come from fresh thinking — a simpler alternative, a more ambitious alternative, or a variant with a different deployment strategy. The user picks one or mixes. (See Architecture Profile Matching section for the algorithm and wording.)
+6. **Present design** — in sections scaled to their complexity, get user approval after each section
+7. **Scan for sibling-pack skills** — match the approved design against `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`; bucket matches into installed vs missing; for missing packs, emit a blocking prompt per pack (see Sibling-Pack Scan section)
+8. **Write design doc** — save to `docs/ultrapowers/specs/YYYY-MM-DD-<topic>-design.md` (commit only if user opted in). If tone is `non-technical`, open the spec with a plain-language summary paragraph before the technical body. If skills matched in step 7, include them in a `## Referenced Skills` section inside the spec.
+9. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+10. **User reviews written spec** — ask user to review the spec file before proceeding (explain in the tone calibrated for this user)
+11. **Transition to research** — invoke deep-research skill to capture current state of the art
 
 ## Process Flow
 
 ```dot
 digraph brainstorming {
     "Explore project context" [shape=box];
-    "Visual questions ahead?" [shape=diamond];
-    "Offer Visual Companion\n(own message, no other content)" [shape=box];
+    "Calibrate user tone" [shape=box];
     "Ask clarifying questions" [shape=box];
-    "Propose 2-3 approaches" [shape=box];
+    "Load / ask workflow prefs" [shape=box];
+    "Propose 2-3 approaches\n(profile-inspired + fresh)" [shape=box];
     "Present design sections" [shape=box];
     "User approves design?" [shape=diamond];
+    "Scan for sibling-pack skills" [shape=box];
     "Write design doc" [shape=box];
     "Spec self-review\n(fix inline)" [shape=box];
     "User reviews spec?" [shape=diamond];
     "Invoke deep-research skill" [shape=doublecircle];
 
-    "Explore project context" -> "Visual questions ahead?";
-    "Visual questions ahead?" -> "Offer Visual Companion\n(own message, no other content)" [label="yes"];
-    "Visual questions ahead?" -> "Ask clarifying questions" [label="no"];
-    "Offer Visual Companion\n(own message, no other content)" -> "Ask clarifying questions";
-    "Ask clarifying questions" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Present design sections";
+    "Explore project context" -> "Calibrate user tone";
+    "Calibrate user tone" -> "Ask clarifying questions";
+    "Ask clarifying questions" -> "Load / ask workflow prefs";
+    "Load / ask workflow prefs" -> "Propose 2-3 approaches\n(profile-inspired + fresh)";
+    "Propose 2-3 approaches\n(profile-inspired + fresh)" -> "Present design sections";
     "Present design sections" -> "User approves design?";
     "User approves design?" -> "Present design sections" [label="no, revise"];
-    "User approves design?" -> "Write design doc" [label="yes"];
+    "User approves design?" -> "Scan for sibling-pack skills" [label="yes"];
+    "Scan for sibling-pack skills" -> "Write design doc";
     "Write design doc" -> "Spec self-review\n(fix inline)";
     "Spec self-review\n(fix inline)" -> "User reviews spec?";
     "User reviews spec?" -> "Write design doc" [label="changes requested"];
@@ -283,30 +282,39 @@ When switching, announce the change in one line: *"Got it — switching to plain
 
 ## Architecture Profile Matching
 
-**Step 2 — Match architecture profile:**
+**Used during Step 5 — Propose 2-3 approaches:**
 
-Before asking clarifying questions, check if the user's described idea matches a pre-defined architecture profile. Profiles encode the user's default stack choices and feed directly into the design's Architecture section + skills-audit's "External" list.
+**The user's design wins.** Profiles are a library of tool choices that have worked well on similar past projects. They exist to seed **one of the 2-3 approaches** we propose — *adapted* to the current idea, never copy-pasted. The other approaches come from fresh thinking so the user sees genuine alternatives in complexity, tooling, and deployment strategy.
+
+### Setup (first-run only)
+
+Before generating approaches, check:
 
 1. Read `~/.claude/ultrapowers-architecture-defaults.json` (user-level, baseline) and `<repo>/.claude/ultrapowers-architecture-defaults.json` (repo-level override — replaces user-level if present).
-2. If neither file exists AND this is the first run of modified brainstorming:
-   > "I don't see your architecture defaults file at `~/.claude/ultrapowers-architecture-defaults.json`. I can seed one with two profiles (marketing/content site + SaaS product app) based on your current reference projects. Want me to create it? (`yes` / `skip`)"
+2. If neither file exists AND this is the first run after the profiles feature was added, ask **once per user**:
+   > "I don't see your architecture defaults file at `~/.claude/ultrapowers-architecture-defaults.json`. I can seed one with two profiles (marketing/content site + SaaS product app) based on your current reference projects, which I'll consult when proposing design approaches. Want me to create it? (`yes` / `skip`)"
 
-   On `yes`: write the seed file using the two profiles from `${CLAUDE_SKILL_DIR}/architecture-profile-matching.md`. On `skip`: proceed without matching, don't ask again this session.
-3. If a file exists, apply the matching algorithm in `${CLAUDE_SKILL_DIR}/architecture-profile-matching.md` against the user's idea text.
-4. Present the result:
-   - **No match:** skip silently; proceed to clarifying questions.
-   - **Single match:** suggest the profile using the wording in the reference file; user accepts or declines.
-   - **Multiple matches:** present top 2-3 with signal counts; user picks or says `neither`.
-5. If accepted, store the profile ID for the session and bake its `stack` values into the design's Architecture section when you reach step 7.
+   On `yes`: write the seed file using the two profiles from `${CLAUDE_SKILL_DIR}/architecture-profile-matching.md`. On `skip`: proceed without profile input for this session; the 2-3 approaches all come from fresh thinking.
 
-**Never auto-edit the defaults file.** Any change to profiles (including seed write) requires explicit user consent.
+### Using profiles when generating approaches
+
+3. Apply the matching algorithm in `${CLAUDE_SKILL_DIR}/architecture-profile-matching.md` against the clarifying-question answers (what the user is actually building). Match on the described *needs*, not just exact keywords.
+4. If one profile fits: **adapt its stack** to the user's specific idea — drop irrelevant tools, add what the idea needs, adjust deployment to fit constraints (budget, audience size, existing infra). This becomes **one** of the 2-3 approaches you propose.
+5. Generate 1-2 other approaches from fresh thinking — typically a simpler option (less infra, faster to ship) and/or a more ambitious option (more capability, more complexity).
+6. Present all approaches with clear differentiation: complexity, tooling, deployment, trade-offs. Name the profile-inspired approach plainly (e.g., *"**Approach 1** — similar to my past marketing sites: Astro + Netlify + Neon/Drizzle. Adapted here to include {idea-specific additions}."*) so the user understands the reference point without being pushed toward it.
+
+### Never
+
+- **Never** force a profile's stack into an approach. If adapting makes the profile unrecognizable, drop it and propose from fresh thinking.
+- **Never** auto-edit the defaults file. Any change to profiles (including seed write) requires explicit user consent.
+- **Never** present only the profile-based approach as if it were "the" answer. The user must see at least one genuine alternative.
 
 ## Sibling-Pack Scan
 
-**Step 8 — Scan for sibling-pack skills (runs after design is approved, before writing the spec):**
+**Step 8 — Scan for sibling-pack skills (runs after design is approved and profile inspiration has been offered, before writing the spec):**
 
 1. Read `${CLAUDE_SKILL_DIR}/sibling-pack-map.md`.
-2. Extract signals from the approved design: architecture section, tech stack mentions, domain descriptions, profile `stack` values (if a profile was matched in step 2).
+2. Extract signals from the approved design: architecture section, tech stack mentions, domain descriptions, plus any tools adopted from the step 7 profile inspiration.
 3. For each signal, look up matching skills in both the `ultrapowers-dev` and `ultrapowers-business` tables.
 4. For each matched skill, scan the session's available-skills list (injected as `<system-reminder>`) for the corresponding prefix:
    - `ultrapowers-dev:<name>` present → **installed match** for `ultrapowers-dev`.
@@ -329,21 +337,3 @@ Wait for user response:
 - `skip` → drop matches for this pack for this session; don't write to prefs.
 - `skip and stop suggesting` → read current `.claude/ultrapowers-preferences.json`, set `suggestSiblingPacks.<pack>: false`, write it back (preserving all other keys), drop matches for this session.
 
-## Visual Companion
-
-A browser-based companion for showing mockups, diagrams, and visual options during brainstorming. Available as a tool — not a mode. Accepting the companion means it's available for questions that benefit from visual treatment; it does NOT mean every question goes through the browser.
-
-**Offering the companion:** When you anticipate that upcoming questions will involve visual content (mockups, layouts, diagrams), offer it once for consent:
-> "Some of what we're working on might be easier to explain if I can show it to you in a web browser. I can put together mockups, diagrams, comparisons, and other visuals as we go. This feature is still new and can be token-intensive. Want to try it? (Requires opening a local URL)"
-
-**This offer MUST be its own message.** Do not combine it with clarifying questions, context summaries, or any other content. The message should contain ONLY the offer above and nothing else. Wait for the user's response before continuing. If they decline, proceed with text-only brainstorming.
-
-**Per-question decision:** Even after the user accepts, decide FOR EACH QUESTION whether to use the browser or the terminal. The test: **would the user understand this better by seeing it than reading it?**
-
-- **Use the browser** for content that IS visual — mockups, wireframes, layout comparisons, architecture diagrams, side-by-side visual designs
-- **Use the terminal** for content that is text — requirements questions, conceptual choices, tradeoff lists, A/B/C/D text options, scope decisions
-
-A question about a UI topic is not automatically a visual question. "What does personality mean in this context?" is a conceptual question — use the terminal. "Which wizard layout works better?" is a visual question — use the browser.
-
-If they agree to the companion, read the detailed guide before proceeding:
-`skills/brainstorming/visual-companion.md`
