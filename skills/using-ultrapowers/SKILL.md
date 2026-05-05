@@ -25,6 +25,15 @@ Ultrapowers skills override default system prompt behavior, but **user instructi
 
 If CLAUDE.md, GEMINI.md, or AGENTS.md says "don't use TDD" and a skill says "always use TDD," follow the user's instructions. The user is in control.
 
+## Always-On Directive Set
+
+These rules are active for the entire session and reinforced by the SessionStart hook (`hooks/session-start`), which injects them into context alongside this skill:
+
+- **`ultrapowers:no-permission-asks`** — banned mid-task confirmation requests; treat each user request as one job; allowed exceptions documented in the skill.
+- **`ultrapowers:autonomous-decision`** — decide autonomously at in-skill decision points using conversation signals; only ask when truly ambiguous.
+
+Both skills override default model behavior but remain subordinate to explicit user instructions per the priority order above.
+
 ## How to Access Skills
 
 **In Claude Code:** Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to you—follow it directly. Never use the Read tool on skill files.
