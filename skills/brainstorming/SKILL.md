@@ -290,6 +290,28 @@ Do not guess.
 
 The `suggestSiblingPacks` object is additive and controls whether Step 6a (below) fires blocking "install missing sibling pack" prompts. If the file is missing this key, treat both flags as `true`. If a user replies `stop suggesting ultrapowers-dev` (or the flag is written via the sibling-pack scan step), persist `suggestSiblingPacks.dev: false` without touching other fields.
 
+**`autoRouter` block** (consumed by the UserPromptSubmit hook in `hooks/auto-router`):
+
+```json
+{
+  "autoRouter": {
+    "version": 1,
+    "enabled": true,
+    "model": "opus",
+    "invokeThreshold": 0.7,
+    "suggestThreshold": 0.4
+  }
+}
+```
+
+- `version` (int): schema version, currently `1`.
+- `enabled` (bool): when `false`, the hook short-circuits to passthrough.
+- `model` (string): `--model` value passed to `claude --bare -p`. Aliases: `opus`/`sonnet`/`haiku`/`default`/`best`. Defaults to `opus`.
+- `invokeThreshold` (float, 0.0–1.0): confidence ≥ this triggers AUTO-INVOKE injection. Default 0.7.
+- `suggestThreshold` (float, 0.0–1.0): confidence between this and `invokeThreshold` triggers SUGGEST injection. Default 0.4. Below: passthrough.
+
+If the block is missing entirely, the hook uses these hardcoded defaults.
+
 If `.claude/` directory doesn't exist, create it. Suggest adding `.claude/ultrapowers-preferences.json` to `.gitignore` if not already ignored.
 
 All downstream skills (`writing-plans`, `subagent-driven-development`, `executing-plans`, `finishing-a-development-branch`, `project-setup`) read this file and respect the values. Unknown keys (like `suggestSiblingPacks` in older consumers) are ignored gracefully. If the file is missing, fall back to defaults documented above (all three workflow flags ON for auto-commit/auto-push, OFF for commitDesignDocs; both `suggestSiblingPacks` flags ON).
