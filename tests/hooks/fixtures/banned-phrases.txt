@@ -1,0 +1,10 @@
+Want me to continue with the next file?
+Shall I proceed with the migration?
+Should I run the tests now?
+Crack on with the refactor?
+Do you want me to commit?
+Let me know if you want me to add more.
+Ready when you are!
+Just let me know if you want me to continue.
+Would you like me to also update the README?
+May I proceed with the deployment?

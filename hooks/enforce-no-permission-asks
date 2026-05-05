@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# Stop hook: blocks Stop when assistant ends on a mid-task permission-ask.
+# Outputs JSON with decision: "block" + continuation reason.
+# Fails open (allows Stop) on any error per writing-claude-code-hooks.
+
+set -uo pipefail
+
+LOG="${HOME}/.claude/logs/enforce-no-permission-asks.log"
+mkdir -p "$(dirname "$LOG")" 2>/dev/null || true
+
+allow_stop() { exit 0; }
+
+block_stop() {
+    local reason="$1"
+    jq -nc --arg r "$reason" '{decision: "block", reason: $r}'
+    exit 0  # exit 0 + JSON form; do not use exit 2 (plugin bug #10412)
+}
+
+# Read payload from stdin (fail-open if jq isn't available)
+if ! command -v jq >/dev/null 2>&1; then
+    echo "$(date -Iseconds) jq missing, allowing stop" >> "$LOG"
+    allow_stop
+fi
+
+payload=$(cat 2>/dev/null || echo "{}")
+last_msg=$(echo "$payload" | jq -r '.last_assistant_message // ""' 2>/dev/null || echo "")
+stop_active=$(echo "$payload" | jq -r '.stop_hook_active // false' 2>/dev/null || echo "false")
+
+# Already blocked once; allow Stop now to prevent infinite loops.
+if [ "$stop_active" = "true" ]; then
+    allow_stop
+fi
+
+# Sanctioned skill checkpoint exemption.
+if echo "$last_msg" | grep -q '<skill-checkpoint>'; then
+    allow_stop
+fi
+
+# No message; nothing to scan.
+if [ -z "$last_msg" ]; then
+    allow_stop
+fi
+
+# Scan for banned phrases.
+REGEX_FILE="${CLAUDE_PLUGIN_ROOT:-.}/hooks/lib/banned-phrases.regex"
+if [ ! -f "$REGEX_FILE" ]; then
+    echo "$(date -Iseconds) regex file missing at $REGEX_FILE" >> "$LOG"
+    allow_stop
+fi
+
+# Case-insensitive search across all banned-phrase regexes.
+matched=""
+while IFS= read -r pattern; do
+    [ -z "$pattern" ] && continue
+    if echo "$last_msg" | grep -qiE "$pattern"; then
+        matched="$pattern"
+        break
+    fi
+done < "$REGEX_FILE"
+
+if [ -n "$matched" ]; then
+    echo "$(date -Iseconds) blocked on pattern: $matched" >> "$LOG"
+    block_stop "You ended on a permission-ask mid-job. The user gave you a job — finish it. Continue working."
+fi
+
+allow_stop

@@ -1,0 +1,6 @@
+The migration completed successfully. 47 rows updated.
+I added the new module at src/auth/jwt.ts.
+Tests pass. Committed at abc123.
+The build is green.
+I noticed two ambiguous requirements in the spec — does the rate limit apply per-user or per-IP?
+I cannot proceed: ANTHROPIC_API_KEY is not set in the environment. Please set it and let me know.

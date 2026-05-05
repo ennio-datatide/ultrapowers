@@ -56,6 +56,17 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd\" enforce-no-permission-asks",
+            "async": false
+          }
+        ]
+      }
     ]
   }
 }
