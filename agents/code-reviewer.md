@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: Use after completing a major project step, feature, or subsystem to review the implementation against the original plan and coding standards, before marking the step done
-model: inherit
+model: opus
 tools: [Read, Grep, Glob, Bash]
 ---
 
