@@ -145,6 +145,16 @@ Use the least powerful model that can handle each role to conserve cost and incr
 - Touches multiple files with integration concerns → standard model
 - Requires design judgment or broad codebase understanding → most capable model
 
+## Autonomous Dispatch Strategy
+
+Decide parallel vs sequential per `ultrapowers:autonomous-decision`. Signals from the plan structure:
+
+- Tasks marked independent (no shared file paths, no dependency edges) → parallel
+- Tasks with serial dependencies → sequential
+- Tasks that mutate shared state (database, config files, hooks.json) → serial (one at a time)
+
+Announce when confidence is in the 0.4–0.7 band ("tasks 5 and 7 mutate hooks.json — serializing"). Do not ask the user.
+
 ## Handling Implementer Status
 
 Implementer subagents report one of four statuses. Handle each appropriately:

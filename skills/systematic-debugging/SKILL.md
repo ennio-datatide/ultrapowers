@@ -45,6 +45,21 @@ Use for ANY technical issue:
 - You're in a hurry (rushing guarantees rework)
 - Manager wants it fixed NOW (systematic is faster than thrashing)
 
+## Autonomous Strategy Choice
+
+Before starting Phase 1, decide hypothesis-first vs bisect-first vs instrumentation-first per `ultrapowers:autonomous-decision`. Signals:
+
+| Signal | Strategy |
+|---|---|
+| Stack trace points clearly at one component | Hypothesis-first |
+| Error reproduces deterministically | Hypothesis-first |
+| Recent commit churn in the suspected area | Bisect-first |
+| Symptom is intermittent / flaky | Bisect-first or instrumentation-first |
+| Multiple plausible root causes, no clear evidence | Bisect-first |
+| Production-only / can't reproduce locally | Instrumentation-first |
+
+Announce the call when confidence is in the 0.4–0.7 band ("hypothesis-first: stack trace points at the cache layer. Proceeding"). Do not ask the user.
+
 ## The Four Phases
 
 You MUST complete each phase before proceeding to the next.

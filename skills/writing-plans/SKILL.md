@@ -46,6 +46,16 @@ This structure informs the task decomposition. Each task should produce self-con
 - "Run the tests and make sure they pass" - step
 - "Commit" - step
 
+### Autonomous Granularity Decision
+
+Decide overall plan granularity per `ultrapowers:autonomous-decision`. Signals:
+
+- Spec component count ≤3 + tight coupling → coarse-grain (≤5 tasks total)
+- Spec component count 4–7 + moderate coupling → medium-grain (5–12 tasks)
+- Spec component count ≥8 OR cross-cutting concerns → fine-grain (12+ tasks; consider splitting into multiple plans)
+
+Announce the call when confidence is in the 0.4–0.7 band ("plan looks medium-grain — 8 tasks, moderate coupling. Proceeding"). Do not ask the user.
+
 ## Plan Document Header
 
 **Every plan MUST start with this header:**

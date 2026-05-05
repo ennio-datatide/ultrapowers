@@ -21,6 +21,24 @@ Load plan, review critically, execute all tasks inline, report when complete.
 
 If none of these apply, stop and switch to `ultrapowers:subagent-driven-development`. The quality of its two-stage audited review is measurably higher on every platform that supports it.
 
+## Model Handoff at Execution Boundary
+
+This skill marks the boundary between design (opus) and execution (sonnet). When invoked:
+
+1. If the current main-session model is opus, announce that execution should run on sonnet for cost/speed. Suggest the user open a new session with `--model sonnet` (or `--model claude-sonnet-4-6`). Do not block — proceed in the current session if user prefers.
+2. Subagents dispatched during execution should use `model: sonnet` via their frontmatter (or via the Agent tool's `model` parameter).
+3. Lookup-only subagents (`Explore`, `research-fetch`) use `model: haiku`.
+
+## Autonomous Subagent Strategy
+
+Decide parallel vs sequential per `ultrapowers:autonomous-decision`. Signals from the plan structure:
+
+- Tasks marked independent (no shared file paths, no dependency edges) → parallel
+- Tasks with serial dependencies → sequential
+- Tasks that mutate shared state (database, config files) → serial (one at a time)
+
+Announce when confidence is in the 0.4–0.7 band ("tasks 3–7 are independent — parallelizing"). Do not ask the user.
+
 ## Workflow Preferences
 
 Before executing, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its values for `autoCommit` and `autoPush` to determine whether to commit after each task and whether to push. If the file is missing, default to `autoCommit: true`, `autoPush: true` (matches the `brainstorming` skill and README 1.x defaults).
