@@ -1,0 +1,10 @@
+build a contact form with email validation
+fix the failing test in src/auth.ts
+implement OAuth flow for Google sign-in
+debug why the API returns 500 on POST
+add a dark mode toggle to the settings page
+refactor the user service to use dependency injection
+design a new pricing page with three tiers
+migrate the database from MySQL to Postgres
+write a CLI tool that converts CSV to JSON
+update the README with the new install instructions

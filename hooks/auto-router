@@ -1,0 +1,187 @@
+#!/usr/bin/env bash
+# UserPromptSubmit hook: shape-gated, dual-mode auto-router.
+# Confidence >= invokeThreshold -> AUTO-INVOKE skill; >= suggestThreshold -> SUGGEST; else passthrough.
+# Fails open on any error per writing-claude-code-hooks.
+
+set -uo pipefail
+
+LOG="${HOME}/.claude/logs/auto-router.log"
+mkdir -p "$(dirname "$LOG")" 2>/dev/null || true
+
+PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-.}"
+LIB="${PLUGIN_ROOT}/hooks/lib"
+
+passthrough() { exit 0; }
+
+inject_context() {
+    local content="$1"
+    jq -nc --arg c "$content" '{
+        hookSpecificOutput: {
+            hookEventName: "UserPromptSubmit",
+            additionalContext: $c
+        }
+    }'
+    exit 0
+}
+
+log() { echo "$(date -Iseconds) $*" >> "$LOG"; }
+
+# Recursion guard (env-level, defense in depth alongside CLAUDECODE-unset)
+if [ "${ULTRAPOWERS_AUTOROUTER_ACTIVE:-}" = "1" ]; then
+    log "recursion sentinel set, passthrough"
+    passthrough
+fi
+
+# Read payload
+if ! command -v jq >/dev/null 2>&1; then
+    log "jq missing, passthrough"
+    passthrough
+fi
+
+payload=$(cat 2>/dev/null || echo "{}")
+prompt=$(echo "$payload" | jq -r '.prompt // ""' 2>/dev/null || echo "")
+transcript_path=$(echo "$payload" | jq -r '.transcript_path // ""' 2>/dev/null || echo "")
+
+# Empty prompt
+[ -z "$prompt" ] && passthrough
+
+# Slash command — let the harness handle it
+if [[ "$prompt" =~ ^/ ]]; then
+    log "slash command, passthrough"
+    passthrough
+fi
+
+# Active skill flow detection — cheap transcript tail
+if [ -n "$transcript_path" ] && [ -f "$transcript_path" ]; then
+    if tail -n 30 "$transcript_path" 2>/dev/null | grep -q '<command-name>ultrapowers:'; then
+        log "active skill flow, passthrough"
+        passthrough
+    fi
+fi
+
+# Shape gate
+shape_classify() {
+    local p="$1"
+    local task_re="${LIB}/shape-gate-task.regex"
+    local chat_re="${LIB}/shape-gate-chat.regex"
+
+    if [ ! -f "$task_re" ] || [ ! -f "$chat_re" ]; then
+        log "shape regex files missing"
+        echo "task"  # default to task to be safe (classifier still gates by confidence)
+        return
+    fi
+
+    while IFS= read -r pattern; do
+        [ -z "$pattern" ] && continue
+        if echo "$p" | grep -qiE "$pattern"; then
+            echo "task"
+            return
+        fi
+    done < "$task_re"
+
+    while IFS= read -r pattern; do
+        [ -z "$pattern" ] && continue
+        if echo "$p" | grep -qiE "$pattern"; then
+            echo "chat"
+            return
+        fi
+    done < "$chat_re"
+
+    # No strong signal; default to task (classifier confidence will gate)
+    echo "task"
+}
+
+shape=$(shape_classify "$prompt")
+
+# Test mode: emit shape and exit. Used by tests/hooks/test-auto-router.sh.
+if [ "${ULTRAPOWERS_AUTOROUTER_TEST_MODE:-}" = "1" ]; then
+    jq -nc --arg s "$shape" '{testMode: {shape: $s}}'
+    exit 0
+fi
+
+if [ "$shape" = "chat" ]; then
+    log "chat-shaped, passthrough"
+    passthrough
+fi
+
+# Read autoRouter config from preferences
+PREFS="${PLUGIN_ROOT}/.claude/ultrapowers-preferences.json"
+if [ ! -f "$PREFS" ]; then
+    PREFS="$(pwd)/.claude/ultrapowers-preferences.json"
+fi
+
+enabled=$(jq -r '.autoRouter.enabled // true' "$PREFS" 2>/dev/null || echo "true")
+[ "$enabled" = "false" ] && { log "autoRouter disabled"; passthrough; }
+
+model=$(jq -r '.autoRouter.model // "opus"' "$PREFS" 2>/dev/null || echo "opus")
+invoke_threshold=$(jq -r '.autoRouter.invokeThreshold // 0.7' "$PREFS" 2>/dev/null || echo "0.7")
+suggest_threshold=$(jq -r '.autoRouter.suggestThreshold // 0.4' "$PREFS" 2>/dev/null || echo "0.4")
+
+# Auth check
+if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+    log "ANTHROPIC_API_KEY not set, passthrough"
+    passthrough
+fi
+
+# Classifier call
+classifier_prompt=$(cat "${LIB}/classifier-prompt.txt" 2>/dev/null || echo "")
+classifier_schema=$(cat "${LIB}/classifier-schema.json" 2>/dev/null || echo "{}")
+
+[ -z "$classifier_prompt" ] && { log "classifier-prompt missing"; passthrough; }
+
+set +e
+classifier_output=$(ULTRAPOWERS_AUTOROUTER_ACTIVE=1 \
+    timeout 10 \
+    env -u CLAUDECODE -u CLAUDE_CODE_SSE_PORT -u CLAUDE_CODE_ENTRYPOINT \
+    claude --bare -p "$prompt" \
+    --model "$model" \
+    --append-system-prompt "$classifier_prompt" \
+    --output-format json \
+    --json-schema "$classifier_schema" \
+    --max-turns 1 \
+    --max-budget-usd 0.10 \
+    --exclude-dynamic-system-prompt-sections \
+    --disallowedTools "Bash,Edit,Write,Read,WebSearch,WebFetch" \
+    2>>"$LOG")
+classifier_exit=$?
+set -e
+
+if [ "$classifier_exit" -ne 0 ] || [ -z "$classifier_output" ]; then
+    log "classifier failed (exit=$classifier_exit), passthrough"
+    passthrough
+fi
+
+# Parse — structured_output preferred when --json-schema is honored
+structured=$(echo "$classifier_output" | jq -c '.structured_output // (.result | fromjson? // {})' 2>/dev/null || echo "{}")
+route=$(echo "$structured" | jq -r '.route // "passthrough"' 2>/dev/null || echo "passthrough")
+confidence=$(echo "$structured" | jq -r '.confidence // 0' 2>/dev/null || echo "0")
+reasoning=$(echo "$structured" | jq -r '.reasoning // ""' 2>/dev/null || echo "")
+
+log "classified: route=$route conf=$confidence"
+
+# Map route to ultrapowers skill
+declare -A ROUTE_TO_SKILL=(
+    [brainstorm]="ultrapowers:brainstorming"
+    [debug]="ultrapowers:systematic-debugging"
+    [plan-execution]="ultrapowers:executing-plans"
+    [research]="ultrapowers:deep-research"
+    [ui]="ultrapowers:paper-mcp-ui"
+)
+
+if [ "$route" = "passthrough" ]; then
+    passthrough
+fi
+
+skill="${ROUTE_TO_SKILL[$route]:-}"
+[ -z "$skill" ] && { log "unknown route: $route"; passthrough; }
+
+# Numeric comparison — use awk for portability
+above() { awk -v a="$1" -v b="$2" 'BEGIN { exit !(a >= b) }'; }
+
+if above "$confidence" "$invoke_threshold"; then
+    inject_context "AUTO-INVOKE: ${skill}. Reasoning: ${reasoning}"
+elif above "$confidence" "$suggest_threshold"; then
+    inject_context "SUGGEST: ${skill} may apply. Reasoning: ${reasoning}"
+else
+    passthrough
+fi

@@ -1,0 +1,3 @@
+^(what|why|how|when|where|who|is|are|can|could|does|do|did|should|would)\b
+^(hi|hello|hey|thanks|thank you|ok|okay|yes|no|sure|got it|cool|nice)\b
+^.{0,49}$

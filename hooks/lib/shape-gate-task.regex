@@ -1,0 +1,2 @@
+^(build|create|add|implement|design|fix|debug|refactor|migrate|set ?up|configure|integrate|deploy|write|update|delete|remove|rename|wire|ship|generate|extract|inline|hoist|split|merge|optimize)\b
+\b(implement|build|fix|refactor|add|create|design|set up|wire up)\b.{0,80}\b(it|this|that|the .{1,40})$

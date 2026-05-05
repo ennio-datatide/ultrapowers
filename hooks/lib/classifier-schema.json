@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "required": ["route", "confidence", "reasoning"],
+  "additionalProperties": false,
+  "properties": {
+    "route": {
+      "type": "string",
+      "enum": ["brainstorm", "debug", "plan-execution", "research", "ui", "passthrough"]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "reasoning": {
+      "type": "string",
+      "maxLength": 200
+    }
+  }
+}

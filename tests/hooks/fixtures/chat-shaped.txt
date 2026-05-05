@@ -1,0 +1,10 @@
+what does this file do?
+how does the auth flow work?
+why is the build failing?
+hi
+hello
+ok
+thanks
+is this function pure?
+where is the config defined?
+who wrote this module?
