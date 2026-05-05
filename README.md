@@ -43,6 +43,10 @@ Ultrapowers extends [Superpowers](https://github.com/obra/superpowers) by Jesse 
 | DataTide Consulting | Custom AI solutions for your business | [datatide.io](https://datatide.io)         |
 | This Repository     | The open source skill system          | You're here                                |
 
+## What's New in 1.3 (in development)
+
+- **Auto-router and anti-confirmation hooks.** Ultrapowers now auto-invokes the right skill from any user prompt (UserPromptSubmit hook with shape gate + opus classifier; `≥0.7` confidence auto-invokes, `0.4–0.7` suggests, below passes through), and a Stop hook blocks mid-task permission-asks ("Want me to X?", "Shall I proceed?", etc.) at the harness level. New skills `no-permission-asks` and `autonomous-decision` codify the rules; existing skills now decide triage/scope/strategy from conversation signals instead of asking. Phase-based model routing: opus for design, sonnet for execution, haiku for raw lookup. See [INSTALL.md](INSTALL.md#auto-router-and-anti-confirmation-hooks) for configuration.
+
 ## What's New in 1.2
 
 - **Workflow preferences, persisted per repo.** `.claude/ultrapowers-preferences.json` stores `autoCommit`, `autoPush`, `commitDesignDocs`, and sibling-pack suggestion flags. Brainstorming asks once — one confirm-or-tweak prompt — then every downstream skill respects the setting. Defaults: auto-commit on, auto-push on, design docs local.
