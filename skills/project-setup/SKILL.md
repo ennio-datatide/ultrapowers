@@ -27,7 +27,7 @@ Generate a tailored CLAUDE.md for the current project by scanning the codebase a
    - Check for test frameworks: jest, vitest, pytest, cargo test, go test, rspec, phpunit
    - Check for formatters/linters: biome, prettier, eslint, ruff, clippy, golangci-lint
 
-2. **Present findings** — show what was detected and ask for confirmation:
+2. **Present findings** — per `ultrapowers:autonomous-decision`, when detection is unambiguous (single-stack repo with all the right manifest signals) skip confirmation and announce the call ("detected Next.js / TS-React project — proceeding"). When detection is ambiguous (polyglot, missing key files, conflicting signals), show what was detected and ask for confirmation:
    > "I detected [stack details]. Is this accurate? Anything I'm missing?"
 
 3. **Ask targeted questions** — one at a time, only for things that can't be auto-detected:
@@ -101,12 +101,27 @@ When invoked as "project-setup preferences", "change my workflow preferences", o
 4. Write updated values to `.claude/ultrapowers-preferences.json`. Preserve keys the user didn't change.
 5. Suggest adding to `.gitignore` if not already ignored.
 
+## Recommended Model Configuration
+
+For projects using the ultrapowers planning pipeline (brainstorming → research → audit → plan), the design phase benefits from opus. Recommend (don't override) in `~/.claude/settings.json`:
+
+```json
+{
+  "model": "claude-opus-4-7"
+}
+```
+
+This makes the main session opus by default. Execution phase (`subagent-driven-development`, `executing-plans`) hands off to sonnet via subagent dispatch (using `agents/planner.md` opus, default-implementer sonnet, `agents/research-fetch.md` haiku) or by starting a new sonnet session.
+
+Do **not** modify the user's settings.json from this skill — recommend, don't override.
+
 ## Principles
 
 - **Derive, don't template** — every section comes from the actual project, not boilerplate
 - **One question at a time** — don't overwhelm
 - **Keep it lean** — CLAUDE.md is always in context, so shorter is better
 - **No framework advice** — ultrapowers-dev skills handle best practices
+- **Decide autonomously** — per `ultrapowers:autonomous-decision`, infer from manifest signals before asking
 
 ## Common Mistakes
 

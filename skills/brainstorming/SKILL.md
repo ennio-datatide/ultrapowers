@@ -23,6 +23,8 @@ The design can be as short as one line. What CANNOT be skipped is alignment with
 
 "Simple" projects are where unexamined assumptions cause wasted work — but the confirmation doesn't have to be a document. A single line the user reads and nods to is enough for a one-liner. The HARD-GATE enforces alignment, not ceremony.
 
+**REQUIRED BACKGROUND:** This skill follows `ultrapowers:autonomous-decision` for in-skill decision points (triage, scope, granularity). Decide from conversation signals; do not menu-ask the user when the answer is inferable.
+
 ## Platform Notes
 
 Several sections below reference reference files via the `${CLAUDE_SKILL_DIR}` path variable. This variable is Claude-Code-specific and resolves to the directory this SKILL.md lives in. On non-Claude-Code platforms (Codex, OpenCode, Cursor, Gemini CLI), treat `${CLAUDE_SKILL_DIR}` as a placeholder for the same directory and read the files directly (for example: `skills/brainstorming/sibling-pack-map.md` relative to the plugin root, or the equivalent installed path on that platform).
@@ -101,7 +103,19 @@ Do NOT invoke `writing-plans` or any other implementation skill directly from th
 
 ## Triage Routing
 
-**Ask this question after context exploration, before any tone calibration or clarifying question:**
+**Decide autonomously per `ultrapowers:autonomous-decision` before asking.** Score the request against these signals; if confidence is ≥0.7 in any tier, classify silently and proceed. If confidence is 0.4–0.7, announce the call in one line ("treating this as small — proceeding") and proceed. Only ask the user when signals are contradictory or below 0.4 confidence.
+
+**Triage signals:**
+
+| Signal | Trivial | Small | Full |
+|---|---|---|---|
+| Verb specificity | "rename", "fix typo", "add comment" | "fix bug in X", "add Y to Z" | "build", "design", "implement" |
+| File-touch surface | 1 line / 1 file | 1–2 files | ≥3 files or new subsystem |
+| Scope keywords | "just", "quick", "tiny", "one-line" | "small", "targeted" | "feature", "system", "framework" |
+| Outcome ambiguity | None — outcome is in the verb | Slight — known pattern applies | Significant — design choices needed |
+| Existing patterns | N/A | Yes — copy a sibling | New patterns required |
+
+**Fallback ask** (only when signals are genuinely contradictory or below 0.4 confidence):
 
 > "Quick triage — how big is this?
 > 1. **Trivial** — one-liner, typo, rename, cosmetic edit
