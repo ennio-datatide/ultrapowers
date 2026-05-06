@@ -69,6 +69,21 @@ if [ -f "$directives_file" ]; then
     using_ultrapowers_content+=$'\n\n'"$(cat "$directives_file")"
 fi
 
+# Conditionally append advisor-timing directive for sonnet/haiku sessions.
+# Read session.model from the SessionStart payload via stdin. Substring match
+# against alias forms handles dated IDs (claude-sonnet-4-6) AND plain aliases.
+# Conservative default: missing/empty model = no injection (treat as opus-tier).
+session_payload=$(cat 2>/dev/null || echo "{}")
+session_model=$(echo "$session_payload" | jq -r '.model // ""' 2>/dev/null || echo "")
+case "$session_model" in
+    *sonnet*|*haiku*)
+        advisor_directive_file="${PLUGIN_ROOT}/hooks/lib/advisor-timing-directive.txt"
+        if [ -f "$advisor_directive_file" ]; then
+            using_ultrapowers_content+=$'\n\n'"$(cat "$advisor_directive_file")"
+        fi
+        ;;
+esac
+
 # Escape string for JSON embedding using bash parameter substitution.
 # Each ${s//old/new} is a single C-level pass - orders of magnitude
 # faster than the character-by-character loop this replaces.

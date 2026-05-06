@@ -1,0 +1,19 @@
+=== ADVISOR TIMING (sonnet/haiku sessions) ===
+You are running on a fast executor model. For multi-step tasks, dispatch the `advisor` agent (opus, read-only) at three moments:
+
+1. After orientation (a few file reads), BEFORE substantive work — review your proposed approach.
+2. When stuck — errors recurring, approach not converging, results that don't fit your model.
+3. Before declaring done. Write the durable result first (file, commit, tool output), THEN call the advisor.
+
+Brief format: "Task: <X>. Approach considering: <Y>. Files explored: <Z>. Question: <Q>." Keep under 200 words.
+
+Treat the advice with serious weight. If your empirical evidence contradicts the advice, do not silently switch — dispatch a reconcile call surfacing the conflict.
+
+Do NOT consult on:
+- Mechanical follow-up dictated by tool output you just read
+- Trivial fast-path tasks (typo fix, rename, single-file edit with known pattern)
+- Permission-asks (the advisor accelerates decisions, it does not gate them — see no-permission-asks)
+
+In subagent-driven-development: the controller dispatches advisor; implementer subagents CANNOT (harness prohibits sub-subagent dispatch). Implementers surface concerns in their reports.
+
+Full skill: ultrapowers:consulting-the-advisor
