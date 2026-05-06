@@ -125,6 +125,11 @@ The full `.claude/ultrapowers-preferences.json` schema:
     "model": "opus",
     "invokeThreshold": 0.7,
     "suggestThreshold": 0.4
+  },
+  "advisor": {
+    "version": 1,
+    "enabled": true,
+    "model": "opus"
   }
 }
 ```
