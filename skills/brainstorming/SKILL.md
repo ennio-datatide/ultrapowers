@@ -326,6 +326,24 @@ The `suggestSiblingPacks` object is additive and controls whether Step 6a (below
 
 If the block is missing entirely, the hook uses these hardcoded defaults.
 
+**`advisor` block** (consumed by `consulting-the-advisor` skill and the SessionStart hook for advisor-timing directive injection):
+
+```json
+{
+  "advisor": {
+    "version": 1,
+    "enabled": true,
+    "model": "opus"
+  }
+}
+```
+
+- `version` (int): schema version, currently `1`.
+- `enabled` (bool): when `false`, the SessionStart hook skips advisor-timing directive injection and the skill short-circuits dispatches.
+- `model` (string): model passed to the `advisor` subagent. Aliases (`opus`/`sonnet`/`haiku`) or full IDs (`claude-opus-4-7`). Defaults to `opus`. Anything below opus defeats the pattern — documented but not enforced.
+
+If the block is missing, the hook uses these hardcoded defaults.
+
 If `.claude/` directory doesn't exist, create it. Suggest adding `.claude/ultrapowers-preferences.json` to `.gitignore` if not already ignored.
 
 All downstream skills (`writing-plans`, `subagent-driven-development`, `executing-plans`, `finishing-a-development-branch`, `project-setup`) read this file and respect the values. Unknown keys (like `suggestSiblingPacks` in older consumers) are ignored gracefully. If the file is missing, fall back to defaults documented above (all three workflow flags ON for auto-commit/auto-push, OFF for commitDesignDocs; both `suggestSiblingPacks` flags ON).
