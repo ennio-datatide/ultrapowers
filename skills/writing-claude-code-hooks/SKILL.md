@@ -198,6 +198,25 @@ fi
 
 Cheap (no LLM call), specific (matches the harness's actual skill-invocation marker).
 
+## Model-Conditional Injection
+
+When a SessionStart hook should inject different context depending on the session model (e.g., inject directive A only on sonnet/haiku sessions, skip on opus), read `model` from the payload and substring-match against alias forms:
+
+```bash
+session_model=$(jq -r '.model // ""' <<< "$payload")
+case "$session_model" in
+  *sonnet*|*haiku*)
+    additional_context+=$'\n\n'"$(cat "${PLUGIN_ROOT}/hooks/lib/sonnet-haiku-directive.txt")"
+    ;;
+esac
+```
+
+Substring matching handles aliases (`opus`/`sonnet`/`haiku`) AND full IDs (`claude-sonnet-4-6`, `claude-haiku-4-5-20251001`) AND future dated variants — no enumeration of model IDs needed.
+
+**Failure mode:** if `model` is missing or empty, default conservative — do NOT inject. Treat unknown like opus (the strongest tier; safest default for "skip the lower-tier-only directive").
+
+This pattern is how ultrapowers' SessionStart hook ships model-tier-conditional directives without hardcoding a model registry.
+
 ## Fail-Open Pattern
 
 Any hook failure must not break the session. Wrap risk:
