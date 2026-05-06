@@ -155,6 +155,19 @@ Decide parallel vs sequential per `ultrapowers:autonomous-decision`. Signals fro
 
 Announce when confidence is in the 0.4–0.7 band ("tasks 5 and 7 mutate hooks.json — serializing"). Do not ask the user.
 
+## Controller-Level Advisor Consultation
+
+When the controller (the main session running this skill) is on **sonnet or haiku**, dispatch the `advisor` agent (opus) at task boundaries per `ultrapowers:consulting-the-advisor`. Implementer subagents cannot dispatch advisor themselves — Claude Code prohibits sub-subagent dispatch (verified `anthropics/claude-code` issues #19077, #46424, #50306). Consultation is a controller-level discipline.
+
+Pattern:
+
+1. **Before dispatching the implementer for Task N:** dispatch advisor with the plan excerpt + relevant context (files this task touches, prior task outcomes if any). Pass the advisor's enumerated approach into the implementer's dispatch prompt as additional context.
+2. **If implementer reports `DONE_WITH_CONCERNS` or surfaces strategic doubt:** dispatch advisor again with the report + concerns. Decide whether to re-dispatch the implementer with revised guidance or proceed to reviewers.
+
+When the controller's session model is **opus**, skip advisor consultation — the controller is already advisor-class. The skill detects this and short-circuits silently.
+
+Brief format and reconcile-call patterns documented in `consulting-the-advisor`. Read that skill before your first advisor dispatch.
+
 ## Handling Implementer Status
 
 Implementer subagents report one of four statuses. Handle each appropriately:

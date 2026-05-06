@@ -80,6 +80,14 @@ Task tool (general-purpose):
     The controller can provide more context, re-dispatch with a more capable model,
     or break the task into smaller pieces.
 
+    **Strategic doubt during implementation:** If you suspect the approach is wrong but
+    haven't verified it empirically — e.g., "the spec says X but the codebase pattern
+    suggests Y is more idiomatic", or "I implemented this but I'm uncertain whether
+    invariant Z holds" — DO NOT attempt to dispatch the `advisor` agent. Subagents
+    (you) cannot dispatch sub-subagents in Claude Code. Surface the concern in your
+    DONE_WITH_CONCERNS report instead. The controller will dispatch advisor on your
+    behalf if needed (see `ultrapowers:consulting-the-advisor`).
+
     ## Before Reporting Back: Self-Review
 
     Review your work with fresh eyes. Ask yourself:
@@ -116,7 +124,12 @@ Task tool (general-purpose):
     - Self-review findings (if any)
     - Any issues or concerns
 
-    Use DONE_WITH_CONCERNS if you completed the work but have doubts about correctness.
+    Use DONE_WITH_CONCERNS if you completed the work but have doubts about correctness
+    or strategic approach. List the concerns in a `concerns:` field of your report —
+    e.g., "Approach X chosen over Y because <reason>; Y might be more idiomatic", or
+    "Invariant Z assumed but not verified by tests". The controller may dispatch
+    advisor (opus) on your behalf to weigh in before reviewers run.
+
     Use BLOCKED if you cannot complete the task. Use NEEDS_CONTEXT if you need
     information that wasn't provided. Never silently produce work you're unsure about.
 ```
