@@ -31,8 +31,9 @@ These rules are active for the entire session and reinforced by the SessionStart
 
 - **`ultrapowers:no-permission-asks`** — banned mid-task confirmation requests; treat each user request as one job; allowed exceptions documented in the skill.
 - **`ultrapowers:autonomous-decision`** — decide autonomously at in-skill decision points using conversation signals; only ask when truly ambiguous.
+- **`ultrapowers:consulting-the-advisor`** — pair fast executor with opus advisor at strategic moments; active when session model is sonnet/haiku. In `subagent-driven-development`, applies to the controller, not implementer subagents (harness prohibits sub-subagent dispatch).
 
-Both skills override default model behavior but remain subordinate to explicit user instructions per the priority order above.
+These skills override default model behavior but remain subordinate to explicit user instructions per the priority order above.
 
 ## How to Access Skills
 

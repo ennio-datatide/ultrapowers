@@ -60,6 +60,16 @@ For each task:
 3. Run verifications as specified
 4. Mark as completed
 
+### Advisor Consultation (sonnet/haiku sessions)
+
+When the inline executor (this main session) is on sonnet or haiku, dispatch the `advisor` agent (opus, read-only) at the three moments documented in `ultrapowers:consulting-the-advisor`:
+
+1. After orientation reads, before substantive code changes — review approach.
+2. On test failures or when blocked — diagnose and redirect.
+3. Before declaring a task complete (after writing the durable result) — final sanity check.
+
+Skip when the session is on opus (already advisor-class) or when `advisor.enabled: false` in `.claude/ultrapowers-preferences.json`. Read `consulting-the-advisor` for brief format and reconcile-call patterns.
+
 ### Step 3: Complete Development
 
 After all tasks complete and verified:
