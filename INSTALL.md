@@ -65,6 +65,47 @@ If the block is missing, the hook uses these hardcoded defaults.
 - **Conversational opt-out**: phrases like "just answer", "skip the workflow", "no skill" — the classifier routes to passthrough at high confidence.
 - **Disable globally**: set `autoRouter.enabled: false`.
 
+## Advisor Pattern (sonnet/haiku sessions)
+
+When your session runs on sonnet or haiku, ultrapowers automatically:
+
+1. Injects an "advisor timing" directive at SessionStart instructing you to consult an `advisor` agent (opus) at strategic moments — after orientation, on difficulty, before declaring done.
+2. Ships an `advisor` agent definition (`agents/advisor.md`) that runs on opus with read-only tools.
+3. Documents the brief format and reconcile-call pattern in `skills/consulting-the-advisor/SKILL.md`.
+
+This replicates Anthropic's [advisor tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool) using Claude Code subagents — no SDK code required.
+
+### Configuration
+
+Edit `.claude/ultrapowers-preferences.json`:
+
+```json
+{
+  "advisor": {
+    "version": 1,
+    "enabled": true,
+    "model": "opus"
+  }
+}
+```
+
+| Field | Effect |
+|---|---|
+| `enabled: false` | Disable advisor for this project (skips directive injection + skill consultation) |
+| `model` | Model passed to the advisor subagent. Defaults to `opus`. Anything below opus defeats the pattern |
+
+### When advisor activates
+
+- Main session runs on sonnet or haiku → directive injected, executor calls advisor at strategic moments
+- Main session runs on opus → directive NOT injected (executor is already advisor-class)
+- `subagent-driven-development` controller on sonnet/haiku → controller dispatches advisor at task boundaries
+- `subagent-driven-development` controller on opus → skipped (controller already advisor-class)
+- Implementer subagents in SDD → never dispatch advisor (harness prohibits sub-subagent dispatch); surface concerns via DONE_WITH_CONCERNS instead
+
+### Latency note
+
+Subagent dispatch adds ~5–15 seconds per advisor call (vs the API-native advisor's ~1–2s server-side sub-inference). Worth it on multi-minute tasks; skip on sub-minute work via `advisor.enabled: false`.
+
 ### Workflow Preferences
 
 The full `.claude/ultrapowers-preferences.json` schema:

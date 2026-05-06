@@ -46,6 +46,7 @@ Ultrapowers extends [Superpowers](https://github.com/obra/superpowers) by Jesse 
 ## What's New in 1.3 (in development)
 
 - **Auto-router and anti-confirmation hooks.** Ultrapowers now auto-invokes the right skill from any user prompt (UserPromptSubmit hook with shape gate + opus classifier; `≥0.7` confidence auto-invokes, `0.4–0.7` suggests, below passes through), and a Stop hook blocks mid-task permission-asks ("Want me to X?", "Shall I proceed?", etc.) at the harness level. New skills `no-permission-asks` and `autonomous-decision` codify the rules; existing skills now decide triage/scope/strategy from conversation signals instead of asking. Phase-based model routing: opus for design, sonnet for execution, haiku for raw lookup. See [INSTALL.md](INSTALL.md#auto-router-and-anti-confirmation-hooks) for configuration.
+- **Advisor pattern via subagents.** New `advisor` agent (opus, read-only) and `consulting-the-advisor` skill replicate Anthropic's API advisor tool using Claude Code subagents — fast executor (sonnet/haiku) consults a strong advisor at strategic moments without SDK code. Default-on for sonnet/haiku sessions. See [INSTALL.md](INSTALL.md#advisor-pattern-sonnethaiku-sessions) for configuration.
 
 ## What's New in 1.2
 
