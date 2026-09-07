@@ -1,173 +1,59 @@
 ---
 name: dispatching-parallel-agents
-description: Use when investigating 2+ unrelated failures, bugs, or subsystems in parallel (read-only evidence gathering) — NOT for plan-driven implementation; use subagent-driven-development for that
+description: Use when 2+ independent questions need investigating and none depends on another's answer — dispatches read-only sub-agents in parallel and aggregates their findings. Not for building; implement drives the build loop.
 ---
 
 # Dispatching Parallel Agents
 
-## Overview
+Send independent investigations to their own context windows at the same time, then aggregate what comes back.
 
-You delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused and succeed at their task. They should never inherit your session's context or history — you construct exactly what they need. This also preserves your own context for coordination work.
+The win is twofold: wall-clock time, and keeping each investigation's noise out of your window and out of each other's.
 
-When you have multiple unrelated failures (different test files, different subsystems, different bugs), investigating them sequentially wastes time. Each investigation is independent and can happen in parallel.
+## When this applies
 
-**Core principle:** Dispatch one agent per independent problem domain. Let them work concurrently.
+**All three must hold:**
 
-**Scope:** this skill covers **investigation and debugging fan-out** (evidence gathering across independent failures, parallel research, read-only exploration). For **implementation** work, use `ultrapowers:subagent-driven-development` instead — that skill deliberately runs implementers serially to avoid merge conflicts on shared files. Never dispatch multiple implementation subagents in parallel from here.
+1. **Two or more distinct questions**, each answerable on its own.
+2. **No dependencies** — no agent needs another's answer to start.
+3. **Read-only** — investigation, not modification. Parallel writers collide.
 
-**Platform note:** the code shapes below use Claude Code's `Task(...)` primitive. On other harnesses, substitute the equivalent:
+If any fails, don't parallelise. Sequential work with dependencies is faster than parallel work that has to be redone.
 
-- **Codex / Copilot CLI** — `agent(...)` spawn calls with an explicit subagent name.
-- **OpenCode** — `@agent` mentions in chat.
-- **Cursor** — background-agent dispatch via the Cursor Agents panel or `@` mention.
-- **Gemini CLI** — Gemini does not currently expose a per-call parallel-dispatch primitive; serialize the dispatches or skip this skill on that harness.
+## When it does not apply
 
-The pattern (one focused prompt per independent domain) is platform-agnostic; only the spawn call differs.
+- **Locating a string or symbol.** Call the Skill tool with "workspace-search" instead. Never spend an agent on something search answers.
+- **Building from a plan.** That's `implement`, which runs tickets in dependency order.
+- **One question.** Just answer it.
+- **Questions that inform each other.** Answer the first; it changes what you'd ask second.
 
-## When to Use
+## Writing the brief
 
-```dot
-digraph when_to_use {
-    "Multiple failures?" [shape=diamond];
-    "Are they independent?" [shape=diamond];
-    "Single agent investigates all" [shape=box];
-    "One agent per problem domain" [shape=box];
-    "Can they work in parallel?" [shape=diamond];
-    "Sequential agents" [shape=box];
-    "Parallel dispatch" [shape=box];
+Each agent starts with nothing but its brief. A vague brief returns a vague answer, and you cannot tell the difference from here.
 
-    "Multiple failures?" -> "Are they independent?" [label="yes"];
-    "Are they independent?" -> "Single agent investigates all" [label="no - related"];
-    "Are they independent?" -> "Can they work in parallel?" [label="yes"];
-    "Can they work in parallel?" -> "Parallel dispatch" [label="yes"];
-    "Can they work in parallel?" -> "Sequential agents" [label="no - shared state"];
-}
-```
+Every brief carries:
 
-**Use when:**
-- 3+ test files failing with different root causes
-- Multiple subsystems broken independently
-- Each problem can be understood without context from others
-- No shared state between investigations
+- **The one question**, stated as a question.
+- **Where to start** — paths, entry points, or the search route to take.
+- **What to return** — the shape of the answer, and a length bound.
+- **What not to do** — explicitly read-only, no edits, no commits.
 
-**Don't use when:**
-- Failures are related (fix one might fix others)
-- Need to understand full system state
-- Agents would interfere with each other
+> Investigate why the checkout total is wrong for multi-currency carts. Start at `src/checkout/`. Return: the code path the total flows through, where the currency conversion happens, and your best hypothesis with the evidence for it. Do not change any files. Under 300 words.
 
-## The Pattern
+Bound the length. Unbounded briefs return transcripts, and reading five transcripts costs more than the parallelism saved.
 
-### 1. Identify Independent Domains
+## Aggregating
 
-Group failures by what's broken:
-- File A tests: Tool approval flow
-- File B tests: Batch completion behavior
-- File C tests: Abort functionality
+- **Read every report before concluding.** The second one often reframes the first.
+- **Keep findings attributed** to their question. Don't merge them into one narrative; that's where a weak finding gets laundered into a confident one.
+- **Note disagreements explicitly.** Two agents contradicting each other is a finding in itself, usually the most valuable one.
+- **Treat reports as evidence, not verdicts.** An agent that found nothing may have looked in the wrong place. Absence of evidence is reported as absence of evidence.
 
-Each domain is independent - fixing tool approval doesn't affect abort tests.
+## Red flags
 
-### 2. Create Focused Agent Tasks
-
-Each agent gets:
-- **Specific scope:** One test file or subsystem
-- **Clear goal:** Make these tests pass
-- **Constraints:** Don't change other code
-- **Expected output:** Summary of what you found and fixed
-
-### 3. Dispatch in Parallel
-
-```text
-# Pseudocode — substitute your platform's parallel-dispatch primitive
-dispatch("Investigate failure domain A")
-dispatch("Investigate failure domain B")
-dispatch("Investigate failure domain C")
-# All three run concurrently; you coordinate, they don't share state
-```
-
-On Claude Code, `dispatch(...)` is `Task(subagent_type=..., prompt=...)` — see the Platform note at the top for other harnesses.
-
-### 4. Review and Integrate
-
-When agents return:
-- Read each summary
-- Verify fixes don't conflict
-- Run full test suite
-- Integrate all changes
-
-## Agent Prompt Structure
-
-Good agent prompts are:
-1. **Focused** - One clear problem domain
-2. **Self-contained** - All context needed to understand the problem
-3. **Specific about output** - What should the agent return?
-
-```markdown
-Fix the 3 failing tests in src/agents/agent-tool-abort.test.ts:
-
-1. "should abort tool with partial output capture" - expects 'interrupted at' in message
-2. "should handle mixed completed and aborted tools" - fast tool aborted instead of completed
-3. "should properly track pendingToolCount" - expects 3 results but gets 0
-
-These are timing/race condition issues. Your task:
-
-1. Read the test file and understand what each test verifies
-2. Identify root cause - timing issues or actual bugs?
-3. Fix by:
-   - Replacing arbitrary timeouts with event-based waiting
-   - Fixing bugs in abort implementation if found
-   - Adjusting test expectations if testing changed behavior
-
-Do NOT just increase timeouts - find the real issue.
-
-Return: Summary of what you found and what you fixed.
-```
-
-## Common Mistakes
-
-**❌ Too broad:** "Fix all the tests" - agent gets lost
-**✅ Specific:** "Fix agent-tool-abort.test.ts" - focused scope
-
-**❌ No context:** "Fix the race condition" - agent doesn't know where
-**✅ Context:** Paste the error messages and test names
-
-**❌ No constraints:** Agent might refactor everything
-**✅ Constraints:** "Do NOT change production code" or "Fix tests only"
-
-**❌ Vague output:** "Fix it" - you don't know what changed
-**✅ Specific:** "Return summary of root cause and changes"
-
-## When NOT to Use
-
-**Related failures:** Fixing one might fix others - investigate together first
-**Need full context:** Understanding requires seeing entire system
-**Exploratory debugging:** You don't know what's broken yet
-**Shared state:** Agents would interfere (editing same files, using same resources)
-
-## Example Shape
-
-Given 3 failing test files with independent root causes (timing, event-structure, async-completion), the controller identifies three domains, dispatches one agent per domain, and integrates the returned fixes:
-
-- **Agent 1** — scope: one test file; expected: diagnose + fix without touching other files.
-- **Agent 2** — scope: a different test file; expected: same.
-- **Agent 3** — scope: a different test file; expected: same.
-
-On return, the controller reviews each summary, checks for cross-file conflicts, runs the full test suite, and integrates. Because domains were independent, fixes don't collide; because each agent had a narrow scope, their summaries are easy to audit.
-
-## Key Benefits
-
-1. **Parallelization** - Multiple investigations happen simultaneously
-2. **Focus** - Each agent has narrow scope, less context to track
-3. **Independence** - Agents don't interfere with each other
-4. **Speed** - 3 problems solved in time of 1
-
-## Verification
-
-After agents return:
-1. **Review each summary** - Understand what changed
-2. **Check for conflicts** - Did agents edit same code?
-3. **Run full suite** - Verify all fixes work together
-4. **Spot check** - Agents can make systematic errors
-
-## Expected Outcome
-
-When dispatched correctly (independent domains, focused prompts, explicit output contract), parallel agents return fixes that integrate cleanly with zero conflicts and complete in roughly the time of the slowest single agent — a substantial speedup over sequential investigation.
+| Thought | Reality |
+|---|---|
+| "I'll dispatch agents to find where X is defined" | That's a search. Use `workspace-search`. |
+| "More agents will go faster" | More agents means more reports to read. Bound it. |
+| "They can each fix their own bit" | Read-only. Parallel writers collide. |
+| "The first report answers it" | Read them all. You dispatched them for a reason. |
+| "I'll let them figure out the scope" | An unscoped brief returns an unusable answer. |

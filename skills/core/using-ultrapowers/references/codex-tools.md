@@ -15,67 +15,20 @@ Skills use Claude Code tool names. When you encounter these in a skill, use your
 | `Read`, `Write`, `Edit` (files) | Use your native file tools |
 | `Bash` (run commands) | Use your native shell tools |
 
-## Subagent dispatch requires multi-agent support
+## Sub-agent dispatch needs multi-agent mode
 
-Add to your Codex config (`~/.codex/config.toml`):
+Sub-agent dispatch is off unless Codex is configured for it. Enable it in `~/.codex/config.toml`:
 
 ```toml
 [features]
 multi_agent = true
 ```
 
-This enables `spawn_agent`, `wait`, and `close_agent` for skills like `dispatching-parallel-agents` and `subagent-driven-development`.
+Without this, any skill that dispatches sub-agents (`implement`, `review`, `dispatching-parallel-agents`) falls back to running inline. That still works; it is just slower and shares one context window.
 
-## Named agent dispatch
+## Detecting the git environment before acting
 
-Claude Code skills reference named agent types like `ultrapowers:code-reviewer`.
-Codex does not have a named agent registry — `spawn_agent` creates generic agents
-from built-in roles (`default`, `explorer`, `worker`).
-
-When a skill says to dispatch a named agent type:
-
-1. Find the agent's prompt file (e.g., `agents/code-reviewer.md` or the skill's
-   local prompt template like `code-quality-reviewer-prompt.md`)
-2. Read the prompt content
-3. Fill any template placeholders (`{BASE_SHA}`, `{WHAT_WAS_IMPLEMENTED}`, etc.)
-4. Spawn a `worker` agent with the filled content as the `message`
-
-| Skill instruction | Codex equivalent |
-|-------------------|------------------|
-| `Task tool (ultrapowers:code-reviewer)` | `spawn_agent(agent_type="worker", message=...)` with `code-reviewer.md` content |
-| `Task tool (general-purpose)` with inline prompt | `spawn_agent(message=...)` with the same prompt |
-
-### Message framing
-
-The `message` parameter is user-level input, not a system prompt. Structure it
-for maximum instruction adherence:
-
-```
-Your task is to perform the following. Follow the instructions below exactly.
-
-<agent-instructions>
-[filled prompt content from the agent's .md file]
-</agent-instructions>
-
-Execute this now. Output ONLY the structured response following the format
-specified in the instructions above.
-```
-
-- Use task-delegation framing ("Your task is...") rather than persona framing ("You are...")
-- Wrap instructions in XML tags — the model treats tagged blocks as authoritative
-- End with an explicit execution directive to prevent summarization of the instructions
-
-### When this workaround can be removed
-
-This approach compensates for Codex's plugin system not yet supporting an `agents`
-field in `plugin.json`. When `RawPluginManifest` gains an `agents` field, the
-plugin can symlink to `agents/` (mirroring the existing `skills/` symlink) and
-skills can dispatch named agent types directly.
-
-## Environment Detection
-
-Skills that create worktrees or finish branches should detect their
-environment with read-only git commands before proceeding:
+Codex may already place you inside a linked worktree, or on a detached HEAD, and creating a worktree from there fails in confusing ways. Probe with read-only commands first:
 
 ```bash
 GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
@@ -83,20 +36,21 @@ GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 BRANCH=$(git branch --show-current)
 ```
 
-- `GIT_DIR != GIT_COMMON` → already in a linked worktree (skip creation)
-- `BRANCH` empty → detached HEAD (cannot branch/push/PR from sandbox)
+Read the result as:
 
-See `using-git-worktrees` Step 0 and `finishing-a-development-branch`
-Step 1 for how each skill uses these signals.
+| Signal | Meaning | What to do |
+|---|---|---|
+| `GIT_DIR` differs from `GIT_COMMON` | already inside a linked worktree | skip worktree creation, work here |
+| `BRANCH` is empty | detached HEAD | cannot branch, push, or open a PR from the sandbox |
+| both normal | ordinary checkout | proceed as usual |
 
-## Codex App Finishing
+`using-git-worktrees` uses the first signal to decide whether to create anything; `finishing-a-development-branch` uses the second to decide whether it can push.
 
-When the sandbox blocks branch/push operations (detached HEAD in an
-externally managed worktree), the agent commits all work and informs
-the user to use the App's native controls:
+## When the sandbox blocks branching
 
-- **"Create branch"** — names the branch, then commit/push/PR via App UI
-- **"Hand off to local"** — transfers work to the user's local checkout
+On a detached HEAD in an externally managed worktree, the agent cannot create a branch, push, or open a PR. Commit the work anyway, then tell the user to finish through the Codex App's own controls:
 
-The agent can still run tests, stage files, and output suggested branch
-names, commit messages, and PR descriptions for the user to copy.
+- **Create branch** — names the branch, and the commit, push and PR happen through the App.
+- **Hand off to local** — moves the work to the user's local checkout.
+
+The agent can still run tests, stage files, and write out a suggested branch name, commit message, and PR description for the user to paste. Do this rather than reporting that the work cannot be finished: everything except the final git operation is still yours to do.

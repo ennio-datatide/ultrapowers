@@ -1,61 +1,43 @@
-# Spec Compliance Reviewer Prompt Template
+# Spec Reviewer Sub-Agent Prompt
 
-Use this template when dispatching a spec compliance reviewer subagent.
+Template for the first review after an implementer finishes. One question: **does this do what the ticket asked?**
 
-**Purpose:** Verify implementer built what was requested (nothing more, nothing less)
+Runs before the quality review. Code that implements the wrong thing shouldn't have its style reviewed.
 
 ```
-Task tool (general-purpose):
-  description: "Review spec compliance for Task N"
-  prompt: |
-    You are reviewing whether an implementation matches its specification.
+Review this change against the ticket it was built from.
 
-    ## What Was Requested
+## The ticket
 
-    [FULL TEXT of task requirements]
+<ticket, verbatim, including acceptance criteria>
 
-    ## What Implementer Claims They Built
+## The spec section behind it
 
-    [From implementer's report]
+<the originating spec section>
 
-    ## CRITICAL: Do Not Trust the Report
+## The change
 
-    The implementer finished suspiciously quickly. Their report may be incomplete,
-    inaccurate, or optimistic. You MUST verify everything independently.
+Run: git diff <base>...HEAD
 
-    **DO NOT:**
-    - Take their word for what they implemented
-    - Trust their claims about completeness
-    - Accept their interpretation of requirements
+## Your job
 
-    **DO:**
-    - Read the actual code they wrote
-    - Compare actual implementation to requirements line by line
-    - Check for missing pieces they claimed to implement
-    - Look for extra features they didn't mention
+Verify independently. The implementer's report is a claim; the diff is the evidence. Read the code yourself and do not take the report's word for anything.
 
-    ## Your Job
+Report:
 
-    Read the implementation code and verify:
+(a) Acceptance criteria that are NOT met, or only partly met. Quote the criterion and say what's missing.
+(b) Behaviour in the diff that the ticket did not ask for. Scope creep counts even when the code is good.
+(c) Criteria that look implemented but are implemented wrongly. Quote the criterion and explain the gap.
 
-    **Missing requirements:**
-    - Did they implement everything that was requested?
-    - Are there requirements they skipped or missed?
-    - Did they claim something works but didn't actually implement it?
+For each finding, quote the relevant line of the ticket or spec.
 
-    **Extra/unneeded work:**
-    - Did they build things that weren't requested?
-    - Did they over-engineer or add unnecessary features?
-    - Did they add "nice to haves" that weren't in spec?
+If every criterion is genuinely met, say so plainly and say what you checked.
 
-    **Misunderstandings:**
-    - Did they interpret requirements differently than intended?
-    - Did they solve the wrong problem?
-    - Did they implement the right feature but wrong way?
-
-    **Verify by reading code, not by trusting report.**
-
-    Report:
-    - ✅ Spec compliant (if everything matches after code inspection)
-    - ❌ Issues found: [list specifically what's missing or extra, with file:line references]
+Under 400 words.
 ```
+
+## Dispatching notes
+
+- A fast implementer report is the usual signature of incomplete work. The reviewer must re-derive the verdict from the diff, never inherit it.
+- This agent does not fix anything. It reports; findings go back to the implementer.
+- Keep it separate from the quality reviewer. Merging the two lets a spec failure get softened by good style, which is exactly what the split prevents.

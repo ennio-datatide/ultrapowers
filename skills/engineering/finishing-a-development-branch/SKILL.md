@@ -1,223 +1,58 @@
 ---
 name: finishing-a-development-branch
-description: Use when implementation is complete, all tests pass, and you need to decide how to integrate the work - guides completion of development work by presenting structured options for merge, PR, or cleanup
+description: Use when implementation is complete and reviewed, to integrate the work — merge, open a PR, keep the branch, or discard it — and clean up any worktree afterwards.
 ---
 
 # Finishing a Development Branch
 
-## Overview
+Get finished work off the branch and into the project, then clean up.
 
-Guide completion of development work by presenting clear options and handling chosen workflow.
+## First, confirm it's actually finished
 
-**Core principle:** Verify tests → Present options → Execute choice → Clean up.
+Call the Skill tool with "verification-before-completion", then check:
 
-**Announce at start:** "I'm using the finishing-a-development-branch skill to complete this work."
+- The full test suite passes on the branch as it stands.
+- The `review` phase has run and its findings have been dealt with or consciously accepted.
+- Nothing is uncommitted.
 
-## Workflow Preferences
+If any of these fails, stop here and say which. Integrating unfinished work is how a broken main branch happens.
 
-Before presenting options, read `.claude/ultrapowers-preferences.json` in the project root. If it exists, use its `autoPush` value to determine whether to push automatically. If the file is missing, default to `autoPush: true` (matches the `grilling` skill and README 1.x defaults). If the file exists but cannot be parsed as JSON, warn the user and fall back to the full 4-option menu — do not auto-pick from a malformed prefs file.
+## Choose the path
 
-`autoCommit` covers uncommitted working-tree changes (should this skill commit them itself before presenting options? No — assume upstream skills committed per-task). `autoPush` governs Option 2 push behavior; it does not influence Option 1's local merge.
+Read `.claude/ultrapowers-preferences.json` first.
 
-## The Process
+**If `autoPush` is true (the default): push the branch and open a PR.** Don't present a menu — that's what the preference means. Announce what you did and give the user the link.
 
-### Step 1: Verify Tests
+If `autoPush` is false, or the preferences file is missing or malformed, present the options:
 
-**Before presenting options, verify tests pass.** This step is the concrete enforcement of the `ultrapowers:verification-before-completion` doctrine — no "should work", no "tests were green earlier", no trust in prior output. Run the command fresh, in this session, and read the output before continuing.
-
-```bash
-# Run project's test suite
-npm test / cargo test / pytest / go test ./...
-```
-
-**If tests fail:**
-```
-Tests failing (<N> failures). Must fix before completing:
-
-[Show failures]
-
-Cannot proceed with merge/PR until tests pass.
-```
-
-Stop. Don't proceed to Step 2.
-
-**If tests pass:** Continue to Step 2.
-
-### Step 2: Determine Base Branch
-
-```bash
-# Try common base branches
-git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
-```
-
-Or ask: "This branch split from main - is that correct?"
-
-### Step 3: Auto-Pick Or Present Options
-
-**Auto-pick based on signals** instead of asking every time:
-
-| Signal | Action |
+| Option | When it fits |
 |---|---|
-| `autoPush: true` AND branch has ≥1 commit ahead of base | Option 2 (push + PR). Announce the choice, proceed. |
-| `autoPush: false` OR no preference file | Present the 4-option menu below. |
-| User explicitly said "merge locally" / "discard" / "keep as-is" | Honor the request directly (typed confirmation still required for discard). |
+| **Open a PR** | Anyone else reviews, or the project works through PRs |
+| **Merge to the main branch** | Solo project, work is reviewed, no PR process |
+| **Keep the branch** | Not ready, or waiting on something external |
+| **Discard it** | The work is being abandoned |
 
-**Announce your auto-pick** in one line before proceeding:
+On a malformed preferences file, warn the user and present the menu. Never guess from a file you couldn't parse.
 
-> "Implementation complete. Auto-picking Option 2 (push + PR) — `autoPush: true` set in workflow prefs."
+## Carrying it out
 
-**Only present the menu when the auto-pick rules don't apply.** When shown, use exactly these 4 options:
+**PR:** push the branch, open the PR with a body describing what changed and why, linking the spec. Give the user the URL.
 
-```
-Implementation complete. What would you like to do?
+**Merge:** confirm the target branch, merge, push. If the merge conflicts, stop and resolve deliberately rather than picking sides mechanically.
 
-1. Merge back to <base-branch> locally
-2. Push and create a Pull Request
-3. Keep the branch as-is (I'll handle it later)
-4. Discard this work
+**Keep:** push the branch so the work isn't only on one machine, and say what it's waiting on.
 
-Which option?
-```
+**Discard:** confirm explicitly first, naming what will be lost. This is the one irreversible option here, so it is never the default and never inferred.
 
-**Don't add explanation** - keep options concise.
+## Clean up
 
-**Never auto-pick Option 4 (Discard)** — destructive actions always require explicit user intent and typed confirmation (see Option 4 below). Also: when auto-picking Option 2, if the branch target defaults to an upstream fork (common when `origin` is a fork of another repo), pass `--repo <owner/repo>` explicitly to `gh pr create` to avoid PRs landing on the wrong remote.
-
-### Step 4: Execute Choice
-
-#### Option 1: Merge Locally
+Once the work has landed:
 
 ```bash
-# Switch to base branch
-git checkout <base-branch>
-
-# Pull latest
-git pull
-
-# Merge feature branch
-git merge <feature-branch>
-
-# Verify tests on merged result
-<test command>
-
-# If tests pass
-git branch -d <feature-branch>
+git worktree remove .worktrees/<name>   # if a worktree was used
+git branch -d <branch>                  # after a successful merge
 ```
 
-Then: Cleanup worktree (Step 5)
+Use `-d`, not `-D`. The refusal from `-d` on an unmerged branch is a safety check, not an obstacle — if it refuses, the work has not landed and deleting it loses the work.
 
-#### Option 2: Push and Create PR
-
-```bash
-# Push branch
-git push -u origin <feature-branch>
-
-# Create PR
-gh pr create --title "<title>" --body "$(cat <<'EOF'
-## Summary
-<2-3 bullets of what changed>
-
-## Test Plan
-- [ ] <verification steps>
-EOF
-)"
-```
-
-Then: **keep the worktree open** while the PR is in review — cleanup happens after the PR lands.
-
-#### Option 3: Keep As-Is
-
-Report: "Keeping branch <name>. Worktree preserved at <path>."
-
-**Don't cleanup worktree.**
-
-#### Option 4: Discard
-
-**Confirm first:**
-```
-This will permanently delete:
-- Branch <name>
-- All commits: <commit-list>
-- Worktree at <path>
-
-Type 'discard' to confirm.
-```
-
-Wait for exact confirmation.
-
-If confirmed:
-```bash
-git checkout <base-branch>
-git branch -D <feature-branch>
-```
-
-Then: Cleanup worktree (Step 5)
-
-### Step 5: Cleanup Worktree
-
-**For Options 1 and 4:**
-
-Check if in worktree:
-```bash
-git worktree list | grep $(git branch --show-current)
-```
-
-If yes:
-```bash
-git worktree remove <worktree-path>
-```
-
-**For Options 2 and 3:** Keep the worktree. Option 2's PR may still be in review; Option 3 is an explicit keep-as-is.
-
-## Quick Reference
-
-| Option | Merge | Push | Keep Worktree | Cleanup Branch |
-|--------|-------|------|---------------|----------------|
-| 1. Merge locally | ✓ | - | - | ✓ |
-| 2. Create PR | - | ✓ | ✓ | - |
-| 3. Keep as-is | - | - | ✓ | - |
-| 4. Discard | - | - | - | ✓ (force) |
-
-## Common Mistakes
-
-**Skipping test verification**
-- **Problem:** Merge broken code, create failing PR
-- **Fix:** Always verify tests before offering options
-
-**Open-ended questions**
-- **Problem:** "What should I do next?" → ambiguous
-- **Fix:** Present exactly 4 structured options
-
-**Automatic worktree cleanup**
-- **Problem:** Remove worktree when might need it (Option 2, 3)
-- **Fix:** Only cleanup for Options 1 and 4
-
-**No confirmation for discard**
-- **Problem:** Accidentally delete work
-- **Fix:** Require typed "discard" confirmation
-
-## Red Flags
-
-**Never:**
-- Proceed with failing tests
-- Merge without verifying tests on result
-- Delete work without confirmation
-- Force-push without explicit request
-
-**Always:**
-- Verify tests before offering options
-- Present exactly 4 options
-- Get typed confirmation for Option 4
-- Clean up worktree for Options 1 & 4 only
-
-## Integration
-
-**Called by:**
-- **subagent-driven-development** (Step 7) - After all tasks complete
-- **executing-plans** (Step 5) - After all batches complete
-
-**Required sub-skill:**
-- **ultrapowers:verification-before-completion** - Step 1's test run is this skill's concrete enforcement point. If the test command has not been run fresh in this session, stop and run it before presenting options.
-
-**Pairs with:**
-- **using-git-worktrees** - Cleans up worktree created by that skill
+Leave the ticket files in `.scratch/` alone. They are the record of what was built, and they cost nothing.

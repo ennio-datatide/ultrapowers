@@ -1,26 +1,37 @@
-# Code Quality Reviewer Prompt Template
+# Code Quality Reviewer Sub-Agent Prompt
 
-Use this template when dispatching a code quality reviewer subagent.
-
-**Purpose:** Verify implementation is well-built (clean, tested, maintainable)
-
-**Only dispatch after spec compliance review passes.**
+Template for the second review. **Only dispatch after the spec review passes** — otherwise you are grading the style of the wrong feature.
 
 ```
-Task tool (ultrapowers:code-reviewer):
-  Use template at review/code-reviewer.md
+Review the quality of this change.
 
-  WHAT_WAS_IMPLEMENTED: [from implementer's report]
-  PLAN_OR_REQUIREMENTS: Task N from [plan-file]
-  BASE_SHA: [commit before task]
-  HEAD_SHA: [current commit]
-  DESCRIPTION: [task summary]
+## The change
+
+Run: git diff <base>...HEAD
+
+## This project's standards
+
+<contents or paths of CODING_STANDARDS.md, CONTRIBUTING.md, CLAUDE.md, whichever exist>
+
+## Your job
+
+Assume the change does the right thing; that was already checked. Assess how it is built.
+
+Report:
+
+(a) Violations of this project's documented standards. Cite the standard and the rule.
+(b) Code smells, named, with the hunk quoted: duplicated logic, a name that doesn't reveal intent, a primitive standing in for a domain concept, an abstraction with no current need, a module changed for unrelated reasons.
+(c) Tests that verify implementation details rather than behaviour, or that could never fail.
+
+A documented project standard always wins over a general heuristic. Skip anything the project's tooling already enforces.
+
+Mark each finding as a hard violation or a judgement call. Most are judgement calls; say so.
+
+Under 400 words.
 ```
 
-**In addition to standard code quality concerns, the reviewer should check:**
-- Does each file have one clear responsibility with a well-defined interface?
-- Are units decomposed so they can be understood and tested independently?
-- Is the implementation following the file structure from the plan?
-- Did this implementation create new files that are already large, or significantly grow existing files? (Don't flag pre-existing file sizes — focus on what this change contributed.)
+## Dispatching notes
 
-**Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
+- Give it the standards files. Without them it invents a house style, and the findings become noise.
+- Don't ask it to re-check spec compliance. That axis is done, and re-running it here lets one axis mask the other.
+- Judgement calls go to the user, not straight back to the implementer. Only hard violations auto-return.

@@ -1,135 +1,54 @@
-# Implementer Subagent Prompt Template
+# Implementer Sub-Agent Prompt
 
-Use this template when dispatching an implementer subagent.
+Template for dispatching the agent that builds one ticket.
+
+The agent starts with nothing. Everything it needs is in this brief, and nothing from previous tickets is carried in.
 
 ```
-Task tool (general-purpose):
-  description: "Implement Task N: [task name]"
-  prompt: |
-    You are implementing Task N: [task name]
+Build ticket <NN>: <title>.
 
-    ## Task Description
+## What to build
 
-    [FULL TEXT of task from plan - paste it here, don't make subagent read file]
+<the ticket's "What to build" section, verbatim>
 
-    ## Context
+## Acceptance criteria
 
-    [Scene-setting: where this fits, dependencies, architectural context]
+<the ticket's checklist, verbatim>
 
-    ## Before You Begin
+## Spec context
 
-    If you have questions about:
-    - The requirements or acceptance criteria
-    - The approach or implementation strategy
-    - Dependencies or assumptions
-    - Anything unclear in the task description
+<the section of the spec this ticket came from, so the intent behind the criteria is visible>
 
-    **Ask them now.** Raise any concerns before starting work.
+## How to work
 
-    ## Required First Step: Invoke TDD Skill
+- Build this test-first. Write the failing test, watch it fail, write the minimum that passes it, repeat.
+- Test only at these seams: <the seams agreed in the spec>. Do not invent a new seam. If one seems necessary, stop and report that instead of proceeding.
+- Follow the conventions already in this codebase. Read neighbouring code before writing.
+- Use the project's vocabulary from CONTEXT.md for names.
+- Respect the ADRs in docs/adr/ covering this area. Do not re-litigate a recorded decision.
 
-    **Before writing any code**, invoke the `ultrapowers:test-driven-development` skill.
-    This is mandatory, not advisory — every implementer subagent starts with a TDD
-    invocation. The skill defines the red-green-refactor cycle you will follow for
-    every production code change in this task. If you skip this step, your work
-    will fail code review.
+## Scope
 
-    ## Your Job
+Build exactly this ticket. Not the next one, not a refactor you noticed on the way, not an improvement outside the acceptance criteria. Note anything you spot and move on.
 
-    Once you're clear on requirements and have invoked the TDD skill:
-    1. Implement exactly what the task specifies, following the TDD cycle (failing
-       test first, minimal implementation, refactor)
-    2. Write tests **before** the code that satisfies them — never after
-    3. Verify implementation works (run the actual test command; no "should pass")
-    4. Commit your work (if `autoCommit: true` was passed in) or stage it (if `autoCommit: false`)
-    5. Self-review (see below)
-    6. Report back
+## Before you report back
 
-    Work from: [directory]
+- Run the typechecker.
+- Run the tests covering what you changed.
+- Re-read the acceptance criteria and confirm each one against the code you wrote.
 
-    **While you work:** If you encounter something unexpected or unclear, **ask questions**.
-    It's always OK to pause and clarify. Don't guess or make assumptions.
+## Report
 
-    ## Code Organization
+- Which acceptance criteria are met, each with the evidence.
+- Anything you could not do, and why.
+- Anything you noticed but deliberately left alone.
+- The commands you ran, and what they output.
 
-    You reason best about code you can hold in context at once, and your edits are more
-    reliable when files are focused. Keep this in mind:
-    - Follow the file structure defined in the plan
-    - Each file should have one clear responsibility with a well-defined interface
-    - If a file you're creating is growing beyond the plan's intent, stop and report
-      it as DONE_WITH_CONCERNS — don't split files on your own without plan guidance
-    - If an existing file you're modifying is already large or tangled, work carefully
-      and note it as a concern in your report
-    - In existing codebases, follow established patterns. Improve code you're touching
-      the way a good developer would, but don't restructure things outside your task.
-
-    ## When You're in Over Your Head
-
-    It is always OK to stop and say "this is too hard for me." Bad work is worse than
-    no work. You will not be penalized for escalating.
-
-    **STOP and escalate when:**
-    - The task requires architectural decisions with multiple valid approaches
-    - You need to understand code beyond what was provided and can't find clarity
-    - You feel uncertain about whether your approach is correct
-    - The task involves restructuring existing code in ways the plan didn't anticipate
-    - You've been reading file after file trying to understand the system without progress
-
-    **How to escalate:** Report back with status BLOCKED or NEEDS_CONTEXT. Describe
-    specifically what you're stuck on, what you've tried, and what kind of help you need.
-    The controller can provide more context, re-dispatch with a more capable model,
-    or break the task into smaller pieces.
-
-    **Strategic doubt during implementation:** If you suspect the approach is wrong but
-    haven't verified it empirically — e.g., "the spec says X but the codebase pattern
-    suggests Y is more idiomatic", or "I implemented this but I'm uncertain whether
-    invariant Z holds" — DO NOT attempt to dispatch the `advisor` agent. Subagents
-    (you) cannot dispatch sub-subagents in Claude Code. Surface the concern in your
-    DONE_WITH_CONCERNS report instead. The controller will dispatch advisor on your
-    behalf if needed (see `ultrapowers:consulting-the-advisor`).
-
-    ## Before Reporting Back: Self-Review
-
-    Review your work with fresh eyes. Ask yourself:
-
-    **Completeness:**
-    - Did I fully implement everything in the spec?
-    - Did I miss any requirements?
-    - Are there edge cases I didn't handle?
-
-    **Quality:**
-    - Is this my best work?
-    - Are names clear and accurate (match what things do, not how they work)?
-    - Is the code clean and maintainable?
-
-    **Discipline:**
-    - Did I avoid overbuilding (YAGNI)?
-    - Did I only build what was requested?
-    - Did I follow existing patterns in the codebase?
-
-    **Testing:**
-    - Do tests actually verify behavior (not just mock behavior)?
-    - Did I follow TDD if required?
-    - Are tests comprehensive?
-
-    If you find issues during self-review, fix them now before reporting.
-
-    ## Report Format
-
-    When done, report:
-    - **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
-    - What you implemented (or what you attempted, if blocked)
-    - What you tested and test results
-    - Files changed
-    - Self-review findings (if any)
-    - Any issues or concerns
-
-    Use DONE_WITH_CONCERNS if you completed the work but have doubts about correctness
-    or strategic approach. List the concerns in a `concerns:` field of your report —
-    e.g., "Approach X chosen over Y because <reason>; Y might be more idiomatic", or
-    "Invariant Z assumed but not verified by tests". The controller may dispatch
-    advisor (opus) on your behalf to weigh in before reviewers run.
-
-    Use BLOCKED if you cannot complete the task. Use NEEDS_CONTEXT if you need
-    information that wasn't provided. Never silently produce work you're unsure about.
+Do not report a criterion as met without having run something that shows it.
 ```
+
+## Dispatching notes
+
+- Pass the ticket and spec section as text. Don't make the agent go looking for them.
+- Name the seams explicitly. "Test at the appropriate level" produces a different answer every run.
+- Bound the scope in the prompt. An unbounded implementer refactors adjacent code and blows the ticket's size.

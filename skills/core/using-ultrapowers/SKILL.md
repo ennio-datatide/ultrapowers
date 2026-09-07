@@ -68,7 +68,7 @@ Before any broad file read, and before delegating discovery to a sub-agent, call
 
 | Thought | Reality |
 |---|---|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
+| "They only asked a question" | A question is a task with a shorter answer. Check anyway. |
 | "I need more context first" | Skills tell you *how* to gather context. Check first. |
 | "The skill is overkill here" | Simple things become complex. Use it. |
 | "I remember this skill" | Skills change. Invoke it and read the current version. |
