@@ -10,9 +10,8 @@ Skills live in bucket folders under `skills/`:
 - `core/` — the rails: the router, and the skills that make the agent decide rather than ask
 - `meta/` — skills about authoring skills
 - `misc/` — real but off-path; **not promoted**
-- `deprecated/` — forwarding aliases only, removed next release
 
-**Promoted buckets** (`flow`, `engineering`, `productivity`, `core`, `meta`, `deprecated`) must appear in `.claude-plugin/plugin.json`'s `skills` array and in the README. **`misc/` must appear in neither** — that is what makes it cost no context.
+**Promoted buckets** (`flow`, `engineering`, `productivity`, `core`, `meta`) must appear in `.claude-plugin/plugin.json`'s `skills` array and in the README. **`misc/` must appear in neither** — that is what makes it cost no context.
 
 Run `claude plugin validate . --strict` after touching a manifest.
 

@@ -61,7 +61,7 @@ If the block is missing, the hook uses these hardcoded defaults.
 
 ### Bypass options
 
-- **Slash command**: any prompt starting with `/` skips the router (e.g., `/ultrapowers:brainstorming foo`).
+- **Slash command**: any prompt starting with `/` skips the router (e.g., `/ultrapowers:grill foo`).
 - **Conversational opt-out**: phrases like "just answer", "skip the workflow", "no skill" — the classifier routes to passthrough at high confidence.
 - **Disable globally**: set `autoRouter.enabled: false`.
 
@@ -98,8 +98,8 @@ Edit `.claude/ultrapowers-preferences.json`:
 
 - Main session runs on sonnet or haiku → directive injected, executor calls advisor at strategic moments
 - Main session runs on opus → directive NOT injected (executor is already advisor-class)
-- `subagent-driven-development` controller on sonnet/haiku → controller dispatches advisor at task boundaries
-- `subagent-driven-development` controller on opus → skipped (controller already advisor-class)
+- `implement` controller on sonnet/haiku → controller dispatches advisor at ticket boundaries
+- `implement` controller on opus → skipped (controller already advisor-class)
 - Implementer subagents in SDD → never dispatch advisor (harness prohibits sub-subagent dispatch); surface concerns via DONE_WITH_CONCERNS instead
 
 ### Latency note

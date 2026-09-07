@@ -36,7 +36,7 @@ output=$(timeout 60s opencode run --print-logs "Use the find_skills tool to list
 }
 
 # Check for expected patterns in output
-if echo "$output" | grep -qi "ultrapowers:brainstorming\|ultrapowers:using-ultrapowers\|Available skills"; then
+if echo "$output" | grep -qi "ultrapowers:grill\|ultrapowers:using-ultrapowers\|Available skills"; then
     echo "  [PASS] find_skills tool discovered ultrapowers skills"
 else
     echo "  [FAIL] find_skills did not return expected skills"
@@ -79,9 +79,9 @@ fi
 # Test 3: Test use_skill with ultrapowers: prefix
 echo ""
 echo "Test 3: Testing use_skill with ultrapowers: prefix..."
-echo "  Running opencode with ultrapowers:brainstorming skill..."
+echo "  Running opencode with ultrapowers:grill skill..."
 
-output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load ultrapowers:brainstorming and tell me the first few lines of what you received." 2>&1) || {
+output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load ultrapowers:grill and tell me the first few lines of what you received." 2>&1) || {
     exit_code=$?
     if [ $exit_code -eq 124 ]; then
         echo "  [FAIL] OpenCode timed out after 60s"
@@ -90,11 +90,11 @@ output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load u
     echo "  [WARN] OpenCode returned non-zero exit code: $exit_code"
 }
 
-# Check for expected content from brainstorming skill
-if echo "$output" | grep -qi "brainstorming\|Launching skill\|skill.*loaded"; then
-    echo "  [PASS] use_skill loaded ultrapowers:brainstorming skill"
+# Check for expected content from grilling skill
+if echo "$output" | grep -qi "grilling\|Launching skill\|skill.*loaded"; then
+    echo "  [PASS] use_skill loaded ultrapowers:grill skill"
 else
-    echo "  [FAIL] use_skill did not load ultrapowers:brainstorming correctly"
+    echo "  [FAIL] use_skill did not load ultrapowers:grill correctly"
     echo "  Output was:"
     echo "$output" | head -50
     exit 1

@@ -43,7 +43,7 @@ Everything happens in the worktree. Check `pwd` if you're unsure — running com
 
 ## Finishing
 
-Hand to `finishing-a-development-branch`. It handles merge, PR, or discard, and removes the worktree afterwards.
+The `review` phase handles merge, PR, or discard, and removes the worktree afterwards.
 
 To remove one by hand:
 

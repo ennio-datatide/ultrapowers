@@ -32,7 +32,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/ennio-datat
 
 3. Restart Codex.
 
-4. **For subagent skills** (optional): Skills like `dispatching-parallel-agents` and `subagent-driven-development` require Codex's multi-agent feature. Add to your Codex config:
+4. **For subagent skills** (optional): The `implement` and `review` phases dispatch sub-agents, which requires Codex's multi-agent feature. Add to your Codex config:
    ```toml
    [features]
    multi_agent = true
@@ -60,7 +60,7 @@ The `using-ultrapowers` skill is discovered automatically and enforces skill usa
 ## Usage
 
 Skills are discovered automatically. Codex activates them when:
-- You mention a skill by name (e.g., "use brainstorming")
+- You mention a skill by name (e.g., "use grill")
 - The task matches a skill's description
 - The `using-ultrapowers` skill directs Codex to use one
 

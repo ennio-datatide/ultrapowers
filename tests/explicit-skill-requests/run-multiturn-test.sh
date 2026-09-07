@@ -27,7 +27,7 @@ echo ""
 cd "$PROJECT_DIR"
 
 # Create a dummy plan file
-cat > "$PROJECT_DIR/docs/ultrapowers/plans/auth-system.md" << 'EOF'
+cat > "$PROJECT_DIR/.scratch/auth-system/issues/" << 'EOF'
 # Auth System Implementation Plan
 
 ## Task 1: Add User Model
@@ -59,7 +59,7 @@ echo ""
 # Turn 2: Continue with more planning detail
 echo ">>> Turn 2: Continuing planning..."
 TURN2_LOG="$OUTPUT_DIR/turn2.json"
-claude -p "Good analysis. I've already written the plan to docs/ultrapowers/plans/auth-system.md. Now I'm ready to implement. What are my options for execution?" \
+claude -p "Good analysis. I've already written the plan to .scratch/auth-system/issues/. Now I'm ready to implement. What are my options for execution?" \
     --continue \
     --plugin-dir "$PLUGIN_DIR" \
     --dangerously-skip-permissions \
@@ -70,10 +70,10 @@ claude -p "Good analysis. I've already written the plan to docs/ultrapowers/plan
 echo "Turn 2 complete."
 echo ""
 
-# Turn 3: The critical test - ask for subagent-driven-development
-echo ">>> Turn 3: Requesting subagent-driven-development..."
+# Turn 3: The critical test - ask for implement
+echo ">>> Turn 3: Requesting implement..."
 TURN3_LOG="$OUTPUT_DIR/turn3.json"
-claude -p "subagent-driven-development, please" \
+claude -p "implement, please" \
     --continue \
     --plugin-dir "$PLUGIN_DIR" \
     --dangerously-skip-permissions \
@@ -87,12 +87,12 @@ echo ""
 echo "=== Results ==="
 
 # Check if skill was triggered in Turn 3
-SKILL_PATTERN='"skill":"([^"]*:)?subagent-driven-development"'
+SKILL_PATTERN='"skill":"([^"]*:)?implement"'
 if grep -q '"name":"Skill"' "$TURN3_LOG" && grep -qE "$SKILL_PATTERN" "$TURN3_LOG"; then
-    echo "PASS: Skill 'subagent-driven-development' was triggered in Turn 3"
+    echo "PASS: Skill 'implement' was triggered in Turn 3"
     TRIGGERED=true
 else
-    echo "FAIL: Skill 'subagent-driven-development' was NOT triggered in Turn 3"
+    echo "FAIL: Skill 'implement' was NOT triggered in Turn 3"
     TRIGGERED=false
 fi
 

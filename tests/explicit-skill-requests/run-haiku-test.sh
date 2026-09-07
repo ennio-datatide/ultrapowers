@@ -31,7 +31,7 @@ else
 fi
 
 # Create a dummy plan file
-cat > "$PROJECT_DIR/docs/ultrapowers/plans/auth-system.md" << 'EOF'
+cat > "$PROJECT_DIR/.scratch/auth-system/issues/" << 'EOF'
 # Auth System Implementation Plan
 
 ## Task 1: Add User Model
@@ -49,8 +49,8 @@ EOF
 
 echo ""
 
-# Turn 1: Start brainstorming
-echo ">>> Turn 1: Brainstorming request..."
+# Turn 1: Start grilling
+echo ">>> Turn 1: Grill request..."
 claude -p "I want to add user authentication to my app. Help me think through this." \
     --model haiku \
     --plugin-dir "$PLUGIN_DIR" \
@@ -97,9 +97,9 @@ claude -p "The plan looks good. What are my options for executing it?" \
 echo "Done."
 
 # Turn 5: THE CRITICAL TEST
-echo ">>> Turn 5: Requesting subagent-driven-development..."
+echo ">>> Turn 5: Requesting implement..."
 FINAL_LOG="$OUTPUT_DIR/turn5.json"
-claude -p "subagent-driven-development, please" \
+claude -p "implement, please" \
     --continue \
     --model haiku \
     --plugin-dir "$PLUGIN_DIR" \
@@ -113,7 +113,7 @@ echo ""
 echo "=== Results (Haiku) ==="
 
 # Check final turn
-SKILL_PATTERN='"skill":"([^"]*:)?subagent-driven-development"'
+SKILL_PATTERN='"skill":"([^"]*:)?implement"'
 if grep -q '"name":"Skill"' "$FINAL_LOG" && grep -qE "$SKILL_PATTERN" "$FINAL_LOG"; then
     echo "PASS: Skill was triggered"
     TRIGGERED=true

@@ -69,7 +69,7 @@ while IFS= read -r line; do
 done < "$REPO_ROOT/tests/hooks/fixtures/chat-shaped.txt"
 
 echo "Test: slash command early-exit"
-assert_passthrough "slash command" "/ultrapowers:brainstorming foo"
+assert_passthrough "slash command" "/ultrapowers:grill foo"
 
 echo "Test: recursion guard (CLAUDECODE-style)"
 ULTRAPOWERS_AUTOROUTER_ACTIVE=1 assert_passthrough "recursion sentinel" "build a thing"

@@ -81,7 +81,7 @@ payload=$(jq -nc '{
     transcript_path: "/tmp/x",
     cwd: "/tmp",
     permission_mode: "acceptEdits",
-    last_assistant_message: "<skill-checkpoint>brainstorming-section-1</skill-checkpoint> Approve section 1?",
+    last_assistant_message: "<skill-checkpoint>grill-section-1</skill-checkpoint> Approve section 1?",
     stop_hook_active: false
 }')
 run_case "skill-checkpoint marker allows banned-looking phrase" "$payload" "allow"

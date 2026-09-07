@@ -79,7 +79,7 @@ Give the advice serious weight. The advisor is a stronger model with the brief i
 
 The reconcile call is the disagreement protocol. Use it instead of unilaterally overriding.
 
-## Subagent-Driven-Development Special Case
+## Implement-Loop Special Case
 
 In SDD, the **controller** dispatches advisor — implementer subagents cannot (harness restriction: subagents cannot dispatch sub-subagents).
 

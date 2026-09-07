@@ -36,7 +36,7 @@ Only ask if at least one applies:
 
 ## Decision Examples
 
-**Brainstorming fast-path triage** — signals: prompt length, verb specificity, scope keywords, codebase size, framework constraints. Decide silently in most cases.
+**Grill fast-path triage** — signals: prompt length, verb specificity, scope keywords, codebase size, framework constraints. Decide silently in most cases.
 
 **Plan granularity** — signals: spec component count, dependency density, file-touch surface area. Coarse for ≤3 components and tight coupling; fine-grained for ≥5 components or cross-cutting concerns.
 

@@ -53,7 +53,7 @@ So Ultrapowers keeps the engineering rigor exactly as-is and changes one thing: 
 
 **Ultrapowers is now built on [Matt Pocock's skills](https://github.com/mattpocock/skills).** The whole flow was rebuilt around his method.
 
-- **Five phases, one mental model.** `Grill → Spec → Tickets → Implement → Review` replaces the old pipeline. Old skill names (`brainstorming`, `writing-plans`, `requesting-code-review`, `receiving-code-review`) still work as aliases for one release.
+- **Five phases, one mental model.** `Grill → Spec → Tickets → Implement → Review`.
 - **Grilling.** The agent interviews you in rounds, walking a design tree until nothing is left assumed. Every question comes with a recommended answer, so you can reply `ok` and still have walked the whole tree.
 - **A Project Dictionary and Decisions Log.** The agent builds a glossary of *your* words as you talk, and records the decisions that would be expensive to reverse. This is what stops session two re-litigating session one.
 - **Work you can see.** Tickets are vertical slices, each demoable on its own and sized to a single fresh context window, so the agent never runs out of room to think mid-build.
@@ -169,8 +169,6 @@ The agent grills you on what "notification" means here, who sees them, what happ
 ### Not loaded by default
 
 `skills/misc/` holds **using-git-worktrees**, **writing-claude-code-hooks**, **skills-audit**, and **skills-creation**. They're real and they work, but they're off the path for someone describing an idea, so they don't sit in context. Ask for one by name and it'll be used.
-
-`skills/deprecated/` holds forwarding aliases for the 1.x names, removed in 2.1.
 
 ## Companion Plugins
 

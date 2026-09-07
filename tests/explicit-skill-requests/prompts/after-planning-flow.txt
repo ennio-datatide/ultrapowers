@@ -1,4 +1,4 @@
-Great, the plan is complete. I've saved it to docs/ultrapowers/plans/auth-system.md.
+Great, the plan is complete. I've saved it to .scratch/auth-system/issues/.
 
 Here's a summary of what we designed:
 - Task 1: Add User Model with email/password fields
@@ -14,4 +14,4 @@ Which approach do you want?
 
 ---
 
-subagent-driven-development, please
+implement, please

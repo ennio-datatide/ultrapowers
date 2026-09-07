@@ -46,7 +46,7 @@ use skill tool to list skills
 ### Loading a Skill
 
 ```
-use skill tool to load ultrapowers/brainstorming
+use skill tool to load ultrapowers/grill
 ```
 
 ### Personal Skills
