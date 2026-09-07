@@ -102,6 +102,14 @@ Rules:
 - Say where to start (URL, screen, command). Never assume they know where the feature lives.
 - Never write "verify it works correctly". Say what correct looks like.
 
+### Handing the QA plan over
+
+Show the checklist, say roughly how long it takes, and say what to do with a failure:
+
+> Here's the list. Work through it whenever you have ten minutes. **If something doesn't match what I said should happen, tell me which number and what you saw instead** — that's more useful to me than trying to describe why it's wrong.
+
+Don't ask whether they want a QA plan, and don't wait for them to finish it before reporting. It's theirs to run when they choose.
+
 ## After review
 
 Report both outputs. Findings are **not** silently fixed: present them and let the user decide what gets addressed. Fixing a finding is new work, and new work goes through the flow.

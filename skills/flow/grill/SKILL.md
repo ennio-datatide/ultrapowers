@@ -29,17 +29,29 @@ If neither is set, ask exactly one question, before anything else:
 
 Save the answer to `~/.claude/ultrapowers-user-profile.json` as `{"technicalComfort": "..."}`. Ambiguous or blank defaults to `technical`, announced in one line. The user can say `explain simpler` or `talk more technical` at any point to switch.
 
+**If `non-technical`, orient them once — first time only, in this repo.** They have no idea what is about to happen, and a five-line map removes most of the anxiety:
+
+> Here's how this works: I'll ask you a batch of questions to pin the idea down (each one comes with my recommendation, so you can just say `ok`). Then I write up what we agreed for you to check, break it into pieces you'll be able to see working, build them one at a time, and finish with a checklist you can run yourself.
+>
+> Two things worth knowing: **say `wait what` any time I lose you** and I'll re-explain in plain English. And nothing gets built until you've approved the write-up.
+
+Say this once. Never repeat it in later sessions — check whether `.claude/ultrapowers-preferences.json` already exists, which means they've been here before.
+
 ### 3. Load workflow preferences
 
 Read `.claude/ultrapowers-preferences.json`. If it exists, announce in one line and move on:
 
 > Using saved workflow prefs (auto-commit: on, auto-push: on, commit docs: off). Say "change prefs" to update.
 
-If it does not exist, ask once, with defaults visible:
+If it does not exist, ask once, with defaults visible. **Phrase it for the audience** — `technical`:
 
 > Workflow defaults for this repo: **auto-commit on**, **auto-push on**, **commit design docs off**. Reply `ok` to accept, or tell me what to change.
 
-Defaults: `autoCommit: true`, `autoPush: true`, `commitDesignDocs: false`. Write the file; create `.claude/` if needed.
+`non-technical` — same three settings, no jargon:
+
+> How I'll handle your work by default: **save your progress as I go**, **back it up to GitHub automatically**, and **keep the planning documents private** rather than saving them alongside your code. Reply `ok`, or tell me what to change.
+
+Defaults either way: `autoCommit: true`, `autoPush: true`, `commitDesignDocs: false`. Write the file; create `.claude/` if needed.
 
 ### 4. Grill
 

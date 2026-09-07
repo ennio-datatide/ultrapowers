@@ -95,9 +95,15 @@ Read it back with fresh eyes and fix inline:
 
 ### 5. User review gate
 
-> Spec written to `<path>`. Please review it and tell me if you want anything changed before we break it into pieces.
+> Spec written to `<path>`. Please read it before we go further.
+>
+> **The part worth your attention is User Stories.** That's the list I'll check the finished work against, so anything missing or wrong there becomes something built wrong. Everything else I can correct later; that list is the expensive one.
+>
+> Tell me what to change, or say `ok` and I'll break it into pieces.
 
-Wait. If they request changes, make them and re-run the self-review. Only proceed on approval.
+Wait for them. If they request changes, make them and re-run the self-review. Only proceed on approval.
+
+Never treat silence as approval. This is the last cheap moment to change direction: after this, changes cost rework.
 
 Commit the spec only if `commitDesignDocs` is true in `.claude/ultrapowers-preferences.json`. Default is false.
 

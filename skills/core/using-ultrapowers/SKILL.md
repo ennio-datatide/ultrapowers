@@ -54,7 +54,7 @@ If CLAUDE.md says "don't use TDD" and a skill says "always use TDD", follow the 
 
 **Flow** — `grill`, `spec`, `tickets`, `implement`, `review`
 
-**Engineering** — `grilling` (the interview primitive), `domain-modeling` (vocabulary + decisions), `workspace-search` (how to search cheaply), `codebase-design` (deep-module vocabulary), `test-driven-development`, `systematic-debugging`, `deep-research`, `prototype`, `wizard` (steps only a human can do), `improve-codebase-architecture`
+**Engineering** — `grilling` (the interview primitive), `domain-modeling` (vocabulary + decisions), `workspace-search` (how to search cheaply), `codebase-design` (deep-module vocabulary), `test-driven-development`, `systematic-debugging`, `deep-research`, `prototype`, `wizard` (steps only a human can do), `improve-codebase-architecture`, `resolving-merge-conflicts`
 
 **Productivity** — `wait-what` (re-pitch in plain English), `handoff`
 

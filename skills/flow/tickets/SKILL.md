@@ -62,13 +62,19 @@ Present the tickets as a numbered list. For each: **title**, **blocked by**, and
 
 For a non-technical user, present this as a **progress board of things they'll be able to see working**, in the order they'll appear. Never surface "tracer bullet", "vertical slice", or "blocking edges" raw — say "what has to be finished first".
 
-Ask:
+Ask, in their language. `technical`:
 
-- Does the granularity feel right — too big, too small?
-- Is the order right: does each piece genuinely need the ones before it?
-- Should anything be merged or split?
+- Does the granularity feel right — too coarse, too fine?
+- Are the blocking edges correct: does each ticket only depend on what genuinely gates it?
+- Should any be merged or split?
 
-Iterate until the user approves.
+`non-technical`:
+
+- Does this look like the right order to build things in?
+- Is anything here bigger than you'd want to wait for in one go?
+- Is anything missing that you expected to see?
+
+Iterate until the user approves. A board they didn't really read is a board that surprises them at piece four.
 
 ### 5. Publish
 
