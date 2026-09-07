@@ -71,3 +71,13 @@ The mechanism: after each audit, the final step is `git merge -s ours upstream/m
 7. Push.
 
 **Rule of thumb:** adapt ideas, don't copy implementations. Preserve the fork's essence (workflow-defaults UX, sibling-pack integration, architecture profile inspiration, tone calibration, auto-pick behavior). Upstream's code is the source — ours is the product.
+
+---
+
+## 2026-09-07 — Final entry: pivot to the Pocock method
+
+Ultrapowers 2.0 is rebuilt on [mattpocock/skills](https://github.com/mattpocock/skills). **The upstream-sync relationship with `obra/superpowers` ends here.** No further merges or audits are performed against it.
+
+The new upstream reference of interest is `mattpocock/skills`, tracked by **audit rather than merge**: read his changes, decide what applies to a non-technical audience, port deliberately. There is no shared git history to reconcile, so no `merge -s ours` bookkeeping is needed.
+
+Note on licensing: portions of the original skill-system foundation remain in this repo, so the MIT copyright notice for that work is retained in `LICENSE` alongside notices for ported Pocock material and for Ultrapowers itself. Prose and marketing attribution has been removed from the README as a positioning decision; the license notice is a separate, legal obligation and stays.

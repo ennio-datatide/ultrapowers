@@ -161,11 +161,11 @@ log "classified: route=$route conf=$confidence"
 
 # Map route to ultrapowers skill
 declare -A ROUTE_TO_SKILL=(
-    [brainstorm]="ultrapowers:brainstorming"
+    [brainstorm]="ultrapowers:grill"
     [debug]="ultrapowers:systematic-debugging"
     [plan-execution]="ultrapowers:executing-plans"
     [research]="ultrapowers:deep-research"
-    [ui]="ultrapowers:paper-mcp-ui"
+    [ui]="ultrapowers:prototype"
 )
 
 if [ "$route" = "passthrough" ]; then

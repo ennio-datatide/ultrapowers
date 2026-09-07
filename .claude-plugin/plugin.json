@@ -1,7 +1,7 @@
 {
   "name": "ultrapowers",
-  "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "1.2.0",
+  "description": "Matt Pocock's engineering method on rails: grill an idea, spec it, slice it, build it test-first, review it \u2014 driven for people who build software without being engineers.",
+  "version": "2.0.0",
   "author": {
     "name": "Ennio Maldonado",
     "url": "https://www.enniomaldonado.com"
@@ -9,5 +9,51 @@
   "homepage": "https://datatide.io/ultrapowers",
   "repository": "https://github.com/ennio-datatide/ultrapowers",
   "license": "MIT",
-  "keywords": ["skills", "tdd", "debugging", "collaboration", "best-practices", "workflows"]
+  "keywords": [
+    "skills",
+    "grilling",
+    "spec-driven",
+    "tdd",
+    "code-review",
+    "domain-modeling",
+    "workflows"
+  ],
+  "skills": [
+    "./skills/flow/grill",
+    "./skills/flow/spec",
+    "./skills/flow/tickets",
+    "./skills/flow/implement",
+    "./skills/flow/review",
+    "./skills/core/autonomous-decision",
+    "./skills/core/consulting-the-advisor",
+    "./skills/core/no-permission-asks",
+    "./skills/core/using-ultrapowers",
+    "./skills/deprecated/brainstorming",
+    "./skills/deprecated/receiving-code-review",
+    "./skills/deprecated/requesting-code-review",
+    "./skills/deprecated/writing-plans",
+    "./skills/engineering/codebase-design",
+    "./skills/engineering/deep-research",
+    "./skills/engineering/dispatching-parallel-agents",
+    "./skills/engineering/domain-modeling",
+    "./skills/engineering/executing-plans",
+    "./skills/engineering/finishing-a-development-branch",
+    "./skills/engineering/grilling",
+    "./skills/engineering/improve-codebase-architecture",
+    "./skills/engineering/project-setup",
+    "./skills/engineering/prototype",
+    "./skills/engineering/skills-audit",
+    "./skills/engineering/skills-creation",
+    "./skills/engineering/subagent-driven-development",
+    "./skills/engineering/systematic-debugging",
+    "./skills/engineering/test-driven-development",
+    "./skills/engineering/using-git-worktrees",
+    "./skills/engineering/verification-before-completion",
+    "./skills/engineering/wizard",
+    "./skills/engineering/workspace-search",
+    "./skills/meta/writing-claude-code-hooks",
+    "./skills/meta/writing-skills",
+    "./skills/productivity/handoff",
+    "./skills/productivity/wait-what"
+  ]
 }

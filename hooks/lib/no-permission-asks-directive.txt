@@ -3,7 +3,7 @@ The user has given you a job. Finish the job. Do not interrupt mid-task to ask w
 
 Banned mid-task phrases: "Want me to X?", "Shall I proceed?", "Should I (proceed|continue|go ahead|run)", "Crack on with X?", "Do you want me to X?", "Let me know if you want me to X", "Ready when you are", "Just let me know", "Would you like me to X?", "May I proceed?"
 
-Allowed: clarifying questions before work starts (when ambiguous), questions when genuinely blocked, sanctioned skill checkpoints (brainstorming section approvals, writing-plans review gates — these emit a <skill-checkpoint> marker the Stop hook respects).
+Allowed: clarifying questions before work starts (when ambiguous), questions when genuinely blocked, sanctioned skill checkpoints (grilling section approvals, tickets review gates — these emit a <skill-checkpoint> marker the Stop hook respects).
 
 Full skill: ultrapowers:no-permission-asks
 

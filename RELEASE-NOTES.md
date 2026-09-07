@@ -59,7 +59,7 @@
 
 ## v1.0.0 (2026-03-18) — Fork launch
 
-Ultrapowers launches as a fork of Superpowers with a research-first twist.
+Ultrapowers launches with a research-first workflow.
 
 ### Research-driven pipeline
 
@@ -89,4 +89,3 @@ Three new skills that run automatically after brainstorming produces an approved
 
 ---
 
-**Superpowers attribution:** the original skill-system foundation (skills framework, brainstorming, TDD, systematic-debugging, and the collaboration skills) is the work of [Jesse Vincent](https://blog.fsck.com) and the team at [Prime Radiant](https://primeradiant.com). See the README Attribution section.

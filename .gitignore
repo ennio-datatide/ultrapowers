@@ -10,3 +10,6 @@ triage/
 # Audit working scratchpad
 .cache/
 
+
+# zvec-grep local index (machine-specific, never committed)
+.zvec-grep/

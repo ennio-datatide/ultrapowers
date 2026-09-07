@@ -18,17 +18,17 @@ trap cleanup_test_env EXIT
 echo "Setting up priority test fixtures..."
 
 # 1. Create in ultrapowers location (lowest priority)
-mkdir -p "$SUPERPOWERS_SKILLS_DIR/priority-test"
-cat > "$SUPERPOWERS_SKILLS_DIR/priority-test/SKILL.md" <<'EOF'
+mkdir -p "$ULTRAPOWERS_SKILLS_DIR/priority-test"
+cat > "$ULTRAPOWERS_SKILLS_DIR/priority-test/SKILL.md" <<'EOF'
 ---
 name: priority-test
 description: Ultrapowers version of priority test skill
 ---
 # Priority Test Skill (Ultrapowers Version)
 
-This is the SUPERPOWERS version of the priority test skill.
+This is the plugin version of the priority test skill.
 
-PRIORITY_MARKER_SUPERPOWERS_VERSION
+PRIORITY_MARKER_PLUGIN_VERSION
 EOF
 
 # 2. Create in personal location (medium priority)
@@ -65,7 +65,7 @@ echo "  Created priority-test skill in all three locations"
 echo ""
 echo "Test 1: Verifying test fixtures..."
 
-if [ -f "$SUPERPOWERS_SKILLS_DIR/priority-test/SKILL.md" ]; then
+if [ -f "$ULTRAPOWERS_SKILLS_DIR/priority-test/SKILL.md" ]; then
     echo "  [PASS] Ultrapowers version exists"
 else
     echo "  [FAIL] Ultrapowers version missing"
@@ -113,7 +113,7 @@ output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load t
 
 if echo "$output" | grep -qi "PRIORITY_MARKER_PERSONAL_VERSION"; then
     echo "  [PASS] Personal version loaded (overrides ultrapowers)"
-elif echo "$output" | grep -qi "PRIORITY_MARKER_SUPERPOWERS_VERSION"; then
+elif echo "$output" | grep -qi "PRIORITY_MARKER_PLUGIN_VERSION"; then
     echo "  [FAIL] Ultrapowers version loaded instead of personal"
     exit 1
 else
@@ -142,7 +142,7 @@ if echo "$output" | grep -qi "PRIORITY_MARKER_PROJECT_VERSION"; then
 elif echo "$output" | grep -qi "PRIORITY_MARKER_PERSONAL_VERSION"; then
     echo "  [FAIL] Personal version loaded instead of project"
     exit 1
-elif echo "$output" | grep -qi "PRIORITY_MARKER_SUPERPOWERS_VERSION"; then
+elif echo "$output" | grep -qi "PRIORITY_MARKER_PLUGIN_VERSION"; then
     echo "  [FAIL] Ultrapowers version loaded instead of project"
     exit 1
 else
@@ -164,7 +164,7 @@ output=$(timeout 60s opencode run --print-logs "Use the use_skill tool to load u
     fi
 }
 
-if echo "$output" | grep -qi "PRIORITY_MARKER_SUPERPOWERS_VERSION"; then
+if echo "$output" | grep -qi "PRIORITY_MARKER_PLUGIN_VERSION"; then
     echo "  [PASS] ultrapowers: prefix correctly forces ultrapowers version"
 elif echo "$output" | grep -qi "PRIORITY_MARKER_PROJECT_VERSION\|PRIORITY_MARKER_PERSONAL_VERSION"; then
     echo "  [FAIL] ultrapowers: prefix did not force ultrapowers version"

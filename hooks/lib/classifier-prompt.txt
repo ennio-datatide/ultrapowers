@@ -8,7 +8,7 @@ Routes:
 - ui: UI/UX/design work specifically (mentions: design, mockup, layout, component, screen, page, frontend, visual, dribbble, figma)
 - passthrough: trivial questions, chat, explanations, code reads, OR explicit user opt-out
 
-Conversational opt-out: if the user message contains language like "just answer", "skip the workflow", "no skill", "don't run brainstorming", "raw answer", "directly answer", "no auto-router", classify as passthrough at high confidence (>= 0.9).
+Conversational opt-out: if the user message contains language like "just answer", "skip the workflow", "no skill", "don't run grilling", "raw answer", "directly answer", "no auto-router", classify as passthrough at high confidence (>= 0.9).
 
 Confidence calibration:
 - 0.9+: unambiguous match — clear verb + clear scope

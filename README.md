@@ -8,12 +8,12 @@
 <h1 align="center">Ultrapowers</h1>
 
 <p align="center">
-  <strong>A research-driven software development workflow for your coding agents.</strong><br/>
-  Brainstorm &rarr; Research &rarr; Audit &rarr; Plan &rarr; Build &rarr; Review &rarr; Ship — on rails.
+  <strong>Real engineering discipline for people who aren't engineers.</strong><br/>
+  Grill &rarr; Spec &rarr; Tickets &rarr; Implement &rarr; Review — driven for you, on rails.
 </p>
 
 <p align="center">
-  <a href="https://github.com/ennio-datatide/ultrapowers/releases"><img alt="Version" src="https://img.shields.io/badge/plugin-v1.2.0-6d28d9?style=flat-square"></a>
+  <a href="https://github.com/ennio-datatide/ultrapowers/releases"><img alt="Version" src="https://img.shields.io/badge/plugin-v2.0.0-6d28d9?style=flat-square"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/ennio-datatide/ultrapowers?color=6d28d9&style=flat-square"></a>
   <a href="https://github.com/ennio-datatide/ultrapowers/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/ennio-datatide/ultrapowers?color=6d28d9&style=flat-square"></a>
   <a href="https://github.com/ennio-datatide/ultrapowers/pulls"><img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-6d28d9?style=flat-square"></a>
@@ -29,7 +29,13 @@
 
 ---
 
-Ultrapowers extends [Superpowers](https://github.com/obra/superpowers) by Jesse Vincent with a **research-first pipeline** that ensures agents always work with current, verified knowledge before writing code. Forked for teams and solo builders who want their agent to brainstorm with them, research the state of the art, audit what it knows, and only then plan and ship.
+Ultrapowers takes [Matt Pocock's engineering skills](https://github.com/mattpocock/skills) — a method proven daily by working engineers — and **drives it for you**.
+
+His version asks you to be the router: you learn twenty-five commands and type the right one at each step. That's a fair trade if you're an engineer. If you're a founder, creator, or business owner who just wants to describe an idea and get it built properly, it's a wall.
+
+So Ultrapowers keeps the engineering rigor exactly as-is and changes one thing: **the agent drives the flow, not you.** You share an idea. It grills you until the idea is airtight, writes it up, breaks it into pieces you can see working, builds them test-first, then hands you a checklist to try it yourself.
+
+> **If you're an engineer, use [his pack directly](https://github.com/mattpocock/skills).** It's excellent, and you don't need the rails.
 
 ## Learn to Build with Ultrapowers
 
@@ -43,21 +49,19 @@ Ultrapowers extends [Superpowers](https://github.com/obra/superpowers) by Jesse 
 | DataTide Consulting | Custom AI solutions for your business | [datatide.io](https://datatide.io)         |
 | This Repository     | The open source skill system          | You're here                                |
 
-## What's New in 1.3 (in development)
+## What's New in 2.0
 
-- **Auto-router and anti-confirmation hooks.** Ultrapowers now auto-invokes the right skill from any user prompt (UserPromptSubmit hook with shape gate + opus classifier; `≥0.7` confidence auto-invokes, `0.4–0.7` suggests, below passes through), and a Stop hook blocks mid-task permission-asks ("Want me to X?", "Shall I proceed?", etc.) at the harness level. New skills `no-permission-asks` and `autonomous-decision` codify the rules; existing skills now decide triage/scope/strategy from conversation signals instead of asking. Phase-based model routing: opus for design, sonnet for execution, haiku for raw lookup. See [INSTALL.md](INSTALL.md#auto-router-and-anti-confirmation-hooks) for configuration.
-- **Advisor pattern via subagents.** New `advisor` agent (opus, read-only) and `consulting-the-advisor` skill replicate Anthropic's API advisor tool using Claude Code subagents — fast executor (sonnet/haiku) consults a strong advisor at strategic moments without SDK code. Default-on for sonnet/haiku sessions. See [INSTALL.md](INSTALL.md#advisor-pattern-sonnethaiku-sessions) for configuration.
+**Ultrapowers is now built on [Matt Pocock's skills](https://github.com/mattpocock/skills).** The whole flow was rebuilt around his method.
 
-## What's New in 1.2
+- **Five phases, one mental model.** `Grill → Spec → Tickets → Implement → Review` replaces the old pipeline. Old skill names (`brainstorming`, `writing-plans`, `requesting-code-review`, `receiving-code-review`) still work as aliases for one release.
+- **Grilling.** The agent interviews you in rounds, walking a design tree until nothing is left assumed. Every question comes with a recommended answer, so you can reply `ok` and still have walked the whole tree.
+- **A Project Dictionary and Decisions Log.** The agent builds a glossary of *your* words as you talk, and records the decisions that would be expensive to reverse. This is what stops session two re-litigating session one.
+- **Work you can see.** Tickets are vertical slices, each demoable on its own and sized to a single fresh context window, so the agent never runs out of room to think mid-build.
+- **Two-axis review, plus a QA plan.** Parallel sub-agents check standards and spec compliance separately, so neither masks the other. Then you get a plain-language checklist you can run yourself.
+- **Local semantic search.** Optional [zvec-grep](https://github.com/zvec-ai/zvec-grep) integration makes the agent faster and cheaper by finding things without reading whole files. Fully local, and it degrades to normal search when absent.
+- **New skills:** `wait-what` (re-pitch anything that didn't land, in plain English), `wizard` (guides you through steps only a human can do, like credentials and dashboards), `prototype`, `domain-modeling`, `codebase-design`, `workspace-search`, `improve-codebase-architecture`, `handoff`.
 
-- **Workflow preferences, persisted per repo.** `.claude/ultrapowers-preferences.json` stores `autoCommit`, `autoPush`, `commitDesignDocs`, and sibling-pack suggestion flags. Brainstorming asks once — one confirm-or-tweak prompt — then every downstream skill respects the setting. Defaults: auto-commit on, auto-push on, design docs local.
-- **Transparent sibling-pack awareness.** When [`ultrapowers-dev`](https://github.com/ennio-datatide/ultrapowers-dev) or [`ultrapowers-business`](https://github.com/ennio-datatide/ultrapowers-business) are installed, the workflow silently references their skills in specs, audits, and plan annotations. Missing pack → one blocking "install / skip / stop suggesting" prompt.
-- **Architecture profile matching.** Seed profiles (marketing/content site, SaaS product app) inspire one of the 2–3 approaches proposed during brainstorming. Profiles store **tool identity only** — deep-research resolves the current latest at each run, so the library never goes stale.
-- **Tone calibration.** First brainstorming question reads the user's comfort with technical terms. Every downstream prompt adapts: jargon-light with creators and founders, engineer-direct with developers. The recommended tech stays best-in-class regardless.
-- **Auto-pick execution.** Subagent-driven development is the default after a plan is written; the workflow only asks when it would not pick it. Same for branch finishing — push + PR is automatic when `autoPush` is on.
-- **Documented upstream sync.** New process for auditing `obra/superpowers` commits, adapting ideas without copy-paste, and resetting the "behind by N commits" counter via `git merge -s ours` with a written audit log.
-
-See [RELEASE-NOTES.md](RELEASE-NOTES.md) for the full changelog.
+See [RELEASE-NOTES.md](RELEASE-NOTES.md) for the full changelog and migration notes.
 
 ## Installation
 
@@ -101,32 +105,25 @@ Best-effort means: the skills load and the workflow principles apply, but a hand
 
 ## How it works
 
-It starts the same way Superpowers does — your agent doesn't just jump into code. It steps back and asks what you're really trying to do.
+You describe an idea. The agent runs it through five phases and tells you where you are at each step. You're asked to decide things, never to remember which command to type.
 
-But then Ultrapowers goes further. After brainstorming, it **researches the current state of the art** for every technology and pattern involved. It audits your existing skills against what it finds, creates or updates skills to fill gaps, and only then moves into planning and implementation.
+## The Flow
 
-Every implementation step gets audited against the research findings and your plan. The result: agents that build on verified knowledge, not assumptions. Knowledge compounds across sessions — your agent gets smarter over time.
+| Phase | What happens |
+|---|---|
+| **1. Grill** | The agent interviews you in rounds until every branch of the idea is settled, building a glossary of your terms as it goes. It looks up facts itself and only asks you to *decide* things. Then it researches the current state of the art so the build isn't based on stale knowledge. |
+| **2. Spec** | Everything you agreed, written up: the problem, the solution, a long list of user stories, and the decisions made. No new questions — this is synthesis. You review it before anything is built. |
+| **3. Tickets** | The work is split into small vertical slices, each one demoable on its own and sized to fit a single fresh context window. You see them as a progress board of things you'll be able to try. |
+| **4. Implement** | The agent works the board in order, test-first, with a fresh context per piece so it never degrades mid-build. It tells you what you can see working as each piece lands. |
+| **5. Review** | Two parallel reviews — does the code follow this project's standards, and does it do what the spec asked — reported separately so neither hides the other. Then a plain-language QA checklist for you to run yourself. |
 
-## The Research-Driven Workflow
-
-1. **brainstorming** — Reads your technical comfort, asks what you're really building, proposes 2–3 design approaches (one seeded from a past-project profile when applicable), and writes an approved spec.
-2. **deep-research** — Researches the current state of the art for every technology and pattern in the spec. Resolves the latest versions of tools referenced by the profile library, so recommendations are always current.
-3. **skills-audit** — Classifies every required competency as Covered, Stale, Missing, or External. Sibling-pack skills are recognized transparently.
-4. **skills-creation** — Creates or updates the skills needed to fill gaps. Knowledge is captured for future sessions.
-5. **using-git-worktrees** *(optional)* — Creates an isolated workspace on a new branch and verifies a clean test baseline. Your main branch stays untouched. User-invoked when isolation is wanted; not auto-triggered by the pipeline.
-6. **writing-plans** — Breaks work into bite-sized tasks (2–5 minutes each) with skill annotations on each step. Clear enough for any agent to follow.
-7. **subagent-driven-development** *(canonical)* — Dispatches a fresh subagent per task with two-stage review (spec compliance first, then code quality). Auto-picked by default. On harnesses without subagent support, or when execution must span multiple sessions, falls back to **executing-plans** for inline execution.
-8. **test-driven-development** — Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Code written before tests gets deleted.
-9. **code-reviewer agent** (with **requesting-code-review** and **receiving-code-review** skills as user-invoked helpers) — `subagent-driven-development` dispatches the `code-reviewer` agent for per-task review + final review; the two review skills document how to request and receive review when a user runs one manually.
-10. **finishing-a-development-branch** — Verifies tests pass, executes the chosen integration path (merge / PR / keep / discard), cleans up the worktree.
-
-**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.
+Small features skip Tickets and go straight from Spec to Implement. Bug reports skip the flow entirely and enter at `systematic-debugging`.
 
 ## Example
 
 > "Build me a real-time notification system using WebSockets."
 
-Ultrapowers calibrates tone, brainstorms the design with you, researches current WebSocket best practices and libraries, audits your skills to find gaps, creates any missing skills, then plans and implements with TDD — all audited against the research. You review the code and ship when you're satisfied.
+The agent grills you on what "notification" means here, who sees them, what happens when someone's offline, and what counts as read — recommending an answer to each so you can move fast. It researches current WebSocket practice, writes a spec you approve, splits it into six slices, builds each test-first, then hands you a checklist: *open two browser windows, send a message in one, you should see it appear in the other within a second.*
 
 ## What's Inside
 
@@ -184,6 +181,9 @@ When installed, Ultrapowers detects them automatically and weaves their skills i
 ## Philosophy
 
 - **Sensible defaults, full control** — Auto-commit and auto-push are on by default so the workflow flows, but every preference is per-repo and adjustable any time. The agent never overrides your explicit instructions.
+- **You are not expected to be the router** — The agent knows which skill applies. You describe what you want; it drives.
+- **Align before building** — The most expensive failure in software is building the wrong thing. Grilling is cheap; rework isn't.
+- **A shared language** — The agent learns your words and uses them. Fewer misunderstandings, less jargon, shorter sessions.
 - **Research before implementation** — Never build on assumptions when you can verify. Every project starts with research to capture what's current.
 - **Knowledge compounds** — Skills capture learning for future sessions. The audit-create cycle means your agent improves with every project.
 - **Audit everything** — Every step (except research itself) gets audited against the plan and findings. Spec compliance before code quality.
@@ -208,7 +208,11 @@ Skills live directly in this repository. To contribute:
 
 ## Attribution
 
-Ultrapowers started as a fork of [Superpowers](https://github.com/obra/superpowers) by [Jesse Vincent (obra)](https://blog.fsck.com) and the team at [Prime Radiant](https://primeradiant.com), and has since diverged with its own research pipeline, workflow defaults, sibling-pack integration, architecture profile matching, and tone calibration. Credit for the original skill-system foundation goes to their work.
+**The engineering method is [Matt Pocock's](https://github.com/mattpocock/skills)** (MIT). The grilling primitive, the spec and ticket flow, tracer-bullet vertical slicing, domain modelling with `CONTEXT.md` and ADRs, the deep-module vocabulary, the seam discipline in TDD, and the two-axis code review all come from his work, and several reference documents are ported from it directly. It is proven in production by a lot of working engineers, and it is the reason this plugin works.
+
+**What Ultrapowers adds** is the rails and the translation layer: the agent drives the flow instead of the user, the engineering vocabulary is rendered in plain language at the surface, context hygiene is automated rather than a judgement call, and the research pipeline runs on every build. That adaptation is for an audience his pack was not aimed at. **If you're an engineer, use [his pack](https://github.com/mattpocock/skills) directly.**
+
+Local search integration uses [zvec-grep](https://github.com/zvec-ai/zvec-grep) (Apache 2.0).
 
 ## License
 

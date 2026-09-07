@@ -61,7 +61,7 @@ check_for_update() {
 update_notice=$(check_for_update || true)
 
 # Read using-ultrapowers content
-using_ultrapowers_content=$(cat "${PLUGIN_ROOT}/skills/using-ultrapowers/SKILL.md" 2>&1 || echo "Error reading using-ultrapowers skill")
+using_ultrapowers_content=$(cat "${PLUGIN_ROOT}/skills/core/using-ultrapowers/SKILL.md" 2>&1 || echo "Error reading using-ultrapowers skill")
 
 # Append no-permission-asks + autonomous-decision directives (always-on rules)
 directives_file="${PLUGIN_ROOT}/hooks/lib/no-permission-asks-directive.txt"
@@ -100,7 +100,7 @@ escape_for_json() {
 using_ultrapowers_escaped=$(escape_for_json "$using_ultrapowers_content")
 warning_escaped=$(escape_for_json "$warning_message")
 update_notice_escaped=$(escape_for_json "$update_notice")
-session_context="<EXTREMELY_IMPORTANT>\nYou have ultrapowers.\n\n**Below is the full content of your 'ultrapowers:using-ultrapowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_ultrapowers_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>${update_notice_escaped}"
+session_context="<ultrapowers>\nYou have ultrapowers.\n\n**Below is the full content of your 'ultrapowers:using-ultrapowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_ultrapowers_escaped}\n\n${warning_escaped}\n</ultrapowers>${update_notice_escaped}"
 
 # Output context injection as JSON.
 # Cursor hooks expect additional_context (snake_case).

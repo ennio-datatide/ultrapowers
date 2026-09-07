@@ -1,7 +1,7 @@
 {
   "name": "ultrapowers",
   "metadata": {
-    "description": "Research-driven development workflow for coding agents — core workflow, 52 dev skills, and 38 business skills"
+    "description": "Matt Pocock's engineering method on rails for non-technical builders \u2014 core flow, 52 dev skills, and 38 business skills"
   },
   "owner": {
     "name": "Ennio Maldonado",
@@ -10,8 +10,8 @@
   "plugins": [
     {
       "name": "ultrapowers",
-      "description": "Core workflow: research-driven development with brainstorming, deep research, skills auditing, TDD, and subagent-driven development",
-      "version": "1.2.0",
+      "description": "Core flow: Grill \u2192 Spec \u2192 Tickets \u2192 Implement \u2192 Review, with domain modelling, TDD, two-axis review, and local semantic search",
+      "version": "2.0.0",
       "source": "./"
     },
     {
