@@ -20,7 +20,7 @@ Never ask the user for anything you could find out yourself.
 When a frontier question needs a fact from the environment, **go and get it**:
 
 1. Call the Skill tool with "workspace-search" for the retrieval routing policy, and search. Most environment facts are one indexed query, not an exploration.
-2. Dispatch a sub-agent only when the answer needs genuine multi-step exploration that search cannot settle.
+2. Dispatch a sub-agent only when the answer needs genuine multi-step exploration that search cannot settle. Give it one question, where to start, the shape of answer you want, a length bound, and an explicit read-only instruction. Several independent questions can go out at once; questions that inform each other cannot, so answer the first and let it reshape the second.
 
 Don't block on it. A running exploration is an unsettled prerequisite, so only the questions downstream of it wait; ask the rest of the frontier now.
 

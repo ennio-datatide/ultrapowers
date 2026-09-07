@@ -163,7 +163,7 @@ log "classified: route=$route conf=$confidence"
 declare -A ROUTE_TO_SKILL=(
     [brainstorm]="ultrapowers:grill"
     [debug]="ultrapowers:systematic-debugging"
-    [plan-execution]="ultrapowers:executing-plans"
+    [plan-execution]="ultrapowers:implement"
     [research]="ultrapowers:deep-research"
     [ui]="ultrapowers:prototype"
 )

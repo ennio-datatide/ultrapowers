@@ -64,7 +64,7 @@ Call the Skill tool with "deep-research".
 
 This runs every time and is not optional. The user cannot be expected to notice that a pattern went stale eighteen months ago; that protection has to be automatic. Research feeds the thinking you just did — if it contradicts a decision from the grilling, take it back to the user rather than quietly overriding them.
 
-The chain `deep-research → skills-audit → skills-creation` runs from there.
+Research runs once, then Spec. (`skills-audit` and `skills-creation` are unpromoted maintenance skills now; reach for them deliberately, not as part of this chain.)
 
 ### 6. Hand off to Spec
 

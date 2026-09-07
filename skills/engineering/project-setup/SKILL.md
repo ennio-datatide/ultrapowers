@@ -111,7 +111,7 @@ For projects using the ultrapowers planning pipeline (grilling → research → 
 }
 ```
 
-This makes the main session opus by default. Execution phase (`subagent-driven-development`, `executing-plans`) hands off to sonnet via subagent dispatch (using `agents/planner.md` opus, default-implementer sonnet, `agents/research-fetch.md` haiku) or by starting a new sonnet session.
+This makes the main session opus by default. The `implement` phase hands off to sonnet via sub-agent dispatch (using `agents/planner.md` opus, default-implementer sonnet, `agents/research-fetch.md` haiku) or by starting a new sonnet session.
 
 Do **not** modify the user's settings.json from this skill — recommend, don't override.
 

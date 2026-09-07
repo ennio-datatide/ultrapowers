@@ -34,7 +34,7 @@ digraph deep_research {
     "Cross-reference\nmultiple sources" [shape=box];
     "Gaps remain?" [shape=diamond];
     "Synthesize findings\ninto research brief" [shape=box];
-    "Hand off to skills-audit" [shape=doublecircle];
+    "Hand off to spec" [shape=doublecircle];
 
     "Receive approved spec" -> "Extract technologies\nand patterns from spec";
     "Extract technologies\nand patterns from spec" -> "Formulate research questions\n(specific, answerable)";
@@ -43,7 +43,7 @@ digraph deep_research {
     "Cross-reference\nmultiple sources" -> "Gaps remain?";
     "Gaps remain?" -> "Research using tools\n(context7, WebSearch, WebFetch)" [label="yes"];
     "Gaps remain?" -> "Synthesize findings\ninto research brief" [label="no"];
-    "Synthesize findings\ninto research brief" -> "Hand off to skills-audit";
+    "Synthesize findings\ninto research brief" -> "Hand off to spec";
 }
 ```
 
@@ -165,7 +165,7 @@ On option 3, note the deprecation in the research brief and proceed.
 
 ## Output
 
-The research brief feeds directly into **skills-audit**. Invoke the skills-audit skill next.
+The research brief feeds directly into the spec. Call the Skill tool with "spec" next.
 
 ## Why This Step Cannot Be Audited
 

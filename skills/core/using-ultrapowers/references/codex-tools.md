@@ -24,7 +24,7 @@ Sub-agent dispatch is off unless Codex is configured for it. Enable it in `~/.co
 multi_agent = true
 ```
 
-Without this, any skill that dispatches sub-agents (`implement`, `review`, `dispatching-parallel-agents`) falls back to running inline. That still works; it is just slower and shares one context window.
+Without this, any phase that dispatches sub-agents (`implement`, `review`) falls back to running inline. That still works; it is just slower and shares one context window.
 
 ## Detecting the git environment before acting
 
@@ -44,7 +44,7 @@ Read the result as:
 | `BRANCH` is empty | detached HEAD | cannot branch, push, or open a PR from the sandbox |
 | both normal | ordinary checkout | proceed as usual |
 
-`using-git-worktrees` uses the first signal to decide whether to create anything; `finishing-a-development-branch` uses the second to decide whether it can push.
+The unpromoted `using-git-worktrees` skill uses the first signal to decide whether to create anything; `review`'s branch-finishing step uses the second to decide whether it can push.
 
 ## When the sandbox blocks branching
 

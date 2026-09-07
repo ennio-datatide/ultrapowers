@@ -54,11 +54,15 @@ If CLAUDE.md says "don't use TDD" and a skill says "always use TDD", follow the 
 
 **Flow** — `grill`, `spec`, `tickets`, `implement`, `review`
 
-**Engineering** — `grilling` (the interview primitive), `domain-modeling` (vocabulary + decisions), `workspace-search` (how to search cheaply), `codebase-design` (deep-module vocabulary), `test-driven-development`, `systematic-debugging`, `deep-research`, `prototype`, `wizard` (steps only a human can do), `improve-codebase-architecture`, `verification-before-completion`, `using-git-worktrees`, `finishing-a-development-branch`
+**Engineering** — `grilling` (the interview primitive), `domain-modeling` (vocabulary + decisions), `workspace-search` (how to search cheaply), `codebase-design` (deep-module vocabulary), `test-driven-development`, `systematic-debugging`, `deep-research`, `prototype`, `wizard` (steps only a human can do), `improve-codebase-architecture`
 
 **Productivity** — `wait-what` (re-pitch in plain English), `handoff`
 
-**Meta** — `writing-skills`, `writing-claude-code-hooks`
+**Meta** — `writing-skills`
+
+Verification, sub-agent dispatch, and branch finishing are **not** separate skills: that discipline lives inside `implement` and `review`, where it is actually used.
+
+**Unpromoted** (`skills/misc/`, in the repo but not loaded) — `using-git-worktrees`, `writing-claude-code-hooks`, `skills-audit`, `skills-creation`. Reach for them by reading the file when a user asks for that specific job.
 
 ## Searching
 

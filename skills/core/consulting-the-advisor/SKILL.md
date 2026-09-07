@@ -1,6 +1,6 @@
 ---
 name: consulting-the-advisor
-description: Use when running an executor session (sonnet/haiku main session, or sonnet/haiku controller in subagent-driven-development) on multi-step work — codifies when to dispatch the `advisor` agent (after orientation, on difficulty, before declaring done) and what brief to pass; do not use on opus sessions (the executor is already advisor-class)
+description: Use when running an executor session (sonnet/haiku main session, or sonnet/haiku controller driving the implement loop) on multi-step work — codifies when to dispatch the `advisor` agent (after orientation, on difficulty, before declaring done) and what brief to pass; do not use on opus sessions (the executor is already advisor-class)
 ---
 
 # Consulting The Advisor
@@ -14,8 +14,8 @@ Pair a fast executor (sonnet/haiku) with an opus `advisor` consulted at strategi
 ## When to Use
 
 - Main session running on sonnet or haiku, on multi-step tasks (>2 steps or >5 minutes wall time)
-- Controller in `subagent-driven-development` running on sonnet/haiku, between tasks
-- Inline executor in `executing-plans` on sonnet/haiku, during the execution loop
+- Controller driving the `implement` loop on sonnet/haiku, between tickets
+- Inline executor running `implement` without sub-agents on sonnet/haiku
 
 ## When NOT to Use
 
@@ -88,7 +88,7 @@ Pattern for SDD controllers running on sonnet/haiku:
 1. Before dispatching the implementer for Task N: dispatch advisor with the plan excerpt + relevant context. Pass the advisor's plan into the implementer's dispatch prompt.
 2. After implementer reports DONE_WITH_CONCERNS or surfaces strategic doubt: dispatch advisor again with the report + concerns. Use the advice to guide whether reviewers run as planned or whether the implementer needs another pass.
 
-Implementers don't dispatch advisor; they surface concerns the controller acts on. See `subagent-driven-development/implementer-prompt.md` for the implementer-side discipline.
+Implementers don't dispatch advisor; they surface concerns the controller acts on. See `flow/implement/implementer-prompt.md` for the implementer-side discipline.
 
 ## Common Mistakes
 

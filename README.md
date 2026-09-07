@@ -127,40 +127,50 @@ The agent grills you on what "notification" means here, who sees them, what happ
 
 ## What's Inside
 
-### Research Pipeline (new in Ultrapowers)
+**27 skills, organised by what they're for.** Discipline that only one phase uses lives *inside* that phase rather than as a separate skill, so it doesn't cost context on every turn.
 
-- **deep-research** — State-of-the-art research before implementation
-- **skills-audit** — Gap analysis of existing skills vs. requirements
-- **skills-creation** — Create/update skills from research findings
+### The flow
 
-### Testing
+- **grill** — Interview until the idea is airtight, building the project's vocabulary as it goes
+- **spec** — Problem, solution, user stories, decisions. Synthesis, not a second interview
+- **tickets** — Vertical slices, each demoable and sized to one fresh context window
+- **implement** — Works the board test-first, fresh context per ticket, two-stage review each time
+- **review** — Standards and spec checked separately, plus a QA checklist you can run yourself
 
-- **test-driven-development** — RED-GREEN-REFACTOR cycle
+### Engineering
 
-### Debugging
+- **grilling** — The interview primitive: a design tree walked in rounds, every question carrying a recommended answer
+- **domain-modeling** — Builds your Project Dictionary and Decisions Log as you talk
+- **workspace-search** — Routing policy for finding things cheaply, with optional local semantic search
+- **codebase-design** — Deep-module vocabulary: a lot of behaviour behind a small interface
+- **test-driven-development** — Red-green at pre-agreed seams
+- **systematic-debugging** — Phase-gated diagnosis; no theorising before a command goes red on the bug
+- **deep-research** — Current state of the art, before the spec is written
+- **prototype** — Throwaway code that answers one design question
+- **wizard** — A guided script for steps only a human can do: credentials, dashboards, DNS
+- **improve-codebase-architecture** — Periodic survey for deepening opportunities
+- **project-setup** — Configures tickets, domain docs, and optional local search
 
-- **systematic-debugging** — 4-phase root cause process
-- **verification-before-completion** — Ensure it's actually fixed
+### Productivity
 
-### Collaboration
+- **wait-what** — Re-pitch anything that didn't land, in plain English. You invoke this one
+- **handoff** — Portable summary so another session or person can continue
 
-- **brainstorming** — Socratic design refinement with tone calibration and architecture profile matching
-- **writing-plans** — Detailed implementation plans with skill annotations
-- **executing-plans** — Batch execution with checkpoints
-- **dispatching-parallel-agents** — Concurrent subagent workflows
-- **requesting-code-review** — Pre-review checklist
-- **receiving-code-review** — Responding to feedback
-- **using-git-worktrees** — Parallel development branches
-- **finishing-a-development-branch** — Merge / PR / keep / discard, auto-picked when signals are clear
-- **subagent-driven-development** — Fast iteration with audited two-stage review
+### The rails
+
+- **using-ultrapowers** — The phase map and how the flow drives itself
+- **no-permission-asks**, **autonomous-decision** — Why the agent decides instead of asking
+- **consulting-the-advisor** — Strong-model consultation on faster executor sessions
 
 ### Meta
 
-- **project-setup** — Workflow preferences mode (confirm-or-tweak UX)
-- **writing-skills** — Create new skills following best practices
-- **using-ultrapowers** — Introduction to the skills system
+- **writing-skills** — Writing documents that agents consume
 
-See also: **skills-audit** and **skills-creation** under Research Pipeline above.
+### Not loaded by default
+
+`skills/misc/` holds **using-git-worktrees**, **writing-claude-code-hooks**, **skills-audit**, and **skills-creation**. They're real and they work, but they're off the path for someone describing an idea, so they don't sit in context. Ask for one by name and it'll be used.
+
+`skills/deprecated/` holds forwarding aliases for the 1.x names, removed in 2.1.
 
 ## Companion Plugins
 

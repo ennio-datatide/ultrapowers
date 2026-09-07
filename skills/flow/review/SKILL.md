@@ -59,6 +59,8 @@ Each reads *what it is* → *how to fix*:
 
 ### 4. Spawn both sub-agents in parallel
 
+Each agent starts with nothing but its brief, so a vague brief returns a vague answer you cannot tell apart from a good one. Every brief carries the one question, where to start, what shape of answer to return, a length bound, and an explicit read-only instruction. Bound the length: unbounded briefs return transcripts, and reading them costs more than the parallelism saved.
+
 **Standards sub-agent** gets: the diff command and commit list, the standards files found, and **the full smell baseline pasted in** (it has no other access to it). Brief:
 
 > Report, per file/hunk where relevant: (a) every place the diff violates a documented standard — cite the standard, file and rule; (b) any baseline smell — name it and quote the hunk. Distinguish hard violations from judgement calls: documented-standard breaches can be hard, baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words.
@@ -102,6 +104,27 @@ Rules:
 
 ## After review
 
-Report both outputs, then hand to `finishing-a-development-branch` for merge, PR, or cleanup.
+Report both outputs. Findings are **not** silently fixed: present them and let the user decide what gets addressed. Fixing a finding is new work, and new work goes through the flow.
 
-Findings from the agent review are **not** silently fixed. Present them; let the user decide what gets addressed. Fixing a finding is new work, and new work goes through the flow.
+## Finishing the branch
+
+Only once the review is reported and its findings dealt with or consciously accepted.
+
+**Confirm it's actually finished first:** the full suite passes on the branch as it stands, and nothing is uncommitted. If either fails, stop and say which. Integrating unfinished work is how a main branch breaks.
+
+**Then read `.claude/ultrapowers-preferences.json`.**
+
+- **`autoPush` true (the default)** → push the branch and open a PR. Don't present a menu; that's what the preference means. Announce what you did and give the user the link.
+- **`autoPush` false** → offer the four options below.
+- **File missing or malformed** → warn, then offer the options. Never guess from a file you couldn't parse.
+
+| Option | When it fits |
+|---|---|
+| Open a PR | Someone else reviews, or the project works through PRs |
+| Merge to the main branch | Solo project, reviewed work, no PR process |
+| Keep the branch | Not ready, or waiting on something external |
+| Discard it | The work is being abandoned |
+
+Discarding is the one irreversible option here, so confirm it explicitly and name what will be lost. It is never the default and never inferred.
+
+Afterwards, remove any worktree (`git worktree remove`) and delete the merged branch with `git branch -d`. Use `-d`, not `-D`: its refusal on an unmerged branch is a safety check, and if it refuses, the work hasn't landed. Leave the ticket files in `.scratch/` alone — they're the record of what was built and cost nothing.

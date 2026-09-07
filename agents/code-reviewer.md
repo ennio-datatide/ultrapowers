@@ -53,4 +53,4 @@ Your output should be structured, actionable, and focused on helping maintain hi
 
 - **ultrapowers:review** — the skill that dispatches this agent. Consult it for the prompt-template / placeholder contract when integrating.
 - **ultrapowers:review** — the skill that governs how the controller acts on the findings you return. It defines severity tiers (Critical / Important / Minor / Nit) and the expected response pattern.
-- **ultrapowers:subagent-driven-development** — invokes this agent per-task for the code-quality review stage; final review covers the full implementation after all tasks land.
+- **ultrapowers:implement** — invokes this agent per-ticket for the code-quality review stage; final review covers the full implementation after all tasks land.
