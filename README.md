@@ -127,7 +127,7 @@ The agent grills you on what "notification" means here, who sees them, what happ
 
 ## What's Inside
 
-**27 skills, organised by what they're for.** Discipline that only one phase uses lives *inside* that phase rather than as a separate skill, so it doesn't cost context on every turn.
+**26 skills, organised by what they're for.** Discipline that only one phase uses lives *inside* that phase rather than as a separate skill, so it doesn't cost context on every turn.
 
 ### The flow
 
@@ -143,6 +143,8 @@ The agent grills you on what "notification" means here, who sees them, what happ
 - **domain-modeling** — Builds your Project Dictionary and Decisions Log as you talk
 - **workspace-search** — Routing policy for finding things cheaply, with optional local semantic search
 - **codebase-design** — Deep-module vocabulary: a lot of behaviour behind a small interface
+- **visual-design** — Purpose before layout for a UI surface: persuade, operate, read, or experience
+- **design-review** — Audit, clarify, harden, polish, then extract what recurs into shared components
 - **test-driven-development** — Red-green at pre-agreed seams
 - **systematic-debugging** — Phase-gated diagnosis; no theorising before a command goes red on the bug
 - **deep-research** — Current state of the art, before the spec is written
@@ -219,6 +221,8 @@ Skills live directly in this repository. To contribute:
 **The engineering method is [Matt Pocock's](https://github.com/mattpocock/skills)** (MIT). The grilling primitive, the spec and ticket flow, tracer-bullet vertical slicing, domain modelling with `CONTEXT.md` and ADRs, the deep-module vocabulary, the seam discipline in TDD, and the two-axis code review all come from his work, and several reference documents are ported from it directly. It is proven in production by a lot of working engineers, and it is the reason this plugin works.
 
 **What Ultrapowers adds** is the rails and the translation layer: the agent drives the flow instead of the user, the engineering vocabulary is rendered in plain language at the surface, context hygiene is automated rather than a judgement call, and the research pipeline runs on every build. That adaptation is for an audience his pack was not aimed at. **If you're an engineer, use [his pack](https://github.com/mattpocock/skills) directly.**
+
+**The design vocabulary is adapted from [Impeccable](https://github.com/pbakaus/impeccable)** (Apache 2.0). `visual-design` and `design-review` carry its design-purpose taxonomy, quality floor, named refinement moves, and audit/harden rubrics, condensed and rewritten for this plugin's own format rather than reproduced — see [NOTICE](NOTICE) for the full attribution and what was left out. Unlike Pocock's pack, Impeccable is a large, tool-backed system (a compiled CLI, browser live-mode, detector hooks, native-platform variants); Ultrapowers ports only the design reference content and runs it model-invoked inside the existing flow instead of as user-typed commands.
 
 Local search integration uses [zvec-grep](https://github.com/zvec-ai/zvec-grep) (Apache 2.0).
 

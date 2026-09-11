@@ -28,6 +28,8 @@ Use [implementer-prompt.md](./implementer-prompt.md). The sub-agent gets the tic
 
 Call the Skill tool with "test-driven-development" for the red-green discipline. **Test only at seams the spec already agreed.** No test is written at an unconfirmed seam; if a new one looks necessary, stop and take it back to the user.
 
+**A ticket that builds or changes a UI surface** → also call the Skill tool with "visual-design", for the purpose-before-layout discipline.
+
 ### 2. Spec review first
 
 Use [spec-reviewer-prompt.md](./spec-reviewer-prompt.md). One question: **does this do what the ticket asked?**

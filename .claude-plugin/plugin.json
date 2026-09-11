@@ -16,6 +16,7 @@
     "tdd",
     "code-review",
     "domain-modeling",
+    "visual-design",
     "workflows"
   ],
   "skills": [
@@ -38,6 +39,8 @@
     "./skills/engineering/resolving-merge-conflicts",
     "./skills/engineering/systematic-debugging",
     "./skills/engineering/test-driven-development",
+    "./skills/engineering/visual-design",
+    "./skills/engineering/design-review",
     "./skills/engineering/wizard",
     "./skills/engineering/workspace-search",
     "./skills/meta/writing-skills",

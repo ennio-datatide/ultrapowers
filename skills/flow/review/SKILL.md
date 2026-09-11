@@ -57,6 +57,8 @@ Each reads *what it is* → *how to fix*:
 - **Middle Man**: a class or function that mostly just delegates. → cut it.
 - **Refused Bequest**: a subclass ignoring most of what it inherits. → use composition.
 
+**If the diff touches a UI or visual surface**, also call the Skill tool with "design-review" for the accessibility, copy, edge-case, and consistency lenses that the standards axis doesn't cover. Run it alongside the two axes below; report it as its own section rather than folding it into Standards.
+
 ### 4. Spawn both sub-agents in parallel
 
 Each agent starts with nothing but its brief, so a vague brief returns a vague answer you cannot tell apart from a good one. Every brief carries the one question, where to start, what shape of answer to return, a length bound, and an explicit read-only instruction. Bound the length: unbounded briefs return transcripts, and reading them costs more than the parallelism saved.
@@ -71,7 +73,7 @@ Each agent starts with nothing but its brief, so a vague brief returns a vague a
 
 ### 5. Aggregate
 
-Present both reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. **Do not merge or rerank across axes.** End with total findings per axis and the worst issue *within each axis*. Don't pick a winner across axes — that's exactly the reranking the separation exists to prevent.
+Present reports under `## Standards`, `## Spec`, and (when run) `## Design` headings, verbatim or lightly cleaned. **Do not merge or rerank across axes.** End with total findings per axis and the worst issue *within each axis*. Don't pick a winner across axes — that's exactly the reranking the separation exists to prevent.
 
 A change can pass one axis and fail the other: code that follows every standard but builds the wrong thing, or code that does exactly what was asked but breaks every convention. Reporting them separately stops one masking the other.
 

@@ -61,6 +61,8 @@ Run them together: `grilling` works the design tree in rounds, `domain-modeling`
 
 Do not proceed until the frontier is empty and the user confirms you have a shared understanding.
 
+**If the idea includes a UI or visual surface**, also call the Skill tool with "visual-design" during this step, to settle audience, intent, and design purpose alongside the rest of the interview rather than after.
+
 **Stack and tooling questions.** When one reaches the frontier, consult [architecture-profile-matching.md](./architecture-profile-matching.md) to seed your **recommended answer** from profiles that have worked before. Adapt the profile to this idea; never paste it in whole, and never present it as the only option. The user's design wins.
 
 ### 4a. Scan for sibling-pack skills
