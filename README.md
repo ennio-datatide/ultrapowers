@@ -127,7 +127,7 @@ The agent grills you on what "notification" means here, who sees them, what happ
 
 ## What's Inside
 
-**26 skills, organised by what they're for.** Discipline that only one phase uses lives *inside* that phase rather than as a separate skill, so it doesn't cost context on every turn.
+**27 skills, organised by what they're for.** Discipline that only one phase uses lives *inside* that phase rather than as a separate skill, so it doesn't cost context on every turn.
 
 ### The flow
 
@@ -157,6 +157,7 @@ The agent grills you on what "notification" means here, who sees them, what happ
 
 - **wait-what** — Re-pitch anything that didn't land, in plain English. You invoke this one
 - **handoff** — Portable summary so another session or person can continue
+- **claude-code-setup**: First-time setup of Claude Code on macOS or Windows: basic tools, safe storage for secrets, safety defaults, a readable theme and status line, personal instructions, and the companion and Impeccable design plugins
 
 ### The rails
 

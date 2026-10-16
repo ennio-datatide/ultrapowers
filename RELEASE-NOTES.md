@@ -2,6 +2,19 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.1.0 (2026-10-16)
+
+### Recommended Claude Code setup
+
+- **New `claude-code-setup` skill** (`skills/productivity/`). Takes a new macOS or Windows computer from "Claude Code is installed" to "ready to build": basic tools, safe storage for secrets with an approval prompt on every use, safety defaults merged into `~/.claude/settings.json`, personal instructions in `~/.claude/CLAUDE.md`, and the projects folder. Safe to re-run.
+- **Installs the rest of the recommended plugins.** `ultrapowers-dev`, `ultrapowers-business` and the [Impeccable](https://github.com/pbakaus/impeccable) design plugin, each skipped when already present. ultrapowers itself is never reinstalled from inside its own skill.
+- **The recommended configuration, merged without overriding anything already chosen.** Claude Code starts in auto mode with the block and ask rules for secrets, `.env` files, credentials, force pushes and deletes kept in place; fullscreen display, prose wrapped at 100 columns, dynamic workflows and phone notifications on.
+- **A cross-platform status line** (`statusline.mjs`, Node only): session, folder, git branch with staged, changed and conflicted counts, model, and a context bar that turns amber at 70% and red at 85%.
+- **The "ultrapowers" theme**, shipped by the plugin in `themes/`, keeps the user's messages, the dimmed working steps and Claude's answers clearly apart. The setup selects it (`custom:ultrapowers:ultrapowers`) only when no theme is set.
+- **GitHub login can wait.** The git identity is always set; `gh auth login` is optional and does not block the setup.
+
+---
+
 ## v1.2.0 (2026-04-24)
 
 ### Workflow defaults & sibling-pack integration

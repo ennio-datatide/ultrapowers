@@ -56,7 +56,7 @@ If CLAUDE.md says "don't use TDD" and a skill says "always use TDD", follow the 
 
 **Engineering** — `grilling` (the interview primitive), `domain-modeling` (vocabulary + decisions), `workspace-search` (how to search cheaply), `codebase-design` (deep-module vocabulary), `test-driven-development`, `systematic-debugging`, `deep-research`, `prototype`, `wizard` (steps only a human can do), `improve-codebase-architecture`, `resolving-merge-conflicts`
 
-**Productivity** — `wait-what` (re-pitch in plain English), `handoff`
+**Productivity** — `wait-what` (re-pitch in plain English), `handoff`, `claude-code-setup` (first-time setup of Claude Code and the recommended plugins)
 
 **Meta** — `writing-skills`
 

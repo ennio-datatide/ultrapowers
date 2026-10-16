@@ -1,0 +1,40 @@
+{
+  "tui": "fullscreen",
+  "editorMode": "normal",
+  "enableWorkflows": true,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "maxProseWidth": 100,
+  "theme": "custom:ultrapowers:ultrapowers",
+  "statusLine": {
+    "type": "command",
+    "command": "node \"{{HOME}}/.claude/statusline.mjs\""
+  },
+  "permissions": {
+    "defaultMode": "auto",
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.local)",
+      "Read(**/.env.*.local)",
+      "Read(**/.env.development)",
+      "Read(**/.env.production)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/credentials)",
+      "Bash(sudo *)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(envchain --set *)",
+      "Bash(envchain -s *)",
+      "Bash(*add-secret.sh *)",
+      "Bash(powershell.exe * cc-secrets.ps1 set *)"
+    ],
+    "ask": [
+      "Bash(envchain *)",
+      "Bash(powershell.exe * cc-secrets.ps1 *)",
+      "Bash(git push *)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean *)",
+      "Bash(rm -rf *)"
+    ]
+  }
+}

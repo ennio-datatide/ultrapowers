@@ -1,0 +1,20 @@
+{
+  "name": "Ultrapowers (alto contraste)",
+  "base": "dark",
+  "overrides": {
+    "text": "#f4f2ff",
+    "inactive": "#8b88a3",
+    "subtle": "#5c5873",
+    "claude": "#b197fc",
+    "claudeShimmer": "#d0bfff",
+    "userMessageBackground": "#2b2450",
+    "userMessageBackgroundHover": "#362d63",
+    "briefLabelYou": "#7dd3fc",
+    "briefLabelClaude": "#c4b5fd",
+    "promptBorder": "#7c6bd6",
+    "planMode": "#38bdf8",
+    "success": "#4ade80",
+    "warning": "#fbbf24",
+    "error": "#f87171"
+  }
+}
