@@ -56,22 +56,6 @@ Known limits to keep in mind:
 - Use `powershell.exe` (Windows PowerShell 5.1), not `pwsh`. The password dialog is a 5.1 feature; PowerShell 7 asks in the console instead, which cannot be answered when you start the command.
 - An argument written as `-name:value` can be split by PowerShell before it reaches the wrapped command. If a command needs that form, put it in a small script file and run the script through the wrapper.
 
-## The claude-libre shortcut
-
-Adds a `claude-libre` function to the user's PowerShell profile, creating the profile if it is missing. Safe to run again: it does nothing if the function is already there. Run it from Git Bash:
-
-```bash
-powershell.exe -NoProfile -Command '$p = $PROFILE.CurrentUserCurrentHost; if (-not (Test-Path $p)) { New-Item -ItemType File -Path $p -Force | Out-Null }; if (-not (Select-String -Path $p -Pattern "function claude-libre" -Quiet)) { Add-Content -Path $p -Value "`r`n# Claude Code without permission prompts: only inside a project folder with git`r`nfunction claude-libre { claude --dangerously-skip-permissions @args }" }'
-```
-
-PowerShell only loads a profile when scripts are allowed for the user. Check with `powershell.exe -NoProfile -Command 'Get-ExecutionPolicy'`; if it says `Restricted`, allow local scripts for this user only (no admin needed):
-
-```bash
-powershell.exe -NoProfile -Command 'Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force'
-```
-
-It works in PowerShell windows opened afterwards.
-
 Values for the personal instructions template:
 
 - `{{SECRETS_TOOL}}`: cc-secrets (an encrypted Windows vault)

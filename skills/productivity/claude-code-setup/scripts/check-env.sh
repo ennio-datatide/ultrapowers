@@ -107,17 +107,6 @@ else
   report personal-instructions missing "~/.claude/CLAUDE.md has no setup block"
 fi
 
-if [ "$platform" = windows ]; then
-  libre=$(powershell.exe -NoProfile -Command '$p = $PROFILE.CurrentUserCurrentHost; if ((Test-Path $p) -and (Select-String -Path $p -Pattern "function claude-libre" -Quiet)) { "ok" }' 2>/dev/null | tr -d '\r')
-else
-  grep -q 'alias claude-libre=' "$HOME/.zshrc" 2>/dev/null && libre=ok
-fi
-if [ "$libre" = ok ]; then
-  report claude-libre ok
-else
-  report claude-libre missing "shortcut for claude --dangerously-skip-permissions"
-fi
-
 if [ -d "$HOME/Code" ]; then
   report projects-folder ok "$HOME/Code"
 else

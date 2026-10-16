@@ -39,5 +39,6 @@ Stop and ask before anything that:
 - Every project is a git repository. Once I have a GitHub account, each one also gets a private GitHub repository as its backup.
 - Save progress often: commit after each step that works, with a message a non-engineer can understand.
 - Never force push and never rewrite history.
+- If I ask you to stop the permission prompts, explain that you cannot switch yourself into that mode: I restart Claude Code with `claude --dangerously-skip-permissions`, only inside a project folder with git, never in my home folder. The block rules still protect my secrets and stop force pushes.
 - Prefer mainstream, well documented tools and the fewest moving parts. Boring and reliable beats clever.
 <!-- claude-code-setup:end -->

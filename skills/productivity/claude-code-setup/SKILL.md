@@ -96,6 +96,8 @@ And the comfort defaults, in one line each:
 
 Shift+Tab moves between the permission modes, including plan mode, where Claude plans before touching anything. Keep every block and ask rule above even if they later switch to a more permissive mode: those rules are what keep protecting `.env` files, credentials, force pushes and deletes. Never turn off the warning Claude Code shows before its most permissive mode.
 
+Later in the course they will start Claude Code with `claude --dangerously-skip-permissions`. Tell them, in these terms: "That command starts Claude Code without asking permission for each action. Use it only inside a project folder that has git, never in your home folder, and plain `claude` everywhere else; even then, the block rules still protect your secrets and stop force pushes." Do not set this mode as a default anywhere: Claude Code ignores it in a project's `.claude/settings.json`, and the personal instructions from Step 6 cover what to say if they ask to stop the prompts.
+
 Do not add an "always allow" rule for the secrets wrapper, now or later, even if the user asks to "stop the prompts". Explain that the prompt is the only thing standing between a mistaken command and their accounts.
 
 ## Step 6: Personal instructions
@@ -107,8 +109,6 @@ Add the block from `assets/CLAUDE.user.md` to `~/.claude/CLAUDE.md`, which Claud
 - If the marker is already there, replace only what is between the start and end markers.
 
 Then create the projects folder if it is missing (`mkdir -p ~/Code`) and tell the user this is where each new project gets its own folder.
-
-Finally add the `claude-libre` shortcut, which starts `claude --dangerously-skip-permissions`, with the command in the platform reference file. It cannot be a setting instead: Claude Code ignores that mode in a project's `.claude/settings.json`. Tell the user, in these terms: "`claude-libre` starts Claude Code without asking permission for each action. Use it only inside a project folder that has git, never in your home folder, and use plain `claude` everywhere else; even then, the block rules still protect your secrets and stop force pushes." Do not set this mode as a default anywhere, and never turn off the warning Claude Code shows the first time it starts this way.
 
 ## Step 7: Install the ultrapowers plugins
 
