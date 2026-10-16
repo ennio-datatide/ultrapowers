@@ -11,6 +11,7 @@
 - **The recommended configuration, merged without overriding anything already chosen.** Claude Code starts in auto mode with the block and ask rules for secrets, `.env` files, credentials, force pushes and deletes kept in place; fullscreen display, prose wrapped at 100 columns, dynamic workflows and phone notifications on.
 - **A cross-platform status line** (`statusline.mjs`, Node only): session, folder, git branch with staged, changed and conflicted counts, model, and a context bar that turns amber at 70% and red at 85%.
 - **The "ultrapowers" theme**, shipped by the plugin in `themes/`, keeps the user's messages, the dimmed working steps and Claude's answers clearly apart. The setup selects it (`custom:ultrapowers:ultrapowers`) only when no theme is set.
+- **A `claude-libre` shortcut** for `claude --dangerously-skip-permissions` (zsh alias on macOS, PowerShell profile function on Windows, added once). Meant only for project folders with git; the block rules keep protecting secrets and force pushes.
 - **GitHub login can wait.** The git identity is always set; `gh auth login` is optional and does not block the setup.
 
 ---

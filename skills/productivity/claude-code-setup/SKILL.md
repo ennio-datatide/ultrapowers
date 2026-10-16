@@ -108,6 +108,8 @@ Add the block from `assets/CLAUDE.user.md` to `~/.claude/CLAUDE.md`, which Claud
 
 Then create the projects folder if it is missing (`mkdir -p ~/Code`) and tell the user this is where each new project gets its own folder.
 
+Finally add the `claude-libre` shortcut, which starts `claude --dangerously-skip-permissions`, with the command in the platform reference file. It cannot be a setting instead: Claude Code ignores that mode in a project's `.claude/settings.json`. Tell the user, in these terms: "`claude-libre` starts Claude Code without asking permission for each action. Use it only inside a project folder that has git, never in your home folder, and use plain `claude` everywhere else; even then, the block rules still protect your secrets and stop force pushes." Do not set this mode as a default anywhere, and never turn off the warning Claude Code shows the first time it starts this way.
+
 ## Step 7: Install the ultrapowers plugins
 
 This skill ships inside the ultrapowers plugin, so ultrapowers itself is normally installed already and the status report shows `plugin-ultrapowers: ok`. Never reinstall, update or remove it from here, and never ask for a restart just for it. Only install what is reported `missing`:

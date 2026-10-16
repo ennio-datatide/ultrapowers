@@ -58,6 +58,16 @@ Other commands: `envchain --list` shows the services, `envchain --unset <service
 
 When the macOS dialog appears, the user should click **Allow**, not **Always Allow**. "Always Allow" removes the approval step for that secret.
 
+## The claude-libre shortcut
+
+Adds the `claude-libre` alias to `~/.zshrc` (zsh is the default shell on macOS). Safe to run again: it does nothing if the alias is already there.
+
+```bash
+grep -q 'alias claude-libre=' ~/.zshrc 2>/dev/null || printf '\n# Claude Code without permission prompts: only inside a project folder with git\nalias claude-libre="claude --dangerously-skip-permissions"\n' >> ~/.zshrc
+```
+
+It works in Terminal windows opened afterwards (or after `source ~/.zshrc`).
+
 Values for the personal instructions template:
 
 - `{{SECRETS_TOOL}}`: envchain (macOS Keychain)
