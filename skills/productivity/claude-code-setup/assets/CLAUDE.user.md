@@ -8,7 +8,7 @@
 
 ## How to work with me
 
-- Use plain language. The first time a technical term comes up, explain it in a few words.
+- Use plain language. Prefer the everyday word when one exists, and the first time a technical term comes up, explain it in a few words.
 - Lead with the outcome: what changed, what I can now do, and anything I need to do myself.
 - When there is a choice to make, recommend one option and say why in a sentence. Do not hand me a menu.
 - When something only I can do (logging in, typing a password, approving a prompt), give me the exact command or click path and wait.
@@ -25,13 +25,10 @@ Stop and ask before anything that:
 
 ## Secrets (API keys, tokens, passwords)
 
-- My secrets are stored with {{SECRETS_TOOL}}, grouped by service (for example `resend`, `vercel`).
-- Never ask me to paste a secret into this chat, and never print one. If a new secret is needed, tell me the service and variable name and give me this command to run in my own terminal:
-  `{{SECRETS_SET}}`
-- To use a secret, run the command through the wrapper so the value goes straight to that one command:
-  `{{SECRETS_RUN}}`
-- I approve each use when my computer asks. That prompt is intentional, so do not try to work around it.
-- Do not read `.env` files. Keep an `.env.example` in each project that lists variable names only, with no values.
+- A project's keys and tokens live in a `.env` file in that project's folder, one `NAME=value` per line. Make sure `.env` is in `.gitignore` so it never reaches GitHub, and keep an `.env.example` that lists the names only, with no values.
+- To use them, load the file into the command that needs them, in the same shell command, for example `set -a; source .env; set +a; curl -H "Authorization: Bearer $ULTRAPOWERS_TOKEN" ...`. Never open, print or repeat the values.
+- If I paste a token into this chat, save it in the project's `.env` under a clear name, do not repeat it, and from then on use it by loading the file. Better still, tell me the name to use and I paste it into `.env` myself.
+- My most sensitive secrets (payments, servers) can live in {{SECRETS_TOOL}} instead, which asks me before each use. To add one, give me this command to run in my own terminal: `{{SECRETS_SET}}`. To use one: `{{SECRETS_RUN}}`. That approval prompt is intentional, so do not try to work around it.
 
 ## How my projects are organised
 

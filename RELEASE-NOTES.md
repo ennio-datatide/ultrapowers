@@ -2,6 +2,13 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.1.1 (2026-10-17)
+
+### claude-code-setup
+
+- **Project tokens live in the project's `.env`, loaded, never opened.** The personal instructions now tell Claude to load `.env` into the command that needs it (`set -a; source .env; set +a`) without showing the values, and to save a token pasted in the chat into `.env` instead of refusing it. The secrets tool with an approval prompt stays for the most sensitive keys. The block on reading `.env` files is unchanged.
+- **Plainer words.** Claude prefers the everyday word and explains each technical term the first time it comes up.
+
 ## v2.1.0 (2026-10-16)
 
 ### Recommended Claude Code setup

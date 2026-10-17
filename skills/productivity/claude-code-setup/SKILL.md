@@ -18,7 +18,7 @@ The person you are helping probably has no opinion about package managers, git s
 - **Secrets never appear on screen either.** A value that is visible while being pasted stays in the terminal's scroll-back and shows up in screen shares and recordings. So secrets are only ever stored through the bundled helpers (`add-secret.sh` on macOS, `cc-secrets.ps1 set` on Windows), which hide the input. Never hand the user a raw `envchain --set` command: it shows the value unless an extra flag is remembered.
 - **If a secret does get exposed** (pasted into this chat, shown on screen, or put on a command line), say so plainly and do not use it. The fix is to revoke it at the service, create a new one, and store the new one with the helper. Clearing the screen is not enough.
 - **Some things only the user can do**: anything needing their computer password (`sudo`), browser logins, and typing secret values. For each, give the exact command to copy, say where to run it (a separate Terminal or PowerShell window), and wait for them to confirm.
-- **Plain language.** Say "a place to keep passwords that asks you before each use", not "a keychain-backed credential store". Name the tool once so they recognise it later.
+- **Plain language.** Say "a place to keep passwords that asks you before each use", not "a keychain-backed credential store". Use the everyday word when there is one, and the first time a technical word is needed (Terminal, git, token, plugin), explain it in a few words. Name the tool once so they recognise it later.
 
 ## Step 1: See what is already in place
 
@@ -57,6 +57,8 @@ Then:
 
 ## Step 4: Safe storage for secrets
 
+Everyday project tokens go in each project's `.env` file, loaded into the command that needs them (the personal instructions in Step 6 explain it). This step adds a safer place for the most sensitive ones, such as payment or server keys.
+
 Set up the secrets tool for the platform: envchain on macOS, the bundled `cc-secrets.ps1` on Windows. Both work the same way: secrets are grouped by service, the user approves every use with a system prompt, and the value goes straight to one command without appearing in this conversation.
 
 Copy the helper script for the platform into `~/.claude/tools/` as the reference file describes. The helper is what makes storing a secret safe by default: the value is hidden while typed, approval is required on every later use, and it refuses to run from inside Claude Code or with the value on the command line. The settings in Step 5 also block you from running the store command yourself, so the only path is the user, in their own window, through the helper.
@@ -82,7 +84,7 @@ The script writes the status line command with the full home folder path and for
 What the defaults do, in the terms to use with the user:
 
 - **Claude Code starts in auto mode:** it goes ahead with routine work such as editing files and running everyday commands, and stops to ask before anything risky. Git is the safety net for edits. If they had already chosen a starting mode, it is kept.
-- **`.env` files, SSH keys and cloud credentials cannot be read.** Secrets belong in the secrets tool, not in files.
+- **`.env` files can be loaded but not opened.** A project's tokens live in its `.env`; Claude loads them into the command that needs them (`set -a; source .env; set +a`) without ever showing the values. SSH keys and cloud credentials cannot be read at all.
 - **Using a secret, publishing code, and deleting things always ask first**, whatever other permissions are granted later.
 - **Storing a secret is something only the user can do.** Claude Code is blocked from running the store command, so a secret value never has a reason to pass through the conversation.
 - **Admin commands and force pushes are blocked.**

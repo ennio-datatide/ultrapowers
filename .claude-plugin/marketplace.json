@@ -11,7 +11,7 @@
     {
       "name": "ultrapowers",
       "description": "Core flow: Grill \u2192 Spec \u2192 Tickets \u2192 Implement \u2192 Review, with domain modelling, TDD, two-axis review, and local semantic search",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "source": "./"
     },
     {
