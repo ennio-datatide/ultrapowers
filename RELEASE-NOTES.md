@@ -2,6 +2,17 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.2.0 (2026-10-25)
+
+### Design is Impeccable, installed with ultrapowers
+
+- **One plugin to install.** Impeccable is listed in the ultrapowers marketplace (fetched from its own repository, pinned to commit `3671d50`, version 4.7.1) and declared as a dependency, so installing or updating ultrapowers installs it too.
+- **The user chooses the design direction.** `visual-design` hands each design task to Impeccable and makes the choice of direction a sanctioned checkpoint: three options, the user picks, nothing is built before. `autonomous-decision` and `no-permission-asks` say so.
+- **One set of design files.** The root `PRODUCT.md` and `DESIGN.md` that Impeccable keeps; `docs/ultrapowers/design/` is merged into them and retired.
+- **`design-review` runs Impeccable's audit, critique, clarify, harden and polish**, still reported rather than silently fixed.
+- **Removed:** the condensed copies of Impeccable's material (`MOVES.md`, `AUDIT.md`, `HARDEN.md`).
+- **claude-code-setup** no longer installs Impeccable from its own marketplace. It checks the copy that comes with ultrapowers and turns off an older second copy (`impeccable@impeccable`) so skills do not load twice.
+
 ## v2.1.1 (2026-10-17)
 
 ### claude-code-setup

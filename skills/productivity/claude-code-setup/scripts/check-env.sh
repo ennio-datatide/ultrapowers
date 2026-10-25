@@ -123,9 +123,12 @@ if have claude; then
       report "plugin-$p" missing
     fi
   done
-  if printf '%s' "$installed" | grep -q '"impeccable@impeccable"'; then
-    report plugin-impeccable ok
-  else
+  # Impeccable comes with ultrapowers. A second, enabled copy from its own marketplace loads every skill twice.
+  if ! printf '%s' "$installed" | grep -q '"impeccable@ultrapowers"'; then
     report plugin-impeccable missing
+  elif printf '%s' "$installed" | tr -d '\n ' | grep -q '"id":"impeccable@impeccable"[^}]*"enabled":true'; then
+    report plugin-impeccable duplicate "impeccable@impeccable is enabled too"
+  else
+    report plugin-impeccable ok
   fi
 fi

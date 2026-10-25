@@ -143,8 +143,8 @@ The agent grills you on what "notification" means here, who sees them, what happ
 - **domain-modeling** — Builds your Project Dictionary and Decisions Log as you talk
 - **workspace-search** — Routing policy for finding things cheaply, with optional local semantic search
 - **codebase-design** — Deep-module vocabulary: a lot of behaviour behind a small interface
-- **visual-design** — Purpose before layout for a UI surface: persuade, operate, read, or experience
-- **design-review** — Audit, clarify, harden, polish, then extract what recurs into shared components
+- **visual-design** — Hands every design task to Impeccable and has you choose the direction from three options before anything is built
+- **design-review** — Audit, critique, clarify, harden and polish through Impeccable, reported for you to decide
 - **test-driven-development** — Red-green at pre-agreed seams
 - **systematic-debugging** — Phase-gated diagnosis; no theorising before a command goes red on the bug
 - **deep-research** — Current state of the art, before the spec is written
@@ -157,7 +157,7 @@ The agent grills you on what "notification" means here, who sees them, what happ
 
 - **wait-what** — Re-pitch anything that didn't land, in plain English. You invoke this one
 - **handoff** — Portable summary so another session or person can continue
-- **claude-code-setup**: First-time setup of Claude Code on macOS or Windows: basic tools, safe storage for secrets, safety defaults, a readable theme and status line, personal instructions, and the companion and Impeccable design plugins
+- **claude-code-setup**: First-time setup of Claude Code on macOS or Windows: basic tools, safe storage for secrets, safety defaults, a readable theme and status line, personal instructions, and the companion plugins
 
 ### The rails
 
@@ -223,7 +223,7 @@ Skills live directly in this repository. To contribute:
 
 **What Ultrapowers adds** is the rails and the translation layer: the agent drives the flow instead of the user, the engineering vocabulary is rendered in plain language at the surface, context hygiene is automated rather than a judgement call, and the research pipeline runs on every build. That adaptation is for an audience his pack was not aimed at. **If you're an engineer, use [his pack](https://github.com/mattpocock/skills) directly.**
 
-**The design vocabulary is adapted from [Impeccable](https://github.com/pbakaus/impeccable)** (Apache 2.0). `visual-design` and `design-review` carry its design-purpose taxonomy, quality floor, named refinement moves, and audit/harden rubrics, condensed and rewritten for this plugin's own format rather than reproduced — see [NOTICE](NOTICE) for the full attribution and what was left out. Unlike Pocock's pack, Impeccable is a large, tool-backed system (a compiled CLI, browser live-mode, detector hooks, native-platform variants); Ultrapowers ports only the design reference content and runs it model-invoked inside the existing flow instead of as user-typed commands.
+**Design is [Impeccable](https://github.com/pbakaus/impeccable)** (Apache 2.0), by Paul Bakaus. It is listed in this marketplace and installed with ultrapowers as a dependency, pinned to a tested commit, so you install one plugin and get both. `visual-design` and `design-review` call it at the right moments of the flow; none of its code is copied here. See [NOTICE](NOTICE).
 
 Local search integration uses [zvec-grep](https://github.com/zvec-ai/zvec-grep) (Apache 2.0).
 

@@ -36,7 +36,7 @@ The user has given you a job. Finish the job. Do not interrupt mid-task to ask w
 **Allowed:**
 - Clarifying questions **before work starts** when a requirement is genuinely ambiguous and would change the outcome of the work (not the path).
 - Clarifying questions **when genuinely blocked** — missing credentials, missing files, contradictory signals you cannot reconcile by reading code.
-- **Sanctioned skill checkpoints** — grilling section approvals, tickets review gates. These emit a `<skill-checkpoint>` marker that the Stop hook respects.
+- **Sanctioned skill checkpoints** — grilling section approvals, tickets review gates, the choice of design direction. These emit a `<skill-checkpoint>` marker that the Stop hook respects.
 
 ## Decision Test
 

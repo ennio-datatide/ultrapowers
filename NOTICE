@@ -1,18 +1,10 @@
-This project is licensed under the MIT License (see LICENSE), with one exception
-noted below.
+Ultrapowers
+Copyright (c) Ennio Maldonado
 
-skills/engineering/visual-design/ and skills/engineering/design-review/ adapt
-guidance from Impeccable (https://github.com/pbakaus/impeccable),
+This project is licensed under the MIT License (see LICENSE).
+
+The ultrapowers marketplace also lists Impeccable (https://github.com/pbakaus/impeccable),
 Copyright (c) Paul Bakaus, licensed under the Apache License, Version 2.0
-(http://www.apache.org/licenses/LICENSE-2.0).
-
-The material in those two skills is condensed and rewritten to fit Ultrapowers'
-own skill format, vocabulary, and model-invoked flow — it is not a verbatim
-copy of Impeccable's reference documents, which run to roughly 5,000 lines
-across ~20 commands. Ultrapowers ships a small subset (the design-purpose
-taxonomy, the quality floor, eight named refinement moves, the audit rubric,
-and the hardening checklist) and omits Impeccable's CLI, browser live-mode,
-detector hooks, and native-platform tooling entirely.
-
-A copy of the Apache License, Version 2.0 is available at
-http://www.apache.org/licenses/LICENSE-2.0.
+(http://www.apache.org/licenses/LICENSE-2.0). It is installed with ultrapowers as a
+dependency and fetched unmodified from its own repository, pinned to a tested commit.
+None of its code or reference documents are copied into this repository.

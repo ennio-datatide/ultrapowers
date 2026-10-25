@@ -1,68 +1,53 @@
 ---
 name: visual-design
-description: Vocabulary and discipline for designing or improving a UI/visual surface — settle audience and intent before layout, hold a quality floor, preserve one design identity across changes. Use when grill's idea includes a UI, or implement is building or changing a visual seam.
+description: Hands every design task in the flow to Impeccable, which ultrapowers installs as a dependency, and makes the user choose the design direction from three options before anything is built. Use when grill's idea includes a UI, or implement is building or changing a visual seam.
 ---
 
 # Visual Design
 
-Design a UI the same way [codebase-design](../codebase-design/SKILL.md) designs a module: settle the interface's *purpose* before its *shape*. A screen has an interface too — what someone can see and do — and a shallow one (no consistent identity, the key action buried) costs the same way a shallow code interface does.
+Ultrapowers brings the method; [Impeccable](https://github.com/pbakaus/impeccable) brings the design. It is
+installed with ultrapowers as a dependency (`impeccable@ultrapowers`), so its `impeccable` skill is always
+there. This skill decides when to call it and keeps the flow's rules from overriding its choices.
 
-## Context before layout
+## When to call Impeccable
 
-Two facts should exist before a pixel gets drawn, captured once and reused every session after:
+Call the Skill tool with "impeccable", passing the job in plain words as its argument:
 
-- **Audience and intent** — who's using this surface and what they need to accomplish. Write it to `docs/ultrapowers/design/PRODUCT.md`.
-- **Visual system** — the palette, type scale, spacing, and component identity already committed to. Write it to `docs/ultrapowers/design/DESIGN.md`.
+| Moment in the flow | Argument |
+|---|---|
+| Grill, the idea includes a UI | `shape <the surface or feature>`, then, if there is no PRODUCT.md, `init` |
+| Implement, a new page, screen or flow | the request as the user put it (Impeccable routes it to its new-work flow) |
+| Implement, refining an existing surface | the named move when the problem names one (`layout`, `typeset`, `bolder`, `quieter`, `distill`, `colorize`, `animate`, `delight`), otherwise `polish <target>` |
+| Review | handled by [design-review](../design-review/SKILL.md) |
 
-Read both before touching layout in a repo that already has them. Re-explaining either one is the sign they're missing — create them now rather than skip it again next session.
+Follow what Impeccable's skill says from there, including its setup step and its references. Do not
+paraphrase it from memory.
 
-## Design purpose
+## The user chooses the direction
 
-Every surface serves one purpose; get this wrong and the layout that follows is wrong no matter how well it's built:
+Choosing how a design looks is the user's decision, not one to make for them. This is a **sanctioned
+checkpoint**: [no-permission-asks](../../core/no-permission-asks/SKILL.md) and
+[autonomous-decision](../../core/autonomous-decision/SKILL.md) do not apply to it.
 
-- **Persuade** — landing pages, pricing. The visitor decides and acts; earn the attention and the action, strip anything that competes with it.
-- **Operate** — dashboards, editors, admin, settings. The visitor completes a task; scanability, consistency, and the real usage scene outrank expression. Brand lives in precise details, not loud ones.
-- **Read** — documentation, guides, changelogs. The visitor understands something; structure carries the page, then make staying in it worth it.
-- **Experience** — portfolios, galleries, showcases. The visitor is inside the work itself; the interface recedes and the content leads from the first viewport.
+- **A new surface or a new look:** before any code, the user sees **three options** and picks one. Use
+  Impeccable's own decision step (its decision page or comps) whenever it offers one; it already deals
+  three. If it presents fewer, or the harness has no page to show, give three distinct directions in chat,
+  each with its look, its first screen and its honest risk, plus the plain conventional option.
+- **Never pick for them.** Do not recommend one so strongly that the choice is a formality, and do not
+  start building while waiting. Put `<skill-checkpoint>design-direction</skill-checkpoint>` in the message
+  that asks, and stop.
+- **After the pick,** build that direction as chosen, not a safer version of it.
+- **Extending a surface that already has a look** (a section, a component, a state) inherits it. No three
+  options there; that would turn every small change into a redesign.
 
-Choose the mode from the surface being built, not the product it belongs to — a dev tool's landing page is still Persuade, its docs are still Read. Naming it out loud settles arguments about density, whitespace, and what belongs above the fold before they start.
+## Where the design context lives
 
-## Two paths to a first draft
+Impeccable keeps `PRODUCT.md` and `DESIGN.md` at the project root. Those are the only design files. If an
+older project has `docs/ultrapowers/design/PRODUCT.md` or `DESIGN.md`, merge them into the root files once
+and delete the old ones, so there is never a second copy to drift.
 
-- **Code-first** — write markup and styles directly, then look at the render. Coherent by construction, since one set of tokens produces every screen, but slower to see variety.
-- **Mock-first** — generate visual comps to settle direction before code exists. Faster to compare options, but the chosen comp still has to survive translation into the real system.
+## If Impeccable is missing
 
-State which path before starting. Switching mid-surface is how two screens end up with two different identities.
-
-**Refinement preserves; redesign replaces.** Refinement keeps the incumbent identity, behavior, copy, and everything outside scope. Redesign keeps product truth and constraints but treats the old look as evidence, not a starting point, and replaces `DESIGN.md`. Never split the difference into polish on a look that's being discarded anyway — that produces neither.
-
-## The quality floor
-
-Read this once the direction is settled, before any UI edit including a small refinement — not before planning.
-
-- **Contrast** — body/placeholder text ≥4.5:1, large text ≥3:1. On colored surfaces, tint secondary text from that hue; never plain gray on color.
-- **Depth** — shadows carry an offset and a soft blur. A zero-offset colored halo is decoration, not depth.
-- **Spacing** — tight within a group, generous between groups, more space above a heading than below it. Read the computed values, not the intention.
-- **Type** — body measure 65-75ch, obvious scale and weight steps. Run the real copy at every breakpoint and fix what overflows.
-- **Motion** — one authored moment, not the same entrance repeated on every section.
-- **States** — hover, disabled, loading, error, and empty, plus real content and keyboard focus, not just the happy path with placeholder text.
-- **Browser surfaces** — text selection, the caret, scrollbars, focus rings, and tabular numerals still carry the design. Theme them from the palette instead of leaving browser defaults; it's the cheapest signal a page was actually built.
-- **Copy** — controls name their action, errors name the problem and the recovery.
-
-**Defaults to refuse, not bans** — the brief's own words can earn any of these back except the one marked otherwise: same-size icon-plus-heading-plus-text cards as the page's whole structure, the hero-metric template (big number, small label, accent), a kicker or eyebrow above a heading (**this one is a ban** — the heading carries its own weight), gradient text standing in for emphasis, emoji standing in for an icon system, a system display face (Impact, Arial Black, the platform sans) as an own-world page's display voice. Reaching for one of these when the axis was actually free means the choice wasn't made — recognizing that means rewriting the element, not softening it.
-
-## Named moves
-
-State the problem before reaching for a move — "hard to compare plans" targets a fix, "make it nicer" doesn't. Then scope the change to exactly the move that problem needs. See [MOVES.md](MOVES.md) for bolder, quieter, distill, layout, typeset, colorize, animate, and delight — read only the one the task actually calls for.
-
-**Preserve the existing identity unless a full redesign was explicitly requested.** A layout fix that quietly restyles the palette has scope-crept into a redesign nobody asked for.
-
-Where two versions need comparing, render both and put them side by side. A description of a change is not the same evidence as seeing it next to what it replaced.
-
-## Handing off
-
-Call the Skill tool with "design-review" once a surface is ready to ship, for the pre-release checks and the consistency work that follows.
-
-## Attribution
-
-The design-purpose taxonomy, the quality floor, and the named moves in [MOVES.md](MOVES.md) are adapted from [Impeccable](https://github.com/pbakaus/impeccable) (Apache License 2.0), condensed and rewritten for this skill's own format rather than reproduced. See [NOTICE](../../../NOTICE) for the full attribution.
+If the `impeccable` skill is not available, the dependency was removed or disabled. Tell the user in one
+sentence and run `claude plugin install impeccable@ultrapowers`, then ask them to restart Claude Code. Do
+not design without it.

@@ -1,6 +1,6 @@
 ---
 name: claude-code-setup
-description: "First-time setup of Claude Code for a non-technical person on macOS or Windows: installs the basic tools, sets up safe storage for secrets (API keys, tokens) with an approval prompt on every use, applies sensible safety defaults, a readable theme, a status line and personal instructions, and installs the ultrapowers-dev, ultrapowers-business and Impeccable design plugins next to ultrapowers. Use this whenever someone is getting started with Claude Code, setting up a new computer, asks to 'set up', 'onboard', 'install ultrapowers', or asks where to keep API keys and passwords safely, even if they do not mention setup by name. Safe to run again at any time to repair or finish a setup."
+description: "First-time setup of Claude Code for a non-technical person on macOS or Windows: installs the basic tools, sets up safe storage for secrets (API keys, tokens) with an approval prompt on every use, applies sensible safety defaults, a readable theme, a status line and personal instructions, and installs the ultrapowers-dev and ultrapowers-business plugins next to ultrapowers, checking that the Impeccable design plugin that comes with it is there once. Use this whenever someone is getting started with Claude Code, setting up a new computer, asks to 'set up', 'onboard', 'install ultrapowers', or asks where to keep API keys and passwords safely, even if they do not mention setup by name. Safe to run again at any time to repair or finish a setup."
 ---
 
 # Claude Code Setup
@@ -127,16 +127,15 @@ If a command says the marketplace or plugin is already there, treat it as done a
 
 One sentence each for the user: ultrapowers is the guided way of building (talk an idea through, write it down, build it in small tested steps, review it), ultrapowers-dev adds technical know-how, and ultrapowers-business adds marketing, sales and finance know-how.
 
-## Step 8: Install the Impeccable design plugin
+## Step 8: Check the Impeccable design plugin
 
-Impeccable is a separate plugin that ultrapowers expects to be present for design work. Its code is not part of ultrapowers. Skip this step if the status report shows `plugin-impeccable: ok`. Otherwise:
+Impeccable comes with ultrapowers: it is a dependency, installed as `impeccable@ultrapowers` when ultrapowers is. Its code is not part of ultrapowers. Act only on what the status report shows:
 
-```bash
-claude plugin marketplace add pbakaus/impeccable   # only if `claude plugin marketplace list` does not show impeccable
-claude plugin install impeccable@impeccable
-```
+- `plugin-impeccable: ok`: nothing to do.
+- `plugin-impeccable: missing`: run `claude plugin install impeccable@ultrapowers`.
+- `plugin-impeccable: duplicate`: an older copy from Impeccable's own marketplace is enabled too, so every design skill would load twice. Run `claude plugin disable impeccable@impeccable` and tell the user, in one sentence, that you turned off a second copy of the design plugin and kept the one ultrapowers manages. Disable it, never uninstall it.
 
-The same "already there means done" rule applies. One sentence for the user: Impeccable adds design skills that I use whenever we design something, such as a page or an app screen, so it looks professional rather than generic.
+One sentence for the user: Impeccable adds design skills that I use whenever we design something, such as a page or an app screen, and it always lets you choose between three directions before anything is built.
 
 ## Step 9: Confirm and hand over
 

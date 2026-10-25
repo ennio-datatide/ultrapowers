@@ -34,6 +34,8 @@ Only ask if at least one applies:
 2. **Goal shift.** The decision would change *what* you build, not just *how* you build it.
 3. **High blast radius + irreversible.** Action affects shared state (force push, drop table, send message) and cannot be undone.
 
+One decision is never yours at any confidence: **how a new design looks.** The user picks the design direction from three options; see `visual-design`.
+
 ## Decision Examples
 
 **Grill fast-path triage** — signals: prompt length, verb specificity, scope keywords, codebase size, framework constraints. Decide silently in most cases.

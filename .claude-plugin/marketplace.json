@@ -1,7 +1,7 @@
 {
   "name": "ultrapowers",
   "metadata": {
-    "description": "Matt Pocock's engineering method on rails for non-technical builders \u2014 core flow, 52 dev skills, and 38 business skills"
+    "description": "Matt Pocock's engineering method on rails for non-technical builders — core flow, 52 dev skills, and 38 business skills"
   },
   "owner": {
     "name": "Ennio Maldonado",
@@ -10,9 +10,12 @@
   "plugins": [
     {
       "name": "ultrapowers",
-      "description": "Core flow: Grill \u2192 Spec \u2192 Tickets \u2192 Implement \u2192 Review, with domain modelling, TDD, two-axis review, and local semantic search",
-      "version": "2.1.1",
-      "source": "./"
+      "description": "Core flow: Grill → Spec → Tickets → Implement → Review, with domain modelling, TDD, two-axis review, and local semantic search",
+      "version": "2.2.0",
+      "source": "./",
+      "dependencies": [
+        "impeccable"
+      ]
     },
     {
       "name": "ultrapowers-dev",
@@ -31,6 +34,19 @@
         "source": "url",
         "url": "https://github.com/ennio-datatide/ultrapowers-business.git"
       }
+    },
+    {
+      "name": "impeccable",
+      "description": "Impeccable by Paul Bakaus (Apache 2.0): design fluency for frontend work. Installed with ultrapowers, which hands it every design task. Pinned to a tested release.",
+      "version": "4.7.1",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/pbakaus/impeccable.git",
+        "path": "plugin",
+        "sha": "3671d50f0ac9a662ce0615e85a256110c9cd720b"
+      },
+      "homepage": "https://impeccable.style",
+      "license": "Apache-2.0"
     }
   ]
 }
