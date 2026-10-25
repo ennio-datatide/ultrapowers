@@ -2,6 +2,10 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.2.1 (2026-10-25)
+
+- **Impeccable is declared as a dependency in the marketplace entry only, not in `plugin.json`.** A dependency in `plugin.json` that is missing stops ultrapowers from loading, and `claude plugin update` from 2.1.1 does not install a newly added one. A fresh install still brings Impeccable; an update that lacks it keeps working, and `visual-design` and `claude-code-setup` install it the first time it is needed.
+
 ## v2.2.0 (2026-10-25)
 
 ### Design is Impeccable, installed with ultrapowers
