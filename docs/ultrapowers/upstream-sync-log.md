@@ -83,3 +83,14 @@ The new upstream reference of interest is `mattpocock/skills`, tracked by **audi
 Note on licensing: the inherited code has now been replaced, not merely renamed. Measured line-for-line against `obra/superpowers`, substantive identical content went from **814 lines to zero**; what remains are skill names, headings that restate them, and three lines of git plumbing that have only one correct spelling. Six skills were replaced outright (`systematic-debugging`, `test-driven-development`, `writing-skills` from Pocock's equivalents; `verification-before-completion`, `dispatching-parallel-agents`, `executing-plans` written fresh) along with `subagent-driven-development` and its three prompt templates, `using-git-worktrees`, `finishing-a-development-branch`, and the Codex tool reference.
 
 The MIT copyright notice for that work has therefore been removed from `LICENSE`, which now carries Ultrapowers' own notice and Matt Pocock's for the ported material.
+
+---
+
+## 2026-10-25 — mattpocock/skills audit through `5beb35b`
+
+- **Base:** `3cca18b` (4 Sep 2026), the upstream commit the rebuild (`a08ee87`, 7 Sep) was adapted from.
+- **Audited through:** `5beb35b` (19 Oct 2026), on 25 Oct 2026.
+- **Taken:** wizard `template.sh` from `49dd158`/`868c4cf` (private `.env`, safe quoting, stops at end of input); grilling words questions so `ok` accepts (`95249b0`); TDD notes what each seam catches and misses (`3f59913`); debugging proves a forced red (`f3fc563`); handoff temp directory and path (`4f4e943`, `0f5e033`); review sub-agents in the foreground (`3da8c01`).
+- **Not taken, on purpose:** `CONTEXT.md` renamed to `GLOSSARY.md` (`d80fa0f`; student projects already have `CONTEXT.md`); removal of `resolving-merge-conflicts` (`daa01d8`; our users cannot resolve conflicts by hand); `implement-spec` parallel worktrees (more failure modes than a non-technical user can recover from); `pr`, `chief-of-staff`, `teach`, `wayfinder`, `triage`. `retro` may come later, rewritten in plain language.
+
+Impeccable is installed as a dependency, not adapted (see NOTICE), pinned to `3671d50` (4.7.1).

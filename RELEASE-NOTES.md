@@ -2,6 +2,17 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.2.2 (2026-10-26)
+
+- **Synced with Matt Pocock's skills** (audited through `5beb35b`; details in `docs/ultrapowers/upstream-sync-log.md`):
+  - `test-driven-development` takes seams from the spec, decides missing ones through `autonomous-decision`, and notes in one line what each seam catches and misses.
+  - `systematic-debugging` diffs against an untouched copy when a failing test had to be forced red.
+  - `grilling` words each question so a plain `ok` accepts the recommendation.
+  - `handoff` writes to `$TMPDIR` (falling back to `/tmp`, or `%TEMP%` on Windows) and reports the path.
+  - `implement` and `review` dispatch their sub-agents in the foreground and wait for every report.
+  - `wizard/template.sh` is upstream's current version.
+- **`visual-design` ignores Impeccable's own update notices**, since its version comes pinned with ultrapowers. Tested in a fresh session: the grill shapes the page with Impeccable, then shows three directions plus the conventional one and stops at the checkpoint without building.
+
 ## v2.2.1 (2026-10-25)
 
 - **Impeccable is declared as a dependency in the marketplace entry only, not in `plugin.json`.** A dependency in `plugin.json` that is missing stops ultrapowers from loading, and `claude plugin update` from 2.1.1 does not install a newly added one. A fresh install still brings Impeccable; an update that lacks it keeps working, and `visual-design` and `claude-code-setup` install it the first time it is needed.

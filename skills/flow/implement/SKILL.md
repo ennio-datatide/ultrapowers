@@ -24,9 +24,9 @@ dispatch implementer ──► spec review ──► quality review ──► co
 
 ### 1. Dispatch the implementer
 
-Use [implementer-prompt.md](./implementer-prompt.md). The sub-agent gets the ticket, the spec section behind it, and the seams already agreed — never the transcript of previous tickets.
+Use [implementer-prompt.md](./implementer-prompt.md). The sub-agent gets the ticket, the spec section behind it, and the seams already agreed — never the transcript of previous tickets. Dispatch it in the foreground and wait for its report before reviewing: the loop needs each ticket's result before it moves on.
 
-Call the Skill tool with "test-driven-development" for the red-green discipline. **Test only at seams the spec already agreed.** No test is written at an unconfirmed seam; if a new one looks necessary, stop and take it back to the user.
+Call the Skill tool with "test-driven-development" for the red-green discipline. **Test only at seams the spec already agreed.** No test is written at an unconfirmed seam; if a new one looks necessary, decide it with `autonomous-decision` and say in one plain line what it checks. A seam is a technical call, not the user's.
 
 **A ticket that builds or changes a UI surface** → also call the Skill tool with "visual-design", for the purpose-before-layout discipline.
 
@@ -90,7 +90,7 @@ Run the full suite once. Then call the Skill tool with "review":
 |---|---|
 | "I'll write the tests after" | Red before green. Every slice. |
 | "I'll carry this context to the next ticket" | Fresh window per ticket. That's why they're sized this way. |
-| "I'll test at a new seam, it's easier" | Only pre-agreed seams. Take a new one back to the user. |
+| "I'll test at a new seam, it's easier" | Only pre-agreed seams. A necessary new one goes through autonomous-decision, announced in plain words. |
 | "Full suite after every ticket" | Once, at the end. Single files as you go. |
 | "That should work" | Should isn't does. Run it, then claim it. |
 | "The exit code was 0" | Read the output. Suites pass with everything skipped. |

@@ -7,7 +7,7 @@ argument-hint: "What will the next session be used for?"
 
 # Handoff
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save it to the operating system's temporary directory, **not** the current workspace.
+Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save it to the operating system's temporary directory, **not** the current workspace: `$TMPDIR`, falling back to `/tmp`, or `%TEMP%` on Windows. Then tell the user the full path of the file you wrote.
 
 Include:
 

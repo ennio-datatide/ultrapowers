@@ -23,6 +23,9 @@ Call the Skill tool with "impeccable", passing the job in plain words as its arg
 Follow what Impeccable's skill says from there, including its setup step and its references. Do not
 paraphrase it from memory.
 
+Ignore Impeccable's own update notices (`npx impeccable update`) and do not pass them on: its version
+comes with ultrapowers, pinned to one that has been tested with this flow.
+
 ## The user chooses the direction
 
 Choosing how a design looks is the user's decision, not one to make for them. This is a **sanctioned

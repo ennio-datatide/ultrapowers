@@ -19,7 +19,7 @@ Review the diff between `HEAD` and a fixed point, on **two axes**:
 - **Standards** — does the code follow this repo's documented standards?
 - **Spec** — does the code faithfully implement what the spec asked for?
 
-Both run as **parallel sub-agents** so neither pollutes the other's context, then you aggregate.
+Both run as **parallel sub-agents** so neither pollutes the other's context: issue both calls together, in the foreground, and wait for both reports before you aggregate.
 
 ### 1. Pin the fixed point
 

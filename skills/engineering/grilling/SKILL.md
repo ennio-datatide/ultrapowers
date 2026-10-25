@@ -28,7 +28,7 @@ The **decisions** are the user's. Put each to them and wait.
 
 ## Round format
 
-Number each question and give your **recommended answer**. The recommendation is not decoration: it is the primary way the user answers.
+Number each question and give your **recommended answer**. Word each question so that `ok` accepts the recommendation; a question worded in the negative makes `ok` mean the opposite. The recommendation is not decoration: it is the primary way the user answers.
 
 ```
 ❓ **Q1** - **<question title>**: <question body, may be multiple paragraphs, may offer multiple choice>
