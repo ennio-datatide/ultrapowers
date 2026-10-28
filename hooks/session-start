@@ -52,13 +52,32 @@ check_for_update() {
         local newer
         newer=$(printf '%s\n%s\n' "$installed" "$latest" | sort -V | tail -1)
         if [ "$newer" = "$latest" ]; then
-            printf '\n\n<ultrapowers-update-available>\nUltrapowers %s is available (installed: %s). Tell the user once, then suggest they run `/plugin update ultrapowers` when ready. Do not run it yourself.\n</ultrapowers-update-available>' \
+            printf '\n\n<ultrapowers-update-available>\nUltrapowers %s is available (installed: %s). Tell the user once, in their language and in one line, and offer to update it. If they agree, run `claude plugin marketplace update ultrapowers` and then `claude plugin update ultrapowers@ultrapowers`, then tell them to type `/reload-plugins`.\n</ultrapowers-update-available>' \
                 "$latest" "$installed"
         fi
     fi
 }
 
 update_notice=$(check_for_update || true)
+
+# Setup check: a computer set up by claude-code-setup records its setup version in the
+# profile. When this plugin's setup is newer, offer once per session to bring it up to date.
+# Computers never set up with it (no marker in ~/.claude/CLAUDE.md) are left alone.
+check_setup() {
+    local current_file="${PLUGIN_ROOT}/skills/productivity/claude-code-setup/assets/setup-version"
+    [ -f "$current_file" ] || return 0
+    grep -q "claude-code-setup:start" "${HOME}/.claude/CLAUDE.md" 2>/dev/null || return 0
+    local current recorded
+    current=$(tr -dc '0-9' < "$current_file")
+    recorded=$(grep -oE '"setupVersion"[[:space:]]*:[[:space:]]*[0-9]+' "${HOME}/.claude/ultrapowers-user-profile.json" 2>/dev/null | grep -oE '[0-9]+$') || true
+    [ -n "$current" ] || return 0
+    if [ "${recorded:-1}" -lt "$current" ]; then
+        printf '\n\n<ultrapowers-setup-outdated>\nThe Claude Code setup on this computer is from an earlier version of ultrapowers (setup %s; the current one is %s). In your first reply, tell the user once, in their language and in one or two lines, what the newer setup adds (from the list at the end of the claude-code-setup skill), and offer to bring it up to date: it keeps everything they already have. If they agree, run the claude-code-setup skill.\n</ultrapowers-setup-outdated>' \
+            "${recorded:-1}" "$current"
+    fi
+}
+
+setup_notice=$(check_setup || true)
 
 # Read using-ultrapowers content
 using_ultrapowers_content=$(cat "${PLUGIN_ROOT}/skills/core/using-ultrapowers/SKILL.md" 2>&1 || echo "Error reading using-ultrapowers skill")
@@ -99,7 +118,7 @@ escape_for_json() {
 
 using_ultrapowers_escaped=$(escape_for_json "$using_ultrapowers_content")
 warning_escaped=$(escape_for_json "$warning_message")
-update_notice_escaped=$(escape_for_json "$update_notice")
+update_notice_escaped=$(escape_for_json "$update_notice$setup_notice")
 session_context="<ultrapowers>\nYou have ultrapowers.\n\n**Below is the full content of your 'ultrapowers:using-ultrapowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_ultrapowers_escaped}\n\n${warning_escaped}\n</ultrapowers>${update_notice_escaped}"
 
 # Output context injection as JSON.

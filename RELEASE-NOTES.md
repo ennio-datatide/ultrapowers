@@ -2,6 +2,11 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.5.0 (2026-10-28)
+
+- **An older setup gets brought up to date.** `claude-code-setup` records its version (`assets/setup-version`, now 2) in `~/.claude/ultrapowers-user-profile.json` when it finishes. On a computer set up with it, the session-start hook compares that with the plugin's own and, when it is older, has Claude say what the newer setup adds and offer to run it again (it keeps everything). Computers never set up with it are left alone.
+- **The update notice works in one step.** It used to suggest `/plugin update ultrapowers`, which does nothing until the marketplace listing is refreshed. Claude now offers to update and, when the user agrees, runs `claude plugin marketplace update ultrapowers` and `claude plugin update ultrapowers@ultrapowers`, then asks for `/reload-plugins`.
+
 ## v2.4.1 (2026-10-28)
 
 - **Ultrapowers updates itself.** `claude-code-setup` registers the ultrapowers marketplace with `autoUpdate: true`, so Claude Code refreshes it and updates its plugins in the background after startup (third-party marketplaces are off by default). To update by hand in one step, ask Claude: it runs `claude plugin marketplace update ultrapowers` and `claude plugin update ultrapowers@ultrapowers`.

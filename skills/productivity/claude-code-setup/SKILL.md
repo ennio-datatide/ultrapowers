@@ -164,6 +164,12 @@ One sentence for the user: Impeccable adds design skills that I use whenever we 
 
 Run `check-env.sh` again and show the final checklist. Report honestly: list anything still `missing` or `todo` with the single action that finishes it, and do not describe the setup as complete while items remain. The one exception is `github-login`: if they skipped it, show it as "later, when you create your GitHub account" and do not count it against the setup.
 
+When nothing is left `missing`, record the setup, so ultrapowers can offer to bring it up to date when a later version adds something:
+
+```bash
+node "<skill dir>/scripts/record-setup.mjs"
+```
+
 Then tell the user:
 
 1. **Restart Claude Code now.** Plugins, settings, the view and personal instructions load at startup.
@@ -172,3 +178,11 @@ Then tell the user:
 4. **How to undo:** press Esc twice to rewind recent changes, and ask "undo the last change" if unsure.
 
 Keep the hand-over to those four points. They can ask for more when they need it.
+
+## Bringing an older setup up to date
+
+When ultrapowers says the setup on this computer is older than this one, run this skill as usual: every step checks first and only adds what is missing, so nothing they have is undone. Tell the user what is new in one or two lines, from this list, then go through the steps.
+
+What each setup version added (`assets/setup-version` holds the current one):
+
+- **2:** whether they are technical, and a quieter screen if they are not (focus view, the Plain style, the question menu); screen tips in their own language; ultrapowers updates itself; the pulse mod; no command needed to change folder.
