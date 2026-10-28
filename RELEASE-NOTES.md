@@ -2,6 +2,13 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.4.0 (2026-10-28)
+
+- **Grill asks with a menu instead of a wall of text.** Each round goes through Claude Code's question menu (up to 4 questions, 2 to 4 options each): the recommendation first, Enter to accept it, "Other" to type your own answer, one line before saying where you are and a two-line recap after. The calibration, the workflow preferences, the spec and tickets approvals and the design direction (with a sketch per option) use the same menu. The numbered text format stays as the fallback where the menu does not exist (sub-agents, `-p` runs, other harnesses). Tested in a live session: the menu shows one tab per question, the recommendation first and "Type something".
+- **A quieter screen for people who are not technical.** `claude-code-setup` asks once whether the person is technical and saves it where grill reads it. Not technical: Claude Code starts in focus view (the message, one line for the work, the answer) with the new **Plain** output style (`ultrapowers:Plain`): every answer starts with ✅ what is done and 👉 what they have to do, no running commentary, decisions as a menu. Technical: the normal view and style. Both get a few tips about getting around the screen, written in their own language, next to Claude Code's tips. `scripts/apply-display.mjs` applies it, never overwriting a value the person chose.
+- **`/student-view` and `/full-view`** switch this computer between the two, so a teacher sharing their screen sees what students see.
+- **No command to change folder.** The personal instructions and the hand-over say to open `claude` and say which project to work in, instead of starting Claude Code inside the folder.
+
 ## v2.3.0 (2026-10-28)
 
 - **The pulse mod, installed by `claude-code-setup`, so a student's screen looks like the class:** one row under the prompt with what needs attention, the tool running now and its timer, agents, the turn, the 5h and 7d limits against their pace, and the cost. It uses only Claude Code's own APIs (rendering, clock, session), so it behaves the same on macOS and Windows. It lives in `mods/pulse`, is listed as `pulse@ultrapowers`, needs Claude Code 2.1.290 or later, and `check-env.sh` reports it as `plugin-pulse`. The alerts mod is not shipped: its sounds and notifications depend on the operating system and were only tested on macOS.

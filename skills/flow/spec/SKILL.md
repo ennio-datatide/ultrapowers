@@ -101,6 +101,8 @@ Read it back with fresh eyes and fix inline:
 >
 > Tell me what to change, or say `ok` and I'll break it into pieces.
 
+Ask for the approval with the AskUserQuestion menu ("Looks right, carry on" first, then "I want to change something"; the "Other" row takes their changes directly), in their language. Where the menu is not available, end with the text above.
+
 Wait for them. If they request changes, make them and re-run the self-review. Only proceed on approval.
 
 Never treat silence as approval. This is the last cheap moment to change direction: after this, changes cost rework.

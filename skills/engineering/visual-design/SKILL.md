@@ -35,7 +35,7 @@ checkpoint**: [no-permission-asks](../../core/no-permission-asks/SKILL.md) and
 - **A new surface or a new look:** before any code, the user sees **three options** and picks one. Use
   Impeccable's own decision step (its decision page or comps) whenever it offers one; it already deals
   three. If it presents fewer, or the harness has no page to show, give three distinct directions in chat,
-  each with its look, its first screen and its honest risk, plus the plain conventional option.
+  each with its look, its first screen and its honest risk, plus the plain conventional option. Ask for the pick with the AskUserQuestion menu: one option per direction, with a `preview` sketch of its first screen, and no option marked as recommended.
 - **Never pick for them.** Do not recommend one so strongly that the choice is a formality, and do not
   start building while waiting. Put `<skill-checkpoint>design-direction</skill-checkpoint>` in the message
   that asks, and stop.

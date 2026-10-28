@@ -28,31 +28,34 @@ The **decisions** are the user's. Put each to them and wait.
 
 ## Round format
 
-Number each question and give your **recommended answer**. Word each question so that `ok` accepts the recommendation; a question worded in the negative makes `ok` mean the opposite. The recommendation is not decoration: it is the primary way the user answers.
+Ask each round with the **AskUserQuestion** tool, the menu the person answers with the arrow keys and Enter. Picking from a menu is far easier than reading a numbered wall of text and writing replies to it.
+
+- **One menu per round**, up to 4 questions (the tool's limit), each with 2 to 4 options. A round with more questions becomes several menus in a row.
+- **The recommended option goes first**, with "(Recommended)" at the end of its label, in the user's language. Enter on the first option is the equivalent of `ok`.
+- **Every question is multiple choice.** For an open question ("who buys from you?"), offer the 2 or 3 likeliest answers from what you already know. The menu always adds an "Other" row where they type their own answer, so never add one yourself.
+- **Labels are short (1 to 5 words), and the description says what the choice costs and buys.** The `header` (12 characters at most) names the topic: "Audience", "Payments".
+- **Use `preview` to show what an option looks like** when the difference is visual (a layout, a page structure).
+- **Before the menu, one line** says where they are: "Round 2 of about 4: who buys from you." **After the answers**, at most two lines recap what was decided. No wall of text on either side.
+
+Write everything in the language the user writes to you in.
+
+When the menu is not available (inside a sub-agent, in a non-interactive run, or on a harness without it), fall back to text. Number each question and give your recommended answer, worded so that `ok` accepts it:
 
 ```
-❓ **Q1** - **<question title>**: <question body, may be multiple paragraphs, may offer multiple choice>
-
-➡️ <your recommended answer>
-
----
-
-❓ **Q2** - **<question title>**: <question body>
+❓ **Q1** - **<question title>**: <question body, may offer multiple choice>
 
 ➡️ <your recommended answer>
 ```
 
-Open every round by telling the user they can accept the lot:
+Open a text round with: "Reply `ok` to take all the recommendations, or answer only the ones you'd change."
 
-> Reply `ok` to take all the recommendations, or answer only the ones you'd change.
-
-A user who replies `ok` has still walked that branch of the tree. That is the point: the tree is never skipped, only made cheap to traverse.
+Either way, a user who takes the recommendation has still walked that branch of the tree. That is the point: the tree is never skipped, only made cheap to traverse.
 
 ## Pacing
 
 Round size follows the frontier. The tree decides how many questions are unblocked, never a quota, and the tree is **never truncated**.
 
-Where a frontier exceeds six questions, deliver it across two consecutive rounds and say so ("that's 9 questions, so here are the first 5"). A wall of questions makes people freeze, and a frozen user answers worse than a paced one. Pace it; don't cut it.
+Where a frontier exceeds four questions, deliver it across consecutive menus and say so in the line before the first ("9 questions this round, in three short menus"). A wall of questions makes people freeze, and a frozen user answers worse than a paced one. Pace it; don't cut it.
 
 ## Language
 
@@ -66,7 +69,9 @@ Read `~/.claude/ultrapowers-user-profile.json` for `technicalComfort` (a repo-le
   > Instead of: "Should this page be SSR or SSG?"
   > Ask: "Should every visitor see the same page, or something personalised to them? The same-for-everyone version loads faster and costs less to run."
 
-Prefer multiple choice over open-ended wherever the branch permits it. A non-technical user recognises a good answer far more reliably than they generate one.
+Multiple choice is not optional here: a non-technical user recognises a good answer far more reliably than they generate one.
+
+If the user switches with `explain simpler` or `talk more technical`, run the setup's display script, which saves the new value to the profile and makes the screen match: `node "<this skill's base directory>/../../productivity/claude-code-setup/scripts/apply-display.mjs" <technical|non-technical> ~/.claude/settings.json`. It takes effect from their next message.
 
 If the user's project has a `CONTEXT.md`, use its vocabulary in your questions. Their words, not yours.
 
@@ -80,6 +85,7 @@ If the idea covers several independent subsystems, say so **before** grilling th
 |---|---|
 | "I'll just assume they want X" | That's an unvisited branch. Ask it. |
 | "I'll ask them where the config lives" | That's a fact. Go and find it. |
+| "I'll just write the questions out, it's quicker" | The menu is the default. Text only where it doesn't exist. |
 | "This is a lot of questions, I'll trim" | Pace the rounds; never truncate the tree. |
 | "They said `ok`, so they didn't really decide" | They did. Recommendations are answers. |
 | "I understand enough to start building" | The frontier is empty or it isn't. Check. |

@@ -74,6 +74,8 @@ Ask, in their language. `technical`:
 - Is anything here bigger than you'd want to wait for in one go?
 - Is anything missing that you expected to see?
 
+Ask these with the AskUserQuestion menu, one question each, the "looks right" answer first, in their language; the "Other" row takes their changes. Where the menu is not available, ask them in text.
+
 Iterate until the user approves. A board they didn't really read is a board that surprises them at piece four.
 
 ### 5. Publish

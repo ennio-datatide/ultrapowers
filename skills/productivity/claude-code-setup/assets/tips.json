@@ -1,0 +1,52 @@
+{
+  "tips": [
+    {
+      "id": "ultrapowers.detail",
+      "text": "Ctrl+O shows everything Claude is doing, step by step. Press it again to go back.",
+      "cooldownSessions": 2,
+      "priority": 3
+    },
+    {
+      "id": "ultrapowers.stop",
+      "text": "Esc stops Claude at any moment. Nothing breaks: tell it what to do instead.",
+      "cooldownSessions": 2,
+      "priority": 2
+    },
+    {
+      "id": "ultrapowers.latest",
+      "text": "Scrolled up? Click Jump to bottom to see the latest answer (or press Ctrl+End on Windows).",
+      "cooldownSessions": 3,
+      "priority": 2
+    },
+    {
+      "id": "ultrapowers.prompt",
+      "text": "Click the bar at the top to jump back to your last message.",
+      "cooldownSessions": 3,
+      "priority": 1
+    },
+    {
+      "id": "ultrapowers.focus",
+      "text": "/focus switches between a quiet view and seeing every step.",
+      "cooldownSessions": 3,
+      "priority": 1
+    },
+    {
+      "id": "ultrapowers.rewind",
+      "text": "Esc twice, with nothing typed, goes back to an earlier point and undoes the changes since then.",
+      "cooldownSessions": 4,
+      "priority": 1
+    },
+    {
+      "id": "ultrapowers.waitwhat",
+      "text": "Lost? Type /wait-what and Claude explains its last message again, in plain words.",
+      "cooldownSessions": 4,
+      "priority": 1
+    },
+    {
+      "id": "ultrapowers.paste",
+      "text": "To show Claude an error, take a screenshot and paste it in the box (Ctrl+V on a Mac, Alt+V on Windows).",
+      "cooldownSessions": 4,
+      "priority": 0
+    }
+  ]
+}

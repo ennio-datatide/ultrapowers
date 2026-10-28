@@ -1,6 +1,6 @@
 ---
 name: claude-code-setup
-description: "First-time setup of Claude Code for a non-technical person on macOS or Windows: installs the basic tools, sets up safe storage for secrets (API keys, tokens) with an approval prompt on every use, applies sensible safety defaults, a readable theme, a status line and personal instructions, and installs the ultrapowers-dev and ultrapowers-business plugins and the pulse mod next to ultrapowers, checking that the Impeccable design plugin that comes with it is there once. Use this whenever someone is getting started with Claude Code, setting up a new computer, asks to 'set up', 'onboard', 'install ultrapowers', or asks where to keep API keys and passwords safely, even if they do not mention setup by name. Safe to run again at any time to repair or finish a setup."
+description: "First-time setup of Claude Code for a non-technical person on macOS or Windows: installs the basic tools, sets up safe storage for secrets (API keys, tokens) with an approval prompt on every use, applies sensible safety defaults, a readable theme, a status line, a quieter screen for people who are not technical and personal instructions, and installs the ultrapowers-dev and ultrapowers-business plugins and the pulse mod next to ultrapowers, checking that the Impeccable design plugin that comes with it is there once. Use this whenever someone is getting started with Claude Code, setting up a new computer, asks to 'set up', 'onboard', 'install ultrapowers', or asks where to keep API keys and passwords safely, even if they do not mention setup by name. Safe to run again at any time to repair or finish a setup."
 ---
 
 # Claude Code Setup
@@ -44,6 +44,9 @@ Ask these together in one message, and skip any you can already answer from the 
 1. Their name and the email they want on their work (used for saving their work with git; the email they use, or will use, for GitHub is best).
 2. One line about what they do or what they want to build.
 3. The language they want you to talk to them in.
+4. Whether they are technical (developer, engineer, tech PM) or not (creator, founder, business owner, designer). Ask this one with the AskUserQuestion menu, "Not technical" first. It decides how much the screen shows while Claude works (Step 5), and grill reads the same answer later, so it is never asked twice. If `~/.claude/ultrapowers-user-profile.json` already has `technicalComfort`, skip it.
+
+Everything you write for them from here on, including the tips in Step 5, is in the language from question 3.
 
 ## Step 3: Install the basic tools
 
@@ -89,6 +92,20 @@ What the defaults do, in the terms to use with the user:
 - **Storing a secret is something only the user can do.** Claude Code is blocked from running the store command, so a secret value never has a reason to pass through the conversation.
 - **Admin commands and force pushes are blocked.**
 
+Then set how much the screen shows while Claude works. First write the course tips in their language: translate the `text` of every entry in `assets/tips.json` into the language from Step 2 (keep each `id`, `cooldownSessions` and `priority`, keep key names such as Ctrl+O and Esc as they are) and save the result as `~/.claude/ultrapowers-tips.json`. Then run, with `<technical|non-technical>` from Step 2 and the word for "tip" in their language:
+
+```bash
+node "<skill dir>/scripts/apply-display.mjs" <technical|non-technical> ~/.claude/settings.json --tips-label "<Tip>"
+```
+
+It saves their answer to `~/.claude/ultrapowers-user-profile.json` too, and never overwrites a view or style they chose themselves. Run it again to switch; grill does that when they say `explain simpler` or `talk more technical`.
+
+What it does, in one line each:
+
+- **Not technical:** Claude Code starts in **focus view**: their message, one line that sums up the work, and the answer. The **Plain** style makes every answer start with ✅ what is done and 👉 what they have to do, without a running commentary. To see every step, `Ctrl+O`; to switch the view for this session, `/focus`.
+- **Technical:** the normal view and style, every step visible.
+- **Both:** a few tips about getting around the screen (seeing the detail, stopping Claude, jumping to the latest answer) join Claude Code's own tips while it works.
+
 And the comfort defaults, in one line each:
 
 - **A status line under the prompt** shows the session, the folder, the git branch with pending changes, the model, and how full the conversation is (green, then amber from 70%, red from 85%). When it turns red, it is time to start a fresh session.
@@ -109,6 +126,8 @@ Add the block from `assets/CLAUDE.user.md` to `~/.claude/CLAUDE.md`, which Claud
 - If the file does not exist, create it with a `# My instructions for Claude` heading followed by the block.
 - If it exists without the `claude-code-setup:start` marker, append the block and leave everything else untouched.
 - If the marker is already there, replace only what is between the start and end markers.
+
+If they said they are technical in Step 2, leave out the line "I am not a software engineer..." and the first bullet of "How to work with me" (plain language); the rest applies to everyone.
 
 Then create the projects folder if it is missing (`mkdir -p ~/Code`) and tell the user this is where each new project gets its own folder.
 
@@ -146,8 +165,8 @@ Run `check-env.sh` again and show the final checklist. Report honestly: list any
 
 Then tell the user:
 
-1. **Restart Claude Code now.** Plugins, settings and personal instructions load at startup.
-2. **How to start a project:** make a folder inside the projects folder, open Claude Code in it, and describe what they want to build.
+1. **Restart Claude Code now.** Plugins, settings, the view and personal instructions load at startup.
+2. **How to start a project:** open the Terminal, type `claude`, and tell Claude which project to work in (a new folder inside the projects folder, or one that is already there) and what they want to build. No command is needed to change folder.
 3. **How to add a secret**, with the exact command for their platform.
 4. **How to undo:** press Esc twice to rewind recent changes, and ask "undo the last change" if unsure.
 

@@ -32,7 +32,7 @@ Stop and ask before anything that:
 
 ## How my projects are organised
 
-- Every project lives in its own folder inside `{{PROJECTS_DIR}}`. Start Claude Code from inside the project folder, never from my home folder.
+- Every project lives in its own folder inside `{{PROJECTS_DIR}}`. I tell you which project to work in, in my own words: find its folder and work only inside it. Never work across my whole home folder.
 - Every project is a git repository. Once I have a GitHub account, each one also gets a private GitHub repository as its backup.
 - Save progress often: commit after each step that works, with a message a non-engineer can understand.
 - Never force push and never rewrite history.
