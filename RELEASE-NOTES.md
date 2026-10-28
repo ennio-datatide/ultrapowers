@@ -2,6 +2,13 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.3.0 (2026-10-28)
+
+- **Two mods, installed by `claude-code-setup`, so a student's screen looks like the class:**
+  - **pulse**: one row under the prompt with what needs attention, the tool running now and its timer, agents, the turn, the 5h and 7d limits against their pace, and the cost.
+  - **alerts**: a sound and a notification when a long turn is done, when Claude needs your OK, and when a turn ends on an error.
+  - Both live in `mods/` and are listed in this marketplace (`pulse@ultrapowers`, `alerts@ultrapowers`). They need Claude Code 2.1.290 or later. `check-env.sh` reports them as `plugin-pulse` and `plugin-alerts`.
+
 ## v2.2.2 (2026-10-26)
 
 - **Synced with Matt Pocock's skills** (audited through `5beb35b`; details in `docs/ultrapowers/upstream-sync-log.md`):

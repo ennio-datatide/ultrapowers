@@ -1,6 +1,6 @@
 ---
 name: claude-code-setup
-description: "First-time setup of Claude Code for a non-technical person on macOS or Windows: installs the basic tools, sets up safe storage for secrets (API keys, tokens) with an approval prompt on every use, applies sensible safety defaults, a readable theme, a status line and personal instructions, and installs the ultrapowers-dev and ultrapowers-business plugins next to ultrapowers, checking that the Impeccable design plugin that comes with it is there once. Use this whenever someone is getting started with Claude Code, setting up a new computer, asks to 'set up', 'onboard', 'install ultrapowers', or asks where to keep API keys and passwords safely, even if they do not mention setup by name. Safe to run again at any time to repair or finish a setup."
+description: "First-time setup of Claude Code for a non-technical person on macOS or Windows: installs the basic tools, sets up safe storage for secrets (API keys, tokens) with an approval prompt on every use, applies sensible safety defaults, a readable theme, a status line and personal instructions, and installs the ultrapowers-dev and ultrapowers-business plugins and the pulse and alerts mods next to ultrapowers, checking that the Impeccable design plugin that comes with it is there once. Use this whenever someone is getting started with Claude Code, setting up a new computer, asks to 'set up', 'onboard', 'install ultrapowers', or asks where to keep API keys and passwords safely, even if they do not mention setup by name. Safe to run again at any time to repair or finish a setup."
 ---
 
 # Claude Code Setup
@@ -120,12 +120,16 @@ This skill ships inside the ultrapowers plugin, so ultrapowers itself is normall
 claude plugin marketplace add ennio-datatide/ultrapowers   # only if `claude plugin marketplace list` does not show ultrapowers
 claude plugin install ultrapowers-dev@ultrapowers
 claude plugin install ultrapowers-business@ultrapowers
+claude plugin install pulse@ultrapowers
+claude plugin install alerts@ultrapowers
 claude plugin install ultrapowers@ultrapowers              # only if plugin-ultrapowers is missing (for example, loaded with --plugin-dir)
 ```
 
 If a command says the marketplace or plugin is already there, treat it as done and move on; do not retry it. If a marketplace add fails with a network or git error, check that git is installed and visible to this session before retrying once; on Windows that usually means Claude Code needs a restart after Step 3.
 
 One sentence each for the user: ultrapowers is the guided way of building (talk an idea through, write it down, build it in small tested steps, review it), ultrapowers-dev adds technical know-how, and ultrapowers-business adds marketing, sales and finance know-how.
+
+pulse and alerts are mods: small add-ons that change how Claude Code looks and sounds, so the screen matches what the course shows in class. One sentence each: pulse adds a row under the prompt with what Claude is doing right now (the tool running and for how long, helpers working in parallel, how much of the 5-hour and weekly limits is used); alerts plays a sound and shows a notification when a long task is done, when Claude needs their OK, and when something fails, so they can do other things while it works. Both need Claude Code 2.1.290 or later: if `claude --version` is older, run `claude update` first. They load after the restart in Step 9.
 
 ## Step 8: Check the Impeccable design plugin
 

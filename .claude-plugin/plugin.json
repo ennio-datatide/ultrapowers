@@ -1,7 +1,7 @@
 {
   "name": "ultrapowers",
   "description": "Matt Pocock's engineering method on rails: grill an idea, spec it, slice it, build it test-first, review it — driven for people who build software without being engineers.",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "author": {
     "name": "Ennio Maldonado",
     "url": "https://www.enniomaldonado.com"

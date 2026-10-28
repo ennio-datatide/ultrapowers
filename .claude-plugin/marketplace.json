@@ -11,7 +11,7 @@
     {
       "name": "ultrapowers",
       "description": "Core flow: Grill → Spec → Tickets → Implement → Review, with domain modelling, TDD, two-axis review, and local semantic search",
-      "version": "2.2.2",
+      "version": "2.3.0",
       "source": "./",
       "dependencies": [
         "impeccable"
@@ -47,6 +47,18 @@
       },
       "homepage": "https://impeccable.style",
       "license": "Apache-2.0"
+    },
+    {
+      "name": "pulse",
+      "description": "One row under the prompt: what needs attention, the tool running now, agents, the turn, the 5h and 7d limits against their pace, the cost and the mods loaded. Installed by claude-code-setup.",
+      "version": "0.1.0",
+      "source": "./mods/pulse"
+    },
+    {
+      "name": "alerts",
+      "description": "A sound and a notification when a long turn is done, when Claude needs your OK, and when a turn ends on an error. Installed by claude-code-setup.",
+      "version": "0.1.0",
+      "source": "./mods/alerts"
     }
   ]
 }

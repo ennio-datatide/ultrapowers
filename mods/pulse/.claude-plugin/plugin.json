@@ -1,0 +1,10 @@
+{
+  "name": "pulse",
+  "version": "0.1.0",
+  "description": "One row under the prompt: what needs attention, the tool running now, agents, the turn, the 5h and 7d limits against their pace, the cost and the mods loaded.",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "Ennio Maldonado",
+    "url": "https://datatide.io"
+  }
+}
