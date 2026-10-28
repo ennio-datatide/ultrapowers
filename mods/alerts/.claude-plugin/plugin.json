@@ -1,9 +1,0 @@
-{
-  "name": "alerts",
-  "version": "0.1.0",
-  "description": "A sound and a notification when a long turn is done, when Claude needs your OK, and when a turn ends on an error.",
-  "author": {
-    "name": "Ennio Maldonado",
-    "url": "https://datatide.io"
-  }
-}

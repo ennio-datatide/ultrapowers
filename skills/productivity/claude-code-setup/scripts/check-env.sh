@@ -116,8 +116,8 @@ fi
 # Plugins
 if have claude; then
   installed=$(claude plugin list --json 2>/dev/null)
-  # pulse and alerts are mods: the row under the prompt and the sounds, the way the course is shown in class.
-  for p in ultrapowers ultrapowers-dev ultrapowers-business pulse alerts; do
+  # pulse is a mod: the row under the prompt, the way the course is shown in class. It works the same on macOS and Windows.
+  for p in ultrapowers ultrapowers-dev ultrapowers-business pulse; do
     if printf '%s' "$installed" | grep -q "\"$p@ultrapowers\""; then
       report "plugin-$p" ok
     else

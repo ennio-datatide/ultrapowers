@@ -4,10 +4,7 @@
 
 ## v2.3.0 (2026-10-28)
 
-- **Two mods, installed by `claude-code-setup`, so a student's screen looks like the class:**
-  - **pulse**: one row under the prompt with what needs attention, the tool running now and its timer, agents, the turn, the 5h and 7d limits against their pace, and the cost.
-  - **alerts**: a sound and a notification when a long turn is done, when Claude needs your OK, and when a turn ends on an error.
-  - Both live in `mods/` and are listed in this marketplace (`pulse@ultrapowers`, `alerts@ultrapowers`). The alert sounds are our own tones, generated with ffmpeg, not macOS system sounds. They need Claude Code 2.1.290 or later. `check-env.sh` reports them as `plugin-pulse` and `plugin-alerts`.
+- **The pulse mod, installed by `claude-code-setup`, so a student's screen looks like the class:** one row under the prompt with what needs attention, the tool running now and its timer, agents, the turn, the 5h and 7d limits against their pace, and the cost. It uses only Claude Code's own APIs (rendering, clock, session), so it behaves the same on macOS and Windows. It lives in `mods/pulse`, is listed as `pulse@ultrapowers`, needs Claude Code 2.1.290 or later, and `check-env.sh` reports it as `plugin-pulse`. The alerts mod is not shipped: its sounds and notifications depend on the operating system and were only tested on macOS.
 
 ## v2.2.2 (2026-10-26)
 
