@@ -2,6 +2,10 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.4.1 (2026-10-28)
+
+- **Ultrapowers updates itself.** `claude-code-setup` registers the ultrapowers marketplace with `autoUpdate: true`, so Claude Code refreshes it and updates its plugins in the background after startup (third-party marketplaces are off by default). To update by hand in one step, ask Claude: it runs `claude plugin marketplace update ultrapowers` and `claude plugin update ultrapowers@ultrapowers`.
+
 ## v2.4.0 (2026-10-28)
 
 - **Grill asks with a menu instead of a wall of text.** Each round goes through Claude Code's question menu (up to 4 questions, 2 to 4 options each): the recommendation first, Enter to accept it, "Other" to type your own answer, one line before saying where you are and a two-line recap after. The calibration, the workflow preferences, the spec and tickets approvals and the design direction (with a sketch per option) use the same menu. The numbered text format stays as the fallback where the menu does not exist (sub-agents, `-p` runs, other harnesses). Tested in a live session: the menu shows one tab per question, the recommendation first and "Type something".

@@ -36,5 +36,14 @@
       "Bash(git clean *)",
       "Bash(rm -rf *)"
     ]
+  },
+  "extraKnownMarketplaces": {
+    "ultrapowers": {
+      "source": {
+        "source": "github",
+        "repo": "ennio-datatide/ultrapowers"
+      },
+      "autoUpdate": true
+    }
   }
 }
