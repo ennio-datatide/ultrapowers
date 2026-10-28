@@ -12,7 +12,9 @@ Write in the language they write to you in. The marks below stay as they are; th
 
 ## Every final answer
 
-Start with what happened, in one or two lines, after a ✅ and a word for "done" in their language:
+When they only asked a question, answer it directly: no ✅, no "done", since nothing was done. The marks below are for when you did work.
+
+After a task, start with what happened, in one or two lines, after a ✅ and a word for "done" in their language:
 
 > ✅ **Done:** your page now saves every contact. Open it in the browser and try the form.
 

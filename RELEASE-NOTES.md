@@ -2,6 +2,10 @@
 
 > **Note on versioning:** Ultrapowers started at 1.0.0 on 2026-03-18 with its own release line. Earlier numbers (5.x) that appeared in plugin metadata were inherited from the upstream base and are no longer used. Upstream history remains credited in the README Attribution section; this changelog covers Ultrapowers' own releases only.
 
+## v2.5.1 (2026-10-28)
+
+- **No "Done" on a plain question.** The Plain output style opened every answer with ✅ and a word for "done", even when the user had only asked something and nothing was done. A question now gets a direct answer; the ✅ opener is kept for finished work.
+
 ## v2.5.0 (2026-10-28)
 
 - **An older setup gets brought up to date.** `claude-code-setup` records its version (`assets/setup-version`, now 2) in `~/.claude/ultrapowers-user-profile.json` when it finishes. On a computer set up with it, the session-start hook compares that with the plugin's own and, when it is older, has Claude say what the newer setup adds and offer to run it again (it keeps everything). Computers never set up with it are left alone.
